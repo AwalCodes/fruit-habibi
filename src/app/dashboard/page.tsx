@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -83,9 +84,9 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="mt-4">
-                <button className="text-primary hover:text-primary-dark font-medium text-sm">
+                <Link href="/messages" className="text-primary hover:text-primary-dark font-medium text-sm">
                   View messages →
-                </button>
+                </Link>
               </div>
             </div>
           </div>

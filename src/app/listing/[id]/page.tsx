@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
+import ChatPanel from '@/components/ChatPanel';
 
 interface Product {
   id: string;
@@ -31,6 +32,8 @@ export default function ListingDetailPage() {
   const [error, setError] = useState('');
   const { user } = useAuth();
   const params = useParams();
+  const searchParams = useSearchParams();
+  const showChat = searchParams?.get('chat') === 'true';
 
   useEffect(() => {
     if (params.id) {
@@ -117,9 +120,9 @@ export default function ListingDetailPage() {
           </Link>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className={`grid gap-8 ${showChat ? 'grid-cols-1 lg:grid-cols-3' : 'grid-cols-1 lg:grid-cols-2'}`}>
           {/* Product Images */}
-          <div>
+          <div className={showChat ? 'lg:col-span-1' : ''}>
             <div className="aspect-w-16 aspect-h-9 bg-gray-100 rounded-lg overflow-hidden">
               {product.images && product.images.length > 0 ? (
                 <Image
@@ -155,7 +158,7 @@ export default function ListingDetailPage() {
           </div>
 
           {/* Product Details */}
-          <div>
+          <div className={showChat ? 'lg:col-span-1' : ''}>
             <div className="bg-white rounded-lg shadow-soft p-6">
               <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.title}</h1>
               
@@ -198,9 +201,12 @@ export default function ListingDetailPage() {
                 </div>
 
                 {!isOwner && user ? (
-                  <button className="w-full bg-primary text-white py-3 px-4 rounded-md hover:bg-primary-dark transition-colors font-medium">
-                    Contact Supplier
-                  </button>
+                  <Link
+                    href={`/listing/${product.id}?chat=true`}
+                    className="w-full bg-primary text-white py-3 px-4 rounded-md hover:bg-primary-dark transition-colors font-medium inline-block text-center"
+                  >
+                    {showChat ? 'Hide Chat' : 'Start Chat'}
+                  </Link>
                 ) : !user ? (
                   <div className="text-center">
                     <p className="text-sm text-gray-600 mb-4">Sign in to contact the supplier</p>
@@ -225,6 +231,17 @@ export default function ListingDetailPage() {
               </div>
             </div>
           </div>
+
+          {/* Chat Panel */}
+          {showChat && !isOwner && user && (
+            <div className="lg:col-span-1">
+              <ChatPanel
+                productId={product.id}
+                sellerId={product.users.id}
+                sellerName={product.users.full_name}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

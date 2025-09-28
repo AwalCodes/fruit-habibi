@@ -16,6 +16,7 @@ export default function Navbar() {
 
   const userNavigation = [
     { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Messages', href: '/messages' },
     { name: 'Profile', href: '/profile' },
   ];
 
