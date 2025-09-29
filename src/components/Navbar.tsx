@@ -7,7 +7,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, signOut } = useAuth();
+  const { user, loading, signOut } = useAuth();
 
   const navigation = [
     { name: 'Browse Listings', href: '/listings' },
@@ -18,6 +18,13 @@ export default function Navbar() {
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Messages', href: '/messages' },
     { name: 'Profile', href: '/profile' },
+  ];
+
+  const adminNavigation = [
+    { name: 'Admin Dashboard', href: '/admin' },
+    { name: 'Users', href: '/admin/users' },
+    { name: 'Listings', href: '/admin/listings' },
+    { name: 'Messages', href: '/admin/messages' },
   ];
 
   return (
@@ -46,6 +53,32 @@ export default function Navbar() {
           <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
             {user ? (
               <div className="flex items-center space-x-4">
+                {/* Admin Navigation */}
+                {loading ? (
+                  <div className="flex items-center space-x-1 border-r border-gray-200 pr-4 mr-2">
+                    <div className="w-16 h-8 bg-gray-200 rounded-lg animate-pulse"></div>
+                  </div>
+                ) : user.user_metadata?.role === 'admin' && (
+                  <div className="flex items-center space-x-1 border-r border-gray-200 pr-4 mr-2">
+                    <div className="flex items-center space-x-1 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1.5 rounded-lg border border-blue-200">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                      <span className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Admin</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      {adminNavigation.map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className="text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-2 py-1 rounded-md transition-all duration-200"
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Regular User Navigation */}
                 {userNavigation.map((item) => (
                   <Link
                     key={item.name}
@@ -114,6 +147,29 @@ export default function Navbar() {
           <div className="border-t border-gray-200 pb-3 pt-4">
             {user ? (
               <div className="space-y-1">
+                {/* Admin Navigation */}
+                {user.user_metadata?.role === 'admin' && (
+                  <>
+                    <div className="px-3 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 mx-3 rounded-lg border border-blue-200">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                        <span className="text-sm font-semibold text-blue-700 uppercase tracking-wide">Admin Panel</span>
+                      </div>
+                    </div>
+                    {adminNavigation.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className="block px-6 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                    <div className="border-t border-gray-200 my-2"></div>
+                  </>
+                )}
+                
+                {/* Regular User Navigation */}
                 {userNavigation.map((item) => (
                   <Link
                     key={item.name}
