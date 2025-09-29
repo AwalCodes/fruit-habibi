@@ -1,37 +1,39 @@
-# Fruit Habibi
+# Fruit Habibi 🥭
 
-A production-grade B2B fruits & vegetables marketplace connecting African & Asian farmers/exporters with Middle-East importers and distributors.
+A B2B marketplace connecting farmers and importers for fresh produce trading. Built with Next.js and Supabase.
 
-## Features
+## What it does
 
-- **Role-based Authentication**: Farmers/Exporters and Importers/Distributors
-- **Product Listings**: Create, edit, and manage fruit & vegetable listings
-- **Real-time Messaging**: Direct communication between buyers and sellers
-- **Search & Filter**: Find products by location, type, and availability
-- **Admin Panel**: User and listing moderation
-- **Mobile-first Design**: Responsive and accessible interface
+This platform helps farmers from Africa and Asia connect directly with importers in the Middle East. Users can list their products, browse available produce, and communicate through real-time messaging.
+
+## Key Features
+
+- User authentication for farmers and importers
+- Product listings with images and details
+- Real-time chat between buyers and sellers
+- Search and filtering by location and product type
+- Mobile-responsive design
+- Password reset functionality
 
 ## Tech Stack
 
-- **Frontend**: Next.js 15, React 19, TypeScript
-- **Styling**: Tailwind CSS, Headless UI, Framer Motion
-- **Backend**: Supabase (Auth, Database, Realtime, Storage)
-- **Deployment**: Vercel
-- **Testing**: Jest, React Testing Library
+- **Next.js 15** with App Router
+- **TypeScript** for type safety
+- **Tailwind CSS** for styling
+- **Supabase** for backend (auth, database, realtime)
+- **Vercel** for hosting
 
 ## Getting Started
 
 ### Prerequisites
+- Node.js 18 or later
+- A Supabase account
 
-- Node.js 18+ 
-- npm or yarn
-- Supabase account
+### Setup
 
-### Installation
-
-1. Clone the repository:
+1. Clone this repo:
 ```bash
-git clone <repository-url>
+git clone https://github.com/yourusername/fruit-habibi.git
 cd fruit-habibi
 ```
 
@@ -40,54 +42,54 @@ cd fruit-habibi
 npm install
 ```
 
-3. Set up environment variables:
+3. Create your environment file:
 ```bash
 cp .env.example .env.local
 ```
 
-Fill in your Supabase credentials in `.env.local`:
+Add your Supabase credentials to `.env.local`:
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ```
 
-4. Run the development server:
+4. Start the dev server:
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the application.
+Visit `http://localhost:3000` to see the app.
 
-## Available Scripts
+## Database Setup
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run format` - Format code with Prettier
+You'll need to set up the database tables in Supabase. The main tables are:
+- `users` - User profiles
+- `products` - Product listings
+- `messages` - Chat messages
+
+## Scripts
+
+- `npm run dev` - Development server
+- `npm run build` - Production build
+- `npm run lint` - Check code style
+- `npm run format` - Format code
 - `npm test` - Run tests
-- `npm run type-check` - Run TypeScript type checking
 
 ## Project Structure
 
 ```
 src/
-├── app/                 # Next.js app router
-├── components/          # Reusable UI components
-├── lib/                 # Utilities and configurations
-├── types/               # TypeScript type definitions
-└── hooks/               # Custom React hooks
+├── app/           # Next.js pages
+├── components/    # React components
+├── contexts/      # React contexts
+└── lib/          # Utilities
 ```
-
-## Deployment
-
-The application is configured for deployment on Vercel. Set up your environment variables in the Vercel dashboard and deploy.
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
+Feel free to open issues or submit pull requests. Make sure to run the linter before submitting.
+
+## License
+
+MIT
