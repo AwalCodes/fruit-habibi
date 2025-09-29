@@ -35,6 +35,12 @@ export default function DashboardPage() {
           <p className="mt-2 text-gray-600">
             Welcome back, {user.user_metadata?.full_name || user.email}
           </p>
+          <div className="mt-4 flex items-center space-x-4 text-sm text-gray-500">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary text-white">
+              {user.user_metadata?.role === 'farmer' ? 'Farmer/Exporter' : 'Importer/Distributor'}
+            </span>
+            <span>{user.user_metadata?.country}</span>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

@@ -27,22 +27,49 @@ function RegisterForm() {
     formData.role = roleParam;
   }
 
+  const validateForm = () => {
+    if (!formData.fullName.trim()) {
+      setError('Full name is required');
+      return false;
+    }
+    if (!formData.email.trim()) {
+      setError('Email is required');
+      return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setError('Please enter a valid email address');
+      return false;
+    }
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return false;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return false;
+    }
+    if (!formData.country.trim()) {
+      setError('Country is required');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      setLoading(false);
+    if (!validateForm()) {
       return;
     }
+
+    setLoading(true);
 
     try {
       await signUp(formData.email, formData.password, formData.fullName, formData.role, formData.country);
       router.push('/dashboard');
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : 'An error occurred');
+      setError(error instanceof Error ? error.message : 'An error occurred during registration');
     } finally {
       setLoading(false);
     }
