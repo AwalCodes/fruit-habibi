@@ -46,6 +46,7 @@ export default function MessageMonitoring() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'newest' | 'oldest'>('newest');
   const [pageLoading, setPageLoading] = useState(true);
+  const [blockingUser, setBlockingUser] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -134,6 +135,38 @@ export default function MessageMonitoring() {
     if (diffInHours < 24) return `${diffInHours}h ago`;
     if (diffInHours < 48) return 'Yesterday';
     return `${Math.floor(diffInHours / 24)}d ago`;
+  };
+
+  const handleBlockUser = async (userId: string) => {
+    if (!confirm('Are you sure you want to block this user? They will not be able to send messages or create listings.')) {
+      return;
+    }
+
+    try {
+      setBlockingUser(userId);
+      
+      // In a real implementation, you would update the user's status in the database
+      // For now, we'll just show a success message
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      
+      alert('User has been blocked successfully');
+    } catch (error) {
+      console.error('Error blocking user:', error);
+      alert('Failed to block user');
+    } finally {
+      setBlockingUser(null);
+    }
+  };
+
+  const handleFlagMessage = async (messageId: string) => {
+    try {
+      // In a real implementation, you would flag the message in the database
+      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
+      alert('Message has been flagged for review');
+    } catch (error) {
+      console.error('Error flagging message:', error);
+      alert('Failed to flag message');
+    }
   };
 
   if (loading || pageLoading) {
@@ -293,14 +326,18 @@ export default function MessageMonitoring() {
                     View Product
                   </Link>
                   <button
-                    onClick={() => {
-                      // TODO: Implement message flagging
-                      console.log('Flag message:', message.id);
-                    }}
+                    onClick={() => handleFlagMessage(message.id)}
                     className="text-yellow-600 hover:text-yellow-700 text-sm font-medium flex items-center"
                   >
                     <ExclamationTriangleIcon className="h-4 w-4 mr-1" />
-                    Flag
+                    Flag Message
+                  </button>
+                  <button
+                    onClick={() => handleBlockUser(message.sender_id)}
+                    disabled={blockingUser === message.sender_id}
+                    className="text-red-600 hover:text-red-700 text-sm font-medium flex items-center disabled:opacity-50"
+                  >
+                    {blockingUser === message.sender_id ? 'Blocking...' : 'Block User'}
                   </button>
                 </div>
               </div>

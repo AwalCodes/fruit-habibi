@@ -49,6 +49,8 @@ export default function ListingModeration() {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'price_high' | 'price_low'>('newest');
   const [pageLoading, setPageLoading] = useState(true);
+  const [selectedListings, setSelectedListings] = useState<string[]>([]);
+  const [bulkActionLoading, setBulkActionLoading] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -150,6 +152,61 @@ export default function ListingModeration() {
       console.error('Error updating listing status:', error);
       alert('Failed to update listing status');
     }
+  };
+
+  const handleBulkAction = async (action: 'publish' | 'reject' | 'flag') => {
+    if (selectedListings.length === 0) return;
+
+    try {
+      setBulkActionLoading(true);
+      
+      const statusMap = {
+        'publish': 'published',
+        'reject': 'rejected',
+        'flag': 'flagged'
+      };
+
+      const { error } = await supabase
+        .from('products')
+        .update({ 
+          status: statusMap[action],
+          updated_at: new Date().toISOString()
+        })
+        .in('id', selectedListings);
+
+      if (error) throw error;
+
+      // Update local state
+      setListings(prev => prev.map(listing => 
+        selectedListings.includes(listing.id) 
+          ? { ...listing, status: statusMap[action] as any }
+          : listing
+      ));
+
+      setSelectedListings([]);
+      alert(`Successfully ${action}ed ${selectedListings.length} listing(s)`);
+    } catch (error) {
+      console.error('Error performing bulk action:', error);
+      alert('Failed to perform bulk action');
+    } finally {
+      setBulkActionLoading(false);
+    }
+  };
+
+  const toggleListingSelection = (listingId: string) => {
+    setSelectedListings(prev => 
+      prev.includes(listingId) 
+        ? prev.filter(id => id !== listingId)
+        : [...prev, listingId]
+    );
+  };
+
+  const selectAllListings = () => {
+    setSelectedListings(filteredListings.map(listing => listing.id));
+  };
+
+  const clearSelection = () => {
+    setSelectedListings([]);
   };
 
   const getStatusColor = (status: string) => {
@@ -326,21 +383,70 @@ export default function ListingModeration() {
               </select>
             </div>
 
-            <div className="flex items-end">
+            <div className="flex items-end space-x-2">
+              <button
+                onClick={selectAllListings}
+                className="flex-1 px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Select All
+              </button>
               <button
                 onClick={() => {
                   setSearchTerm('');
                   setStatusFilter('');
                   setCategoryFilter('');
                   setSortBy('newest');
+                  setSelectedListings([]);
                 }}
-                className="w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
               >
-                Clear Filters
+                Clear All
               </button>
             </div>
           </div>
         </div>
+
+        {/* Bulk Actions */}
+        {selectedListings.length > 0 && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <span className="text-sm font-medium text-blue-900">
+                  {selectedListings.length} listing(s) selected
+                </span>
+                <button
+                  onClick={clearSelection}
+                  className="text-sm text-blue-600 hover:text-blue-700"
+                >
+                  Clear selection
+                </button>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => handleBulkAction('publish')}
+                  disabled={bulkActionLoading}
+                  className="px-3 py-1 text-sm font-medium text-green-700 bg-green-100 rounded-md hover:bg-green-200 disabled:opacity-50"
+                >
+                  {bulkActionLoading ? 'Publishing...' : 'Publish All'}
+                </button>
+                <button
+                  onClick={() => handleBulkAction('reject')}
+                  disabled={bulkActionLoading}
+                  className="px-3 py-1 text-sm font-medium text-red-700 bg-red-100 rounded-md hover:bg-red-200 disabled:opacity-50"
+                >
+                  {bulkActionLoading ? 'Rejecting...' : 'Reject All'}
+                </button>
+                <button
+                  onClick={() => handleBulkAction('flag')}
+                  disabled={bulkActionLoading}
+                  className="px-3 py-1 text-sm font-medium text-yellow-700 bg-yellow-100 rounded-md hover:bg-yellow-200 disabled:opacity-50"
+                >
+                  {bulkActionLoading ? 'Flagging...' : 'Flag All'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Listings Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -373,6 +479,12 @@ export default function ListingModeration() {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
+                      <input
+                        type="checkbox"
+                        checked={selectedListings.includes(listing.id)}
+                        onChange={() => toggleListingSelection(listing.id)}
+                        className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                      />
                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
                         {getCategoryDisplayName(listing.category)}
                       </span>
