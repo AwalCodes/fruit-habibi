@@ -14,8 +14,10 @@ interface Product {
   quantity: number;
   unit: string;
   location: string;
+  category: string;
   images: string[];
   status: string;
+  owner_id: string;
   created_at: string;
   users: {
     full_name: string;
@@ -27,8 +29,20 @@ export default function ListingsPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
   const [sortBy, setSortBy] = useState<'newest' | 'price_low' | 'price_high'>('newest');
   const { user } = useAuth();
+
+  const categories = [
+    { value: '', label: 'All Categories' },
+    { value: 'fruits', label: 'Fruits' },
+    { value: 'vegetables', label: 'Vegetables' },
+    { value: 'herbs', label: 'Herbs & Spices' },
+    { value: 'grains', label: 'Grains & Cereals' },
+    { value: 'nuts', label: 'Nuts & Seeds' },
+    { value: 'dried', label: 'Dried Products' },
+    { value: 'other', label: 'Other' },
+  ];
 
   useEffect(() => {
     fetchProducts();
@@ -42,7 +56,12 @@ export default function ListingsPage() {
           *,
           users!products_owner_id_fkey(full_name)
         `)
-        .eq('status', 'published');
+        .in('status', ['published', 'draft']);
+
+      // For non-logged in users or non-owners, only show published products
+      if (!user) {
+        query = query.eq('status', 'published');
+      }
 
       // Apply sorting
       switch (sortBy) {
@@ -73,8 +92,13 @@ export default function ListingsPage() {
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesLocation = !locationFilter || 
                            product.location.toLowerCase().includes(locationFilter.toLowerCase());
+    const matchesCategory = !categoryFilter || product.category === categoryFilter;
     
-    return matchesSearch && matchesLocation;
+    // Show draft products only to their owners
+    const isOwner = user?.id === product.owner_id;
+    const isVisible = product.status === 'published' || (product.status === 'draft' && isOwner);
+    
+    return matchesSearch && matchesLocation && matchesCategory && isVisible;
   });
 
   if (loading) {
@@ -114,7 +138,7 @@ export default function ListingsPage() {
 
         {/* Filters */}
         <div className="bg-white rounded-lg shadow-soft p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
                 Search
@@ -127,6 +151,24 @@ export default function ListingsPage() {
                 placeholder="Search products..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
               />
+            </div>
+            
+            <div>
+              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+                Category
+              </label>
+              <select
+                id="category"
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
+              >
+                {categories.map(category => (
+                  <option key={category.value} value={category.value}>
+                    {category.label}
+                  </option>
+                ))}
+              </select>
             </div>
             
             <div>
@@ -192,9 +234,12 @@ export default function ListingsPage() {
                 quantity={product.quantity}
                 unit={product.unit}
                 location={product.location}
+                category={product.category}
                 images={product.images}
                 ownerName={product.users?.full_name || 'Unknown'}
+                ownerId={product.owner_id}
                 createdAt={product.created_at}
+                currentUserId={user?.id}
               />
             ))}
           </div>

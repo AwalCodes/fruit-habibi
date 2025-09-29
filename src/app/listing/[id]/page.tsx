@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import ChatPanel from '@/components/ChatPanel';
+import ProductStatusManager from '@/components/ProductStatusManager';
 
 interface Product {
   id: string;
@@ -30,6 +31,7 @@ export default function ListingDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const { user } = useAuth();
   const params = useParams();
   const searchParams = useSearchParams();
@@ -164,38 +166,55 @@ export default function ListingDetailPage() {
         <div className={`grid gap-8 ${showChat ? 'grid-cols-1 lg:grid-cols-3' : 'grid-cols-1 lg:grid-cols-2'}`}>
           {/* Product Images */}
           <div className={showChat ? 'lg:col-span-1' : ''}>
-            <div className="aspect-w-16 aspect-h-9 bg-gray-100 rounded-lg overflow-hidden">
-              {product.images && product.images.length > 0 ? (
-                <Image
-                  src={product.images[0]}
-                  alt={product.title}
-                  width={600}
-                  height={400}
-                  className="w-full h-96 object-cover"
-                />
-              ) : (
-                <div className="w-full h-96 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
-                  <span className="text-6xl text-gray-400">🌱</span>
+            <div className="space-y-4">
+              {/* Main Image */}
+              <div className="bg-gray-100 rounded-lg overflow-hidden">
+                {product.images && product.images.length > 0 ? (
+                  <Image
+                    src={product.images[selectedImageIndex]}
+                    alt={product.title}
+                    width={600}
+                    height={400}
+                    className="w-full h-80 object-contain"
+                    priority
+                  />
+                ) : (
+                  <div className="w-full h-80 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+                    <span className="text-6xl text-gray-400">🌱</span>
+                  </div>
+                )}
+              </div>
+              
+              {/* Thumbnail Images */}
+              {product.images && product.images.length > 1 && (
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                  {product.images.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImageIndex(index)}
+                      className={`relative aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 transition-all ${
+                        selectedImageIndex === index 
+                          ? 'border-primary ring-2 ring-primary/20' 
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <Image
+                        src={image}
+                        alt={`${product.title} ${index + 1}`}
+                        width={120}
+                        height={120}
+                        className="w-full h-full object-cover"
+                      />
+                      {selectedImageIndex === index && (
+                        <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
+                          <div className="w-2 h-2 bg-primary rounded-full"></div>
+                        </div>
+                      )}
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
-            
-            {/* Additional Images */}
-            {product.images && product.images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2 mt-4">
-                {product.images.slice(1, 5).map((image, index) => (
-                  <div key={index} className="aspect-w-1 aspect-h-1 bg-gray-100 rounded overflow-hidden">
-                    <Image
-                      src={image}
-                      alt={`${product.title} ${index + 2}`}
-                      width={150}
-                      height={150}
-                      className="w-full h-20 object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
 
           {/* Product Details */}
@@ -239,6 +258,18 @@ export default function ListingDetailPage() {
                     <p className="text-sm text-gray-500">Listed on</p>
                     <p className="text-sm font-medium text-gray-900">{formatDate(product.created_at)}</p>
                   </div>
+                </div>
+
+                {/* Product Status Manager */}
+                <div className="mb-6">
+                  <ProductStatusManager
+                    productId={product.id}
+                    currentStatus={product.status as 'draft' | 'published' | 'archived'}
+                    isOwner={isOwner}
+                    onStatusChange={(newStatus) => {
+                      setProduct(prev => prev ? { ...prev, status: newStatus } : null);
+                    }}
+                  />
                 </div>
 
                 {user ? (

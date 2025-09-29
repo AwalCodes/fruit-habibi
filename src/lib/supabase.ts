@@ -45,6 +45,7 @@ export type Database = {
           quantity: number;
           unit: string;
           location: string;
+          category: string;
           images: string[];
           status: 'draft' | 'published' | 'archived';
           created_at: string;
@@ -59,6 +60,7 @@ export type Database = {
           quantity: number;
           unit: string;
           location: string;
+          category?: string;
           images?: string[];
           status?: 'draft' | 'published' | 'archived';
           created_at?: string;
@@ -73,6 +75,7 @@ export type Database = {
           quantity?: number;
           unit?: string;
           location?: string;
+          category?: string;
           images?: string[];
           status?: 'draft' | 'published' | 'archived';
           created_at?: string;
