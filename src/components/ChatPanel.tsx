@@ -29,6 +29,9 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
 
+  // Determine if current user is the seller
+  const isCurrentUserSeller = user?.id === sellerId;
+
   useEffect(() => {
     if (!user) return;
 
@@ -46,17 +49,49 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
 
   const fetchMessages = async () => {
     try {
-      const { data, error } = await supabase
+      // Get messages where the current user is either sender or receiver
+      const { data: messagesData, error: messagesError } = await supabase
         .from('messages')
-        .select(`
-          *,
-          sender:sender_id(id, full_name)
-        `)
+        .select('*')
         .eq('product_id', productId)
+        .or(`sender_id.eq.${user?.id},receiver_id.eq.${user?.id}`)
         .order('created_at', { ascending: true });
 
-      if (error) throw error;
-      setMessages(data || []);
+      if (messagesError) throw messagesError;
+
+      if (!messagesData || messagesData.length === 0) {
+        setMessages([]);
+        setLoading(false);
+        return;
+      }
+
+      // Get unique sender IDs
+      const senderIds = [...new Set(messagesData.map(m => m.sender_id))];
+      
+      // Fetch sender information
+      const { data: usersData, error: usersError } = await supabase
+        .from('users')
+        .select('id, full_name')
+        .in('id', senderIds);
+
+      if (usersError) {
+        console.error('Error fetching users:', usersError);
+        // Still show messages but with "Unknown" sender
+        setMessages(messagesData.map(msg => ({
+          ...msg,
+          sender: { full_name: 'Unknown' }
+        })));
+      } else {
+        // Combine messages with sender info
+        const messagesWithSenders = messagesData.map(msg => {
+          const sender = usersData?.find(u => u.id === msg.sender_id);
+          return {
+            ...msg,
+            sender: { full_name: sender?.full_name || 'Unknown' }
+          };
+        });
+        setMessages(messagesWithSenders);
+      }
     } catch (error) {
       console.error('Error fetching messages:', error);
     } finally {
@@ -75,21 +110,38 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
           table: 'messages',
           filter: `product_id=eq.${productId}`,
         },
-        (payload) => {
-          // Fetch the new message with sender info
-          supabase
-            .from('messages')
-            .select(`
-              *,
-              sender:sender_id(id, full_name)
-            `)
-            .eq('id', payload.new.id)
-            .single()
-            .then(({ data }) => {
-              if (data) {
-                setMessages(prev => [...prev, data]);
+        async (payload) => {
+          const newMessage = payload.new as Message;
+          
+          // Only show the message if the current user is the sender or receiver
+          if (newMessage.sender_id !== user?.id && newMessage.receiver_id !== user?.id) {
+            return;
+          }
+          
+          // Fetch sender info for the new message
+          try {
+            const { data: senderData, error: senderError } = await supabase
+              .from('users')
+              .select('full_name')
+              .eq('id', newMessage.sender_id)
+              .single();
+
+            const messageWithSender = {
+              ...newMessage,
+              sender: { 
+                full_name: senderError ? 'Unknown' : senderData.full_name 
               }
-            });
+            };
+
+            setMessages(prev => [...prev, messageWithSender]);
+          } catch (error) {
+            console.error('Error fetching sender for new message:', error);
+            const messageWithSender = {
+              ...newMessage,
+              sender: { full_name: 'Unknown' }
+            };
+            setMessages(prev => [...prev, messageWithSender]);
+          }
         }
       )
       .subscribe();
@@ -105,19 +157,60 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
 
     setSending(true);
     try {
-      const { error } = await supabase
+      // Validate inputs
+      if (!user?.id) {
+        throw new Error('User not authenticated');
+      }
+      if (!productId) {
+        throw new Error('Product ID is missing');
+      }
+      if (!sellerId) {
+        throw new Error('Seller ID is missing');
+      }
+
+
+      // Determine the receiver: if current user is seller, find a buyer from existing messages
+      // If current user is buyer, receiver is the seller
+      let receiverId = sellerId;
+      
+      if (isCurrentUserSeller) {
+        // If seller is sending, find a buyer from existing messages for this product
+        const buyerMessage = messages.find(msg => msg.sender_id !== sellerId);
+        if (buyerMessage) {
+          receiverId = buyerMessage.sender_id;
+        } else {
+          // If no existing messages, we can't determine the buyer
+          // This shouldn't happen in normal flow, but let's handle it gracefully
+          throw new Error('Cannot send message: no buyer found for this conversation');
+        }
+      }
+
+      const { data, error } = await supabase
         .from('messages')
         .insert({
           product_id: productId,
           sender_id: user.id,
-          receiver_id: sellerId,
+          receiver_id: receiverId,
           body: newMessage.trim(),
-        });
+        })
+        .select();
 
-      if (error) throw error;
+
+      if (error) {
+        console.error('Supabase error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code,
+          fullError: JSON.stringify(error, null, 2)
+        });
+        throw new Error(`Supabase Error: ${error.message || 'Unknown error'}`);
+      }
+      
       setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
+      alert(`Failed to send message: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setSending(false);
     }
@@ -148,9 +241,14 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
     <div className="bg-white rounded-lg shadow-soft">
       <div className="px-6 py-4 border-b border-gray-200">
         <h3 className="text-lg font-medium text-gray-900">
-          Chat with {sellerName}
+          {isCurrentUserSeller ? `Messages for your listing` : `Chat with ${sellerName}`}
         </h3>
-        <p className="text-sm text-gray-500">Real-time messaging</p>
+        <p className="text-sm text-gray-500">
+          {isCurrentUserSeller 
+            ? 'Respond to inquiries about your product' 
+            : `Discuss ${sellerName}'s product`
+          }
+        </p>
       </div>
 
       <div className="h-96 flex flex-col">
@@ -175,21 +273,28 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
                   key={message.id}
                   className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                      isOwnMessage
-                        ? 'bg-primary text-white'
-                        : 'bg-gray-100 text-gray-900'
-                    }`}
-                  >
-                    <p className="text-sm">{message.body}</p>
-                    <p
-                      className={`text-xs mt-1 ${
-                        isOwnMessage ? 'text-primary-100' : 'text-gray-500'
+                  <div className="max-w-xs lg:max-w-md">
+                    {!isOwnMessage && (
+                      <p className="text-xs text-gray-500 mb-1 px-1">
+                        {message.sender.full_name || 'Unknown'}
+                      </p>
+                    )}
+                    <div
+                      className={`px-4 py-2 rounded-lg ${
+                        isOwnMessage
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-100 text-gray-900'
                       }`}
                     >
-                      {formatTime(message.created_at)}
-                    </p>
+                      <p className="text-sm">{message.body}</p>
+                      <p
+                        className={`text-xs mt-1 ${
+                          isOwnMessage ? 'text-primary-100' : 'text-gray-500'
+                        }`}
+                      >
+                        {formatTime(message.created_at)}
+                      </p>
+                    </div>
                   </div>
                 </div>
               );

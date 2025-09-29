@@ -19,11 +19,14 @@ interface Conversation {
 export default function MessagesPage() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const { user } = useAuth();
 
   useEffect(() => {
     if (user) {
       fetchConversations();
+    } else {
+      setLoading(false);
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -63,14 +66,19 @@ export default function MessagesPage() {
         ...messages.map(m => m.receiver_id)
       ])];
       
+      // Force fresh data by adding a cache-busting parameter
       const { data: users, error: usersError } = await supabase
         .from('users')
         .select('id, full_name')
-        .in('id', userIds);
+        .in('id', userIds)
+        .order('created_at', { ascending: false });
 
       if (usersError) throw usersError;
 
-      // Group messages by product and get the latest message for each
+      // Debug: Check what users we found
+      console.log('Users found after SQL fix:', users?.map(u => ({ id: u.id, name: u.full_name })));
+
+      // Group messages by product + other user combination
       const conversationMap = new Map();
       
       messages.forEach((message) => {
@@ -80,13 +88,26 @@ export default function MessagesPage() {
         const otherUserId = isSender ? message.receiver_id : message.sender_id;
         const otherUser = users?.find(u => u.id === otherUserId);
         
-        if (product && otherUser && (!conversationMap.has(productId) || 
-            new Date(message.created_at) > new Date(conversationMap.get(productId).last_message_time))) {
-          conversationMap.set(productId, {
+        console.log('Processing message:', {
+          messageId: message.id,
+          otherUserId,
+          otherUser,
+          userName: otherUser ? otherUser.full_name : 'NOT FOUND'
+        });
+        
+        // Create a unique key for each product + user conversation
+        const conversationKey = `${productId}-${otherUserId}`;
+        
+        // Use cleaner fallback name if user not found
+        const userName = otherUser ? otherUser.full_name : 'Unknown User';
+        
+        if (product && (!conversationMap.has(conversationKey) || 
+            new Date(message.created_at) > new Date(conversationMap.get(conversationKey).last_message_time))) {
+          conversationMap.set(conversationKey, {
             product_id: productId,
             product_title: product.title,
             other_user_id: otherUserId,
-            other_user_name: otherUser.full_name,
+            other_user_name: userName,
             last_message: message.body,
             last_message_time: message.created_at,
             unread_count: 0, // We'll implement this later with proper tracking
@@ -94,13 +115,15 @@ export default function MessagesPage() {
         }
       });
 
-      setConversations(Array.from(conversationMap.values()));
-    } catch (error) {
-      console.error('Error fetching conversations:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+          const conversationsArray = Array.from(conversationMap.values());
+          setConversations(conversationsArray);
+        } catch (error) {
+          console.error('Error fetching conversations:', error);
+          setError(error instanceof Error ? error.message : 'Failed to load conversations');
+        } finally {
+          setLoading(false);
+        }
+      };
 
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
@@ -133,6 +156,21 @@ export default function MessagesPage() {
     );
   }
 
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="bg-red-50 border border-red-200 rounded-md p-4">
+            <div className="text-red-800">
+              <h3 className="text-lg font-medium">Error loading messages</h3>
+              <p className="mt-2">{error}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -141,6 +179,7 @@ export default function MessagesPage() {
           <p className="mt-2 text-gray-600">
             Your conversations with buyers and suppliers
           </p>
+          
         </div>
 
         {conversations.length === 0 ? (
@@ -164,7 +203,7 @@ export default function MessagesPage() {
             <div className="divide-y divide-gray-200">
               {conversations.map((conversation) => (
                 <Link
-                  key={conversation.product_id}
+                  key={`${conversation.product_id}-${conversation.other_user_id}`}
                   href={`/listing/${conversation.product_id}?chat=true`}
                   className="block hover:bg-gray-50 transition-colors"
                 >

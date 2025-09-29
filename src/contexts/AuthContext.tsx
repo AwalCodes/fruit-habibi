@@ -8,9 +8,10 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signUp: (email: string, password: string, fullName: string, role: 'farmer' | 'importer', country: string) => Promise<void>;
+  signUp: (email: string, password: string, fullName: string, role: 'farmer' | 'importer', country: string) => Promise<unknown>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -55,20 +56,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (error) throw error;
 
-    // Create user profile
-    if (data.user) {
-      const { error: profileError } = await supabase
-        .from('users')
-        .insert({
-          id: data.user.id,
-          full_name: fullName,
-          email,
-          role,
-          country,
-        });
-
-      if (profileError) throw profileError;
-    }
+    // The user profile will be created automatically by the trigger
+    // No need to manually insert into users table
+    return data;
   };
 
   const signIn = async (email: string, password: string) => {
@@ -85,6 +75,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error) throw error;
   };
 
+  const resetPassword = async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) throw error;
+  };
+
   const value = {
     user,
     session,
@@ -92,6 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signIn,
     signOut,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

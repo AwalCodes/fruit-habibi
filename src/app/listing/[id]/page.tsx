@@ -43,18 +43,59 @@ export default function ListingDetailPage() {
 
   const fetchProduct = async (id: string) => {
     try {
-      const { data, error } = await supabase
+      // First, get the product
+      const { data: productData, error: productError } = await supabase
         .from('products')
-        .select(`
-          *,
-          users!products_owner_id_fkey(id, full_name, country)
-        `)
+        .select('*')
         .eq('id', id)
         .eq('status', 'published')
         .single();
 
-      if (error) throw error;
-      setProduct(data);
+      console.log('Product fetch result:', { productData, productError });
+
+      if (productError) throw productError;
+
+      // Then, get the user data
+      const { data: userDataArray, error: userError } = await supabase
+        .from('users')
+        .select('id, full_name, country')
+        .eq('id', productData.owner_id);
+      
+      const userData = userDataArray && userDataArray.length > 0 ? userDataArray[0] : null;
+
+      console.log('User fetch result:', { 
+        userData, 
+        userError, 
+        ownerId: productData.owner_id,
+        errorDetails: userError ? {
+          message: userError.message,
+          details: userError.details,
+          hint: userError.hint,
+          code: userError.code
+        } : null
+      });
+
+      // If user doesn't exist, create a fallback or handle gracefully
+      let finalUserData = userData;
+      if (!userData && !userError) {
+        // User doesn't exist, create a fallback
+        finalUserData = {
+          id: productData.owner_id,
+          full_name: 'Unknown Seller',
+          country: 'Unknown'
+        };
+        console.log('User not found, using fallback:', finalUserData);
+      }
+
+      // Combine the data
+      const combinedData = {
+        ...productData,
+        users: finalUserData
+      };
+
+      console.log('Combined data:', combinedData);
+
+      setProduct(combinedData);
     } catch {
       setError('Product not found');
     } finally {
@@ -108,7 +149,7 @@ export default function ListingDetailPage() {
     );
   }
 
-  const isOwner = user?.id === product.users.id;
+  const isOwner = user?.id === product.users?.id;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -191,8 +232,8 @@ export default function ListingDetailPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="text-lg font-medium text-gray-900">Supplier</h3>
-                    <p className="text-gray-600">{product.users.full_name}</p>
-                    <p className="text-sm text-gray-500">{product.users.country}</p>
+                    <p className="text-gray-600">{product.users?.full_name || 'Unknown'}</p>
+                    <p className="text-sm text-gray-500">{product.users?.country || 'Unknown'}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-gray-500">Listed on</p>
@@ -200,14 +241,14 @@ export default function ListingDetailPage() {
                   </div>
                 </div>
 
-                {!isOwner && user ? (
+                {user ? (
                   <Link
                     href={`/listing/${product.id}?chat=true`}
                     className="w-full bg-primary text-white py-3 px-4 rounded-md hover:bg-primary-dark transition-colors font-medium inline-block text-center"
                   >
-                    {showChat ? 'Hide Chat' : 'Start Chat'}
+                    {showChat ? 'Hide Chat' : (isOwner ? 'View Messages' : 'Start Chat')}
                   </Link>
-                ) : !user ? (
+                ) : (
                   <div className="text-center">
                     <p className="text-sm text-gray-600 mb-4">Sign in to contact the supplier</p>
                     <Link
@@ -217,28 +258,19 @@ export default function ListingDetailPage() {
                       Sign In
                     </Link>
                   </div>
-                ) : (
-                  <div className="text-center py-4">
-                    <p className="text-gray-600">This is your listing</p>
-                    <Link
-                      href="/dashboard"
-                      className="text-primary hover:text-primary-dark font-medium"
-                    >
-                      Go to Dashboard
-                    </Link>
-                  </div>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Chat Panel */}
-          {showChat && !isOwner && user && (
+          
+          {/* Chat Panel - Show for both seller and buyer when chat is enabled */}
+          {showChat && user && product.users?.id && (
             <div className="lg:col-span-1">
               <ChatPanel
                 productId={product.id}
                 sellerId={product.users.id}
-                sellerName={product.users.full_name}
+                sellerName={product.users.full_name || 'Unknown'}
               />
             </div>
           )}
