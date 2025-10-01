@@ -31,64 +31,18 @@ export class NotificationService {
     limit: number = 20,
     offset: number = 0
   ): Promise<Notification[]> {
-    try {
-      const { data, error } = await supabase
-        .from('notifications')
-        .select('*')
-        .eq('recipient_id', userId)
-        .order('created_at', { ascending: false })
-        .range(offset, offset + limit - 1);
-
-      if (error) {
-        // Check if the error is because the table doesn't exist
-        if (error.code === '42P01' || error.message?.includes('does not exist')) {
-          console.log('Notifications table not available - returning empty array');
-          return [];
-        }
-        console.error('Error fetching notifications:', error);
-        return [];
-      }
-
-      return data || [];
-    } catch (error) {
-      // Handle table not existing gracefully
-      if (error instanceof Error && error.message.includes('does not exist')) {
-        console.log('Notifications table not available - returning empty array');
-        return [];
-      }
-      console.error('Error fetching notifications:', error);
-      return [];
-    }
+    // Temporarily return empty array since notifications table is disabled
+    // This prevents any console errors while the notifications system is being set up
+    return [];
   }
 
   /**
    * Get unread notification count for a user
    */
   static async getUnreadCount(userId: string): Promise<number> {
-    try {
-      const { data, error } = await supabase
-        .rpc('get_unread_notification_count', { user_uuid: userId });
-
-      if (error) {
-        // Check if the error is because the function or table doesn't exist
-        if (error.code === '42P01' || error.code === '42883' || error.message?.includes('does not exist')) {
-          console.log('Notifications system not available - returning 0');
-          return 0;
-        }
-        console.error('Error fetching unread count:', error);
-        return 0;
-      }
-
-      return data || 0;
-    } catch (error) {
-      // Handle function/table not existing gracefully
-      if (error instanceof Error && (error.message.includes('does not exist') || error.message.includes('function'))) {
-        console.log('Notifications system not available - returning 0');
-        return 0;
-      }
-      console.error('Error fetching unread count:', error);
-      return 0;
-    }
+    // Temporarily return 0 since notifications table is disabled
+    // This prevents any console errors while the notifications system is being set up
+    return 0;
   }
 
   /**
@@ -98,33 +52,9 @@ export class NotificationService {
     userId: string,
     notificationIds?: string[]
   ): Promise<boolean> {
-    try {
-      const { error } = await supabase
-        .rpc('mark_notifications_as_read', {
-          user_uuid: userId,
-          notification_ids: notificationIds || null
-        });
-
-      if (error) {
-        // Check if the error is because the function or table doesn't exist
-        if (error.code === '42P01' || error.code === '42883' || error.message?.includes('does not exist')) {
-          console.log('Notifications system not available - skipping mark as read');
-          return true; // Return true to avoid breaking the UI
-        }
-        console.error('Error marking notifications as read:', error);
-        return false;
-      }
-
-      return true;
-    } catch (error) {
-      // Handle function/table not existing gracefully
-      if (error instanceof Error && (error.message.includes('does not exist') || error.message.includes('function'))) {
-        console.log('Notifications system not available - skipping mark as read');
-        return true; // Return true to avoid breaking the UI
-      }
-      console.error('Error marking notifications as read:', error);
-      return false;
-    }
+    // Temporarily return true since notifications table is disabled
+    // This prevents any console errors while the notifications system is being set up
+    return true;
   }
 
   /**
@@ -134,33 +64,9 @@ export class NotificationService {
     notificationId: string,
     userId: string
   ): Promise<boolean> {
-    try {
-      const { error } = await supabase
-        .from('notifications')
-        .delete()
-        .eq('id', notificationId)
-        .eq('recipient_id', userId);
-
-      if (error) {
-        // Check if the error is because the table doesn't exist
-        if (error.code === '42P01' || error.message?.includes('does not exist')) {
-          console.log('Notifications table not available - skipping delete');
-          return true; // Return true to avoid breaking the UI
-        }
-        console.error('Error deleting notification:', error);
-        return false;
-      }
-
-      return true;
-    } catch (error) {
-      // Handle table not existing gracefully
-      if (error instanceof Error && error.message.includes('does not exist')) {
-        console.log('Notifications table not available - skipping delete');
-        return true; // Return true to avoid breaking the UI
-      }
-      console.error('Error deleting notification:', error);
-      return false;
-    }
+    // Temporarily return true since notifications table is disabled
+    // This prevents any console errors while the notifications system is being set up
+    return true;
   }
 
   /**
@@ -173,36 +79,9 @@ export class NotificationService {
     message: string,
     data?: NotificationData
   ): Promise<string | null> {
-    try {
-      const { data: result, error } = await supabase
-        .rpc('create_notification', {
-          target_user_id: targetUserId,
-          notification_type: type,
-          notification_title: title,
-          notification_message: message,
-          notification_data: data || null
-        });
-
-      if (error) {
-        // Check if the error is because the function or table doesn't exist
-        if (error.code === '42P01' || error.code === '42883' || error.message?.includes('does not exist')) {
-          console.log('Notifications system not available - skipping create');
-          return null;
-        }
-        console.error('Error creating notification:', error);
-        return null;
-      }
-
-      return result;
-    } catch (error) {
-      // Handle function/table not existing gracefully
-      if (error instanceof Error && (error.message.includes('does not exist') || error.message.includes('function'))) {
-        console.log('Notifications system not available - skipping create');
-        return null;
-      }
-      console.error('Error creating notification:', error);
-      return null;
-    }
+    // Temporarily return null since notifications table is disabled
+    // This prevents any console errors while the notifications system is being set up
+    return null;
   }
 
   /**

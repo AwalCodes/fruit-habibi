@@ -50,7 +50,6 @@ export default function NotificationsPage() {
       setNotifications(data);
     } catch (error) {
       // Notifications system might not be available - set empty array
-      console.log('Notifications system not available - showing empty list');
       setNotifications([]);
     } finally {
       setLoading(false);

@@ -63,7 +63,6 @@ export default function NotificationBell({ className = '' }: NotificationBellPro
       setNotifications(data);
     } catch (error) {
       // Notifications system might not be available - set empty array
-      console.log('Notifications system not available - showing empty list');
       setNotifications([]);
     } finally {
       setLoading(false);
@@ -78,7 +77,6 @@ export default function NotificationBell({ className = '' }: NotificationBellPro
       setUnreadCount(count);
     } catch (error) {
       // Notifications system might not be available - set count to 0
-      console.log('Notifications system not available - setting count to 0');
       setUnreadCount(0);
     }
   };

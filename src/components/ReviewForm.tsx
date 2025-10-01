@@ -56,6 +56,8 @@ export default function ReviewForm({ productId, onReviewSubmitted, onCancel }: R
       if (error) {
         if (error.code === '23505') {
           setMessage({ type: 'error', text: 'You have already reviewed this product.' });
+        } else if (error.code === '42P01' || error.message?.includes('does not exist')) {
+          setMessage({ type: 'error', text: 'Reviews feature is not available yet. Please try again later.' });
         } else {
           setMessage({ type: 'error', text: 'Failed to submit review. Please try again.' });
         }
