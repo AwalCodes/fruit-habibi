@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import NotificationBell from './NotificationBell';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -17,6 +18,7 @@ export default function Navbar() {
   const userNavigation = [
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Messages', href: '/messages' },
+    { name: 'Notifications', href: '/notifications' },
     { name: 'Profile', href: '/profile' },
   ];
 
@@ -77,6 +79,9 @@ export default function Navbar() {
                     </div>
                   </div>
                 )}
+                
+                {/* Notifications */}
+                <NotificationBell />
                 
                 {/* Regular User Navigation */}
                 {userNavigation.map((item) => (

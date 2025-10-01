@@ -118,30 +118,55 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
             return;
           }
           
-          // Fetch sender info for the new message
-          try {
-            const { data: senderData, error: senderError } = await supabase
-              .from('users')
-              .select('full_name')
-              .eq('id', newMessage.sender_id)
-              .single();
+          // Check if this message already exists (from optimistic update)
+          setMessages(prev => {
+            const messageExists = prev.some(msg => 
+              msg.body === newMessage.body && 
+              msg.sender_id === newMessage.sender_id &&
+              Math.abs(new Date(msg.created_at).getTime() - new Date(newMessage.created_at).getTime()) < 5000 // Within 5 seconds
+            );
+            
+            if (messageExists) {
+              // Replace the optimistic message with the real one
+              return prev.map(msg => 
+                msg.body === newMessage.body && 
+                msg.sender_id === newMessage.sender_id &&
+                Math.abs(new Date(msg.created_at).getTime() - new Date(newMessage.created_at).getTime()) < 5000
+                  ? { ...newMessage, sender: msg.sender } // Keep existing sender info
+                  : msg
+              );
+            }
+            
+            // If it's a new message, fetch sender info
+            const fetchSenderInfo = async () => {
+              try {
+                const { data: senderData, error: senderError } = await supabase
+                  .from('users')
+                  .select('full_name')
+                  .eq('id', newMessage.sender_id)
+                  .single();
 
-            const messageWithSender = {
-              ...newMessage,
-              sender: { 
-                full_name: senderError ? 'Unknown' : senderData.full_name 
+                const messageWithSender = {
+                  ...newMessage,
+                  sender: { 
+                    full_name: senderError ? 'Unknown' : senderData.full_name 
+                  }
+                };
+
+                setMessages(prevMsgs => [...prevMsgs, messageWithSender]);
+              } catch (error) {
+                console.error('Error fetching sender for new message:', error);
+                const messageWithSender = {
+                  ...newMessage,
+                  sender: { full_name: 'Unknown' }
+                };
+                setMessages(prevMsgs => [...prevMsgs, messageWithSender]);
               }
             };
-
-            setMessages(prev => [...prev, messageWithSender]);
-          } catch (error) {
-            console.error('Error fetching sender for new message:', error);
-            const messageWithSender = {
-              ...newMessage,
-              sender: { full_name: 'Unknown' }
-            };
-            setMessages(prev => [...prev, messageWithSender]);
-          }
+            
+            fetchSenderInfo();
+            return prev; // Return current state while fetching
+          });
         }
       )
       .subscribe();
@@ -156,6 +181,20 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
     if (!newMessage.trim() || !user) return;
 
     setSending(true);
+    const messageText = newMessage.trim();
+    
+    // Optimistically add the message to the UI immediately
+    const optimisticMessage: Message = {
+      id: `temp-${Date.now()}`, // Temporary ID
+      body: messageText,
+      created_at: new Date().toISOString(),
+      sender_id: user.id,
+      receiver_id: '', // Will be set below
+      sender: {
+        full_name: user.user_metadata?.full_name || user.email || 'You'
+      }
+    };
+
     try {
       // Validate inputs
       if (!user?.id) {
@@ -167,7 +206,6 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
       if (!sellerId) {
         throw new Error('Seller ID is missing');
       }
-
 
       // Determine the receiver: if current user is seller, find a buyer from existing messages
       // If current user is buyer, receiver is the seller
@@ -185,18 +223,29 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
         }
       }
 
+      // Update the optimistic message with the correct receiver
+      optimisticMessage.receiver_id = receiverId;
+
+      // Add the optimistic message to the UI immediately
+      setMessages(prev => [...prev, optimisticMessage]);
+      
+      // Clear the input immediately for better UX
+      setNewMessage('');
+
       const { data, error } = await supabase
         .from('messages')
         .insert({
           product_id: productId,
           sender_id: user.id,
           receiver_id: receiverId,
-          body: newMessage.trim(),
+          body: messageText,
         })
         .select();
 
-
       if (error) {
+        // Remove the optimistic message if the real send failed
+        setMessages(prev => prev.filter(msg => msg.id !== optimisticMessage.id));
+        
         console.error('Supabase error details:', {
           message: error.message,
           details: error.details,
@@ -206,9 +255,13 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
         });
         throw new Error(`Supabase Error: ${error.message || 'Unknown error'}`);
       }
+
+      // The real-time subscription will handle updating the message with the real ID
+      // We could also update the optimistic message with the real ID here if needed
       
-      setNewMessage('');
     } catch (error) {
+      // Restore the input if there was an error
+      setNewMessage(messageText);
       console.error('Error sending message:', error);
       alert(`Failed to send message: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {

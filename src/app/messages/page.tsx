@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { useSearchParams } from 'next/navigation';
+import ChatPanel from '@/components/ChatPanel';
 
 interface Conversation {
   product_id: string;
@@ -20,7 +22,14 @@ export default function MessagesPage() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
+  const [showChatPanel, setShowChatPanel] = useState(false);
+  const [chatProductId, setChatProductId] = useState<string | null>(null);
+  const [chatOtherUserId, setChatOtherUserId] = useState<string | null>(null);
+  const [chatOtherUserName, setChatOtherUserName] = useState<string | null>(null);
+  const [chatProductTitle, setChatProductTitle] = useState<string | null>(null);
   const { user } = useAuth();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (user) {
@@ -29,6 +38,59 @@ export default function MessagesPage() {
       setLoading(false);
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-select conversation based on URL parameters
+  useEffect(() => {
+    const productId = searchParams.get('product_id');
+    const otherUserId = searchParams.get('other_user_id');
+    
+    if (productId && otherUserId && conversations.length > 0) {
+      const conversationKey = `${productId}-${otherUserId}`;
+      setSelectedConversation(conversationKey);
+      setShowChatPanel(true);
+      setChatProductId(productId);
+      setChatOtherUserId(otherUserId);
+      
+      // Fetch chat details
+      fetchChatDetails(productId, otherUserId);
+    }
+  }, [searchParams, conversations]);
+
+  const handleConversationClick = async (productId: string, otherUserId: string) => {
+    const conversationKey = `${productId}-${otherUserId}`;
+    setSelectedConversation(conversationKey);
+    setShowChatPanel(true);
+    setChatProductId(productId);
+    setChatOtherUserId(otherUserId);
+    
+    // Fetch user and product details
+    await fetchChatDetails(productId, otherUserId);
+  };
+
+  const fetchChatDetails = async (productId: string, userId: string) => {
+    try {
+      // Fetch user details
+      const { data: userData } = await supabase
+        .from('users')
+        .select('full_name')
+        .eq('id', userId)
+        .single();
+
+      // Fetch product details
+      const { data: productData } = await supabase
+        .from('products')
+        .select('title')
+        .eq('id', productId)
+        .single();
+
+      setChatOtherUserName(userData?.full_name || 'Unknown User');
+      setChatProductTitle(productData?.title || 'Unknown Product');
+    } catch (error) {
+      console.error('Error fetching chat details:', error);
+      setChatOtherUserName('Unknown User');
+      setChatProductTitle('Unknown Product');
+    }
+  };
 
   const fetchConversations = async () => {
     if (!user) return;
@@ -202,10 +264,14 @@ export default function MessagesPage() {
           <div className="bg-white rounded-lg shadow-soft overflow-hidden">
             <div className="divide-y divide-gray-200">
               {conversations.map((conversation) => (
-                <Link
+                <div
                   key={`${conversation.product_id}-${conversation.other_user_id}`}
-                  href={`/listing/${conversation.product_id}?chat=true`}
-                  className="block hover:bg-gray-50 transition-colors"
+                  onClick={() => handleConversationClick(conversation.product_id, conversation.other_user_id)}
+                  className={`block hover:bg-gray-50 transition-colors cursor-pointer ${
+                    selectedConversation === `${conversation.product_id}-${conversation.other_user_id}` 
+                      ? 'bg-blue-50 border-r-4 border-blue-500' 
+                      : ''
+                  }`}
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between">
@@ -234,8 +300,44 @@ export default function MessagesPage() {
                       </div>
                     </div>
                   </div>
-                </Link>
+                </div>
               ))}
+            </div>
+          </div>
+        )}
+        
+        {/* Chat Panel */}
+        {showChatPanel && chatProductId && chatOtherUserId && (
+          <div className="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[85vh] flex flex-col border border-gray-200">
+              <div className="flex justify-between items-center p-6 border-b border-gray-200 bg-gray-50 rounded-t-xl">
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900">Chat with {chatOtherUserName || 'Unknown User'}</h2>
+                  <p className="text-sm text-gray-600 mt-1">Discuss {chatProductTitle || 'Unknown Product'}</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowChatPanel(false);
+                    setSelectedConversation(null);
+                    setChatProductId(null);
+                    setChatOtherUserId(null);
+                    setChatOtherUserName(null);
+                    setChatProductTitle(null);
+                  }}
+                  className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-200 rounded-full"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="flex-1 overflow-hidden bg-white">
+                <ChatPanel
+                  productId={chatProductId}
+                  sellerId={chatOtherUserId}
+                  sellerName={chatOtherUserName || 'Unknown User'}
+                />
+              </div>
             </div>
           </div>
         )}
