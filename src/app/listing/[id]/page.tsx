@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import ChatPanel from '@/components/ChatPanel';
 import ProductStatusManager from '@/components/ProductStatusManager';
+import ProductReviews from '@/components/ProductReviews';
 
 interface Product {
   id: string;
@@ -305,6 +306,11 @@ export default function ListingDetailPage() {
               />
             </div>
           )}
+        </div>
+
+        {/* Reviews Section */}
+        <div className="mt-8">
+          <ProductReviews productId={product.id} />
         </div>
       </div>
     </div>

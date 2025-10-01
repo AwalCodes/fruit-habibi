@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import StarRating from './StarRating';
 
 interface ProductCardProps {
   id: string;
@@ -18,6 +19,8 @@ interface ProductCardProps {
   ownerId: string;
   createdAt: string;
   currentUserId?: string;
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 export default function ProductCard({
@@ -34,6 +37,8 @@ export default function ProductCard({
   ownerId,
   createdAt,
   currentUserId,
+  averageRating,
+  reviewCount,
 }: ProductCardProps) {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -114,6 +119,16 @@ export default function ProductCard({
           <p className="text-gray-600 text-sm mb-3 line-clamp-2">
             {description}
           </p>
+          
+          {/* Rating Display */}
+          {averageRating && averageRating > 0 && (
+            <div className="flex items-center gap-2 mb-3">
+              <StarRating rating={averageRating} size="sm" />
+              <span className="text-sm text-gray-600">
+                ({reviewCount} review{reviewCount !== 1 ? 's' : ''})
+              </span>
+            </div>
+          )}
           
           <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
             <span className="flex items-center">
