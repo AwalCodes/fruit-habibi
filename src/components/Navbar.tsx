@@ -30,12 +30,12 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="bg-white shadow-soft">
+    <nav className="bg-gradient-to-r from-slate-900 via-emerald-900 to-black shadow-2xl border-b border-yellow-400/20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between">
           <div className="flex">
             <div className="flex flex-shrink-0 items-center">
-              <Link href="/" className="text-2xl font-bold text-primary">
+              <Link href="/" className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300">
                 Fruit Habibi
               </Link>
             </div>
@@ -44,7 +44,7 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-emerald-100 hover:border-yellow-400 hover:text-yellow-300 transition-all duration-300"
                 >
                   {item.name}
                 </Link>
@@ -88,14 +88,14 @@ export default function Navbar() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="text-sm font-medium text-gray-500 hover:text-gray-700"
+                    className="text-sm font-medium text-emerald-100 hover:text-yellow-300 transition-colors duration-300"
                   >
                     {item.name}
                   </Link>
                 ))}
                 <button
                   onClick={signOut}
-                  className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-white hover:bg-primary-dark"
+                  className="rounded-md bg-gradient-to-r from-yellow-400 to-yellow-600 px-4 py-2 text-sm font-medium text-black hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25"
                 >
                   Sign Out
                 </button>
@@ -104,13 +104,13 @@ export default function Navbar() {
               <div className="flex items-center space-x-4">
                 <Link
                   href="/login"
-                  className="text-sm font-medium text-gray-500 hover:text-gray-700"
+                  className="text-sm font-medium text-emerald-100 hover:text-yellow-300 transition-colors duration-300"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/register"
-                  className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-white hover:bg-primary-dark"
+                  className="rounded-md bg-gradient-to-r from-yellow-400 to-yellow-600 px-4 py-2 text-sm font-medium text-black hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25"
                 >
                   Get Started
                 </Link>
@@ -121,7 +121,7 @@ export default function Navbar() {
           <div className="flex items-center sm:hidden">
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
+              className="inline-flex items-center justify-center rounded-md p-2 text-emerald-100 hover:bg-emerald-800/50 hover:text-yellow-300 transition-all duration-300"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               <span className="sr-only">Open main menu</span>
@@ -137,19 +137,19 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="sm:hidden">
+        <div className="sm:hidden bg-gradient-to-b from-emerald-900 to-slate-900 border-t border-yellow-400/20">
           <div className="space-y-1 pb-3 pt-2">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-emerald-100 hover:border-yellow-400 hover:bg-emerald-800/30 hover:text-yellow-300 transition-all duration-300"
               >
                 {item.name}
               </Link>
             ))}
           </div>
-          <div className="border-t border-gray-200 pb-3 pt-4">
+          <div className="border-t border-yellow-400/20 pb-3 pt-4">
             {user ? (
               <div className="space-y-1">
                 {/* Admin Navigation */}
@@ -179,14 +179,14 @@ export default function Navbar() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-700"
+                    className="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-yellow-300 hover:bg-emerald-800/30 transition-all duration-300"
                   >
                     {item.name}
                   </Link>
                 ))}
                 <button
                   onClick={signOut}
-                  className="block w-full px-3 py-2 text-left text-base font-medium text-gray-500 hover:text-gray-700"
+                  className="block w-full px-3 py-2 text-left text-base font-medium text-emerald-100 hover:text-yellow-300 hover:bg-emerald-800/30 transition-all duration-300"
                 >
                   Sign Out
                 </button>
@@ -195,13 +195,13 @@ export default function Navbar() {
               <div className="space-y-1">
                 <Link
                   href="/login"
-                  className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-700"
+                  className="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-yellow-300 hover:bg-emerald-800/30 transition-all duration-300"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/register"
-                  className="block px-3 py-2 text-base font-medium text-primary hover:text-primary-dark"
+                  className="block px-3 py-2 text-base font-medium text-yellow-400 hover:text-yellow-300 hover:bg-emerald-800/30 transition-all duration-300"
                 >
                   Get Started
                 </Link>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { useSearchParams } from 'next/navigation';
@@ -208,10 +209,13 @@ export default function MessagesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center h-64">
-            <div className="text-lg text-gray-600">Loading conversations...</div>
+            <div className="text-lg text-emerald-100 flex items-center gap-3">
+              <div className="w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+              Loading premium conversations...
+            </div>
           </div>
         </div>
       </div>
@@ -220,10 +224,10 @@ export default function MessagesPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="bg-red-50 border border-red-200 rounded-md p-4">
-            <div className="text-red-800">
+          <div className="bg-gradient-to-r from-red-900/50 to-red-800/50 border border-red-400/30 rounded-2xl p-6 backdrop-blur-sm">
+            <div className="text-red-100">
               <h3 className="text-lg font-medium">Error loading messages</h3>
               <p className="mt-2">{error}</p>
             </div>
@@ -234,67 +238,84 @@ export default function MessagesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8 relative overflow-hidden">
+      {/* Luxury Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fbbf24' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }} />
+      </div>
+
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Messages</h1>
-          <p className="mt-2 text-gray-600">
-            Your conversations with buyers and suppliers
+          <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-4 drop-shadow-lg">
+            Premium Messages
+          </h1>
+          <p className="text-xl text-emerald-100 leading-relaxed">
+            Your luxury conversations with buyers and premium suppliers
           </p>
-          
         </div>
 
         {conversations.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-soft p-8">
+          <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl border border-yellow-400/20 p-12 shadow-2xl">
             <div className="text-center">
-              <div className="text-gray-400 text-6xl mb-4">💬</div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No conversations yet</h3>
-              <p className="text-gray-600 mb-6">
-                Start conversations by browsing listings and contacting suppliers
+              <motion.div 
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="text-yellow-400 text-8xl mb-6"
+              >
+                💬
+              </motion.div>
+              <h3 className="text-2xl font-bold text-white mb-4">No Premium Conversations Yet</h3>
+              <p className="text-emerald-100 mb-8 leading-relaxed">
+                Start luxury conversations by browsing premium listings and contacting verified suppliers
               </p>
               <Link
                 href="/listings"
-                className="bg-primary text-white px-6 py-3 rounded-md hover:bg-primary-dark transition-colors"
+                className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-8 py-4 rounded-full font-bold hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25 flex items-center gap-3 mx-auto w-fit"
               >
-                Browse Listings
+                ✨ Browse Premium Listings
               </Link>
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-soft overflow-hidden">
-            <div className="divide-y divide-gray-200">
+          <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl border border-yellow-400/20 shadow-2xl overflow-hidden">
+            <div className="divide-y divide-yellow-400/20">
               {conversations.map((conversation) => (
                 <div
                   key={`${conversation.product_id}-${conversation.other_user_id}`}
                   onClick={() => handleConversationClick(conversation.product_id, conversation.other_user_id)}
-                  className={`block hover:bg-gray-50 transition-colors cursor-pointer ${
+                  className={`block hover:bg-emerald-800/30 transition-all duration-300 cursor-pointer ${
                     selectedConversation === `${conversation.product_id}-${conversation.other_user_id}` 
-                      ? 'bg-blue-50 border-r-4 border-blue-500' 
+                      ? 'bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 border-r-4 border-yellow-400' 
                       : ''
                   }`}
                 >
-                  <div className="p-6">
+                  <div className="p-6 relative">
+                    {/* Gemstone Badge */}
+                    <div className="absolute top-4 right-4 text-xl">💎</div>
+                    
                     <div className="flex items-start justify-between">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-3">
-                          <h3 className="text-lg font-medium text-gray-900 truncate">
+                          <h3 className="text-xl font-bold text-white truncate">
                             {conversation.product_title}
                           </h3>
                           {conversation.unread_count > 0 && (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary text-white">
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-yellow-400 to-yellow-600 text-black">
                               {conversation.unread_count}
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-sm text-emerald-300 mt-1">
                           with {conversation.other_user_name}
                         </p>
-                        <p className="text-sm text-gray-500 mt-2 line-clamp-2">
+                        <p className="text-sm text-emerald-100 mt-2 line-clamp-2 leading-relaxed">
                           {conversation.last_message}
                         </p>
                       </div>
                       <div className="ml-4 flex-shrink-0">
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-yellow-300 font-medium">
                           {formatTime(conversation.last_message_time)}
                         </p>
                       </div>
@@ -308,12 +329,12 @@ export default function MessagesPage() {
         
         {/* Chat Panel */}
         {showChatPanel && chatProductId && chatOtherUserId && (
-          <div className="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[85vh] flex flex-col border border-gray-200">
-              <div className="flex justify-between items-center p-6 border-b border-gray-200 bg-gray-50 rounded-t-xl">
+          <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm rounded-2xl shadow-2xl w-full max-w-5xl h-[85vh] flex flex-col border border-yellow-400/30">
+              <div className="flex justify-between items-center p-6 border-b border-yellow-400/20 bg-gradient-to-r from-emerald-900/50 to-slate-900/50 rounded-t-2xl">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900">Chat with {chatOtherUserName || 'Unknown User'}</h2>
-                  <p className="text-sm text-gray-600 mt-1">Discuss {chatProductTitle || 'Unknown Product'}</p>
+                  <h2 className="text-2xl font-bold text-white">💬 Chat with {chatOtherUserName || 'Unknown User'}</h2>
+                  <p className="text-emerald-200 mt-1">Discuss {chatProductTitle || 'Unknown Product'}</p>
                 </div>
                 <button
                   onClick={() => {
@@ -324,14 +345,14 @@ export default function MessagesPage() {
                     setChatOtherUserName(null);
                     setChatProductTitle(null);
                   }}
-                  className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-200 rounded-full"
+                  className="text-emerald-200 hover:text-yellow-300 transition-colors p-2 hover:bg-emerald-800/50 rounded-full"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
-              <div className="flex-1 overflow-hidden bg-white">
+              <div className="flex-1 overflow-hidden bg-gradient-to-br from-slate-800/50 to-slate-900/50">
                 <ChatPanel
                   productId={chatProductId}
                   sellerId={chatOtherUserId}

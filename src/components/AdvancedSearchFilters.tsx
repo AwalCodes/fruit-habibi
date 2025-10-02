@@ -105,12 +105,12 @@ export default function AdvancedSearchFilters({
       {/* Filter Toggle Button */}
       <button
         onClick={onToggle}
-        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+        className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-yellow-400/30 rounded-xl hover:border-yellow-400/50 transition-all duration-300 shadow-lg hover:shadow-yellow-500/10"
       >
-        <FunnelIcon className="w-5 h-5" />
-        <span>Filters</span>
+        <FunnelIcon className="w-5 h-5 text-yellow-400" />
+        <span className="text-emerald-100 font-medium">Premium Filters</span>
         {hasActiveFilters() && (
-          <span className="bg-green-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+          <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold">
             !
           </span>
         )}
@@ -122,47 +122,49 @@ export default function AdvancedSearchFilters({
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-6"
+          className="absolute top-full left-0 right-0 mt-3 bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border border-yellow-400/30 rounded-2xl shadow-2xl z-50 p-8"
         >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Advanced Filters</h3>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
+              💎 Premium Filters
+            </h3>
             <button
               onClick={onToggle}
-              className="p-1 hover:bg-gray-100 rounded-full"
+              className="p-2 hover:bg-emerald-800/30 rounded-full transition-colors duration-300"
             >
-              <XMarkIcon className="w-5 h-5 text-gray-500" />
+              <XMarkIcon className="w-6 h-6 text-emerald-100 hover:text-yellow-300" />
             </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Search Term */}
             <div className="lg:col-span-3">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <MagnifyingGlassIcon className="w-4 h-4 inline mr-1" />
-                Search
+              <label className="block text-sm font-medium text-yellow-400 mb-3">
+                <MagnifyingGlassIcon className="w-4 h-4 inline mr-2" />
+                Premium Search
               </label>
               <input
                 type="text"
                 value={localFilters.searchTerm}
                 onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
-                placeholder="Search products, descriptions..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                placeholder="Search premium products, descriptions..."
+                className="w-full px-4 py-3 bg-slate-700/50 border border-yellow-400/30 rounded-xl text-emerald-100 placeholder-emerald-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-300"
               />
             </div>
 
             {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <TagIcon className="w-4 h-4 inline mr-1" />
-                Category
+              <label className="block text-sm font-medium text-yellow-400 mb-3">
+                <TagIcon className="w-4 h-4 inline mr-2" />
+                Premium Category
               </label>
               <select
                 value={localFilters.category}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                className="w-full px-4 py-3 bg-slate-700/50 border border-yellow-400/30 rounded-xl text-emerald-100 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-300"
               >
                 {categories.map(category => (
-                  <option key={category.value} value={category.value}>
+                  <option key={category.value} value={category.value} className="bg-slate-800">
                     {category.label}
                   </option>
                 ))}
@@ -171,8 +173,8 @@ export default function AdvancedSearchFilters({
 
             {/* Location */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <MapPinIcon className="w-4 h-4 inline mr-1" />
+              <label className="block text-sm font-medium text-yellow-400 mb-3">
+                <MapPinIcon className="w-4 h-4 inline mr-2" />
                 Location
               </label>
               <input
@@ -180,22 +182,22 @@ export default function AdvancedSearchFilters({
                 value={localFilters.location}
                 onChange={(e) => handleFilterChange('location', e.target.value)}
                 placeholder="City, Country..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                className="w-full px-4 py-3 bg-slate-700/50 border border-yellow-400/30 rounded-xl text-emerald-100 placeholder-emerald-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-300"
               />
             </div>
 
             {/* Sort By */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Sort By
+              <label className="block text-sm font-medium text-yellow-400 mb-3">
+                ✨ Sort By
               </label>
               <select
                 value={localFilters.sortBy}
                 onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                className="w-full px-4 py-3 bg-slate-700/50 border border-yellow-400/30 rounded-xl text-emerald-100 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-300"
               >
                 {sortOptions.map(option => (
-                  <option key={option.value} value={option.value}>
+                  <option key={option.value} value={option.value} className="bg-slate-800">
                     {option.label}
                   </option>
                 ))}
@@ -204,18 +206,18 @@ export default function AdvancedSearchFilters({
 
             {/* Price Range */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <CurrencyDollarIcon className="w-4 h-4 inline mr-1" />
-                Price Range (USD)
+              <label className="block text-sm font-medium text-yellow-400 mb-3">
+                <CurrencyDollarIcon className="w-4 h-4 inline mr-2" />
+                💎 Premium Price Range (USD)
               </label>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-3">
                 <input
                   type="number"
                   value={localFilters.minPrice}
                   onChange={(e) => handleFilterChange('minPrice', Number(e.target.value))}
                   placeholder="Min"
                   min="0"
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  className="px-4 py-3 bg-slate-700/50 border border-yellow-400/30 rounded-xl text-emerald-100 placeholder-emerald-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-300"
                 />
                 <input
                   type="number"
@@ -223,25 +225,25 @@ export default function AdvancedSearchFilters({
                   onChange={(e) => handleFilterChange('maxPrice', Number(e.target.value))}
                   placeholder="Max"
                   min="0"
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  className="px-4 py-3 bg-slate-700/50 border border-yellow-400/30 rounded-xl text-emerald-100 placeholder-emerald-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-300"
                 />
               </div>
             </div>
 
             {/* Minimum Rating */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <StarIcon className="w-4 h-4 inline mr-1" />
-                Minimum Rating
+              <label className="block text-sm font-medium text-yellow-400 mb-3">
+                <StarIcon className="w-4 h-4 inline mr-2" />
+                ⭐ Premium Rating
               </label>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <StarRating
                   rating={localFilters.minRating}
                   interactive={true}
                   onRatingChange={(rating) => handleFilterChange('minRating', rating)}
                   size="md"
                 />
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-emerald-200">
                   {localFilters.minRating > 0 ? `${localFilters.minRating}+ stars` : 'Any rating'}
                 </span>
               </div>
@@ -249,15 +251,15 @@ export default function AdvancedSearchFilters({
 
             {/* Additional Filters */}
             <div className="lg:col-span-3">
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-6">
                 <label className="flex items-center">
                   <input
                     type="checkbox"
                     checked={localFilters.hasImages}
                     onChange={(e) => handleFilterChange('hasImages', e.target.checked)}
-                    className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                    className="rounded border-yellow-400/50 text-yellow-400 focus:ring-yellow-400 bg-slate-700/50"
                   />
-                  <span className="ml-2 text-sm text-gray-700">Has Images</span>
+                  <span className="ml-3 text-sm text-emerald-100">✨ Has Premium Images</span>
                 </label>
 
                 <label className="flex items-center">
@@ -265,27 +267,27 @@ export default function AdvancedSearchFilters({
                     type="checkbox"
                     checked={localFilters.inStock}
                     onChange={(e) => handleFilterChange('inStock', e.target.checked)}
-                    className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                    className="rounded border-yellow-400/50 text-yellow-400 focus:ring-yellow-400 bg-slate-700/50"
                   />
-                  <span className="ml-2 text-sm text-gray-700">In Stock</span>
+                  <span className="ml-3 text-sm text-emerald-100">💎 In Premium Stock</span>
                 </label>
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-yellow-400/20">
             <button
               onClick={handleReset}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+              className="px-6 py-3 text-emerald-100 hover:text-yellow-300 transition-colors duration-300 font-medium"
             >
-              Reset All
+              Reset All Filters
             </button>
             <button
               onClick={handleApplyFilters}
-              className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              className="px-8 py-3 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black rounded-xl hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25 font-bold flex items-center gap-2"
             >
-              Apply Filters
+              ✨ Apply Premium Filters
             </button>
           </div>
         </motion.div>
