@@ -87,17 +87,28 @@ export async function POST(request: NextRequest) {
       }
 
       // Reduce product quantity
-      const { error: quantityError } = await supabase
+      // First fetch current product quantity
+      const { data: product, error: productFetchError } = await supabase
         .from('products')
-        .update({ 
-          quantity: order.products.quantity - order.quantity 
-        })
-        .eq('id', order.product_id);
+        .select('quantity')
+        .eq('id', order.product_id)
+        .single();
 
-      if (quantityError) {
-        console.error('Error updating product quantity:', quantityError);
-        // Don't fail the payment confirmation for this
+      if (productFetchError) {
+        console.error('Error fetching product:', productFetchError);
+      } else if (product) {
+        const { error: quantityError } = await supabase
+          .from('products')
+          .update({ 
+            quantity: product.quantity - order.quantity 
+          })
+          .eq('id', order.product_id);
+
+        if (quantityError) {
+          console.error('Error updating product quantity:', quantityError);
+        }
       }
+
 
       // Create notification for seller
       await supabase
