@@ -73,7 +73,13 @@ export default function ReviewList({ productId, onEditReview, onDeleteReview }: 
         return;
       }
 
-      setReviews(data || []);
+      // Transform data to match Review interface
+      const transformedData = data?.map((review: any) => ({
+        ...review,
+        reviewer: Array.isArray(review.reviewer) ? review.reviewer[0] : review.reviewer
+      })) || [];
+      
+      setReviews(transformedData);
     } catch (error) {
       console.error('Error fetching reviews:', error);
       setError('Failed to load reviews');
