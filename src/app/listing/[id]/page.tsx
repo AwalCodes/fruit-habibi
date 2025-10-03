@@ -276,12 +276,20 @@ export default function ListingDetailPage() {
                 {user ? (
                   <div className="space-y-3">
                     {!isOwner && (
-                      <Link
-                        href={`/checkout?product=${product.id}&quantity=1`}
-                        className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-3 px-4 rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-emerald-500/25"
-                      >
-                        Buy Now - ${product.price_usd}
-                      </Link>
+                      <>
+                        <Link
+                          href={`/checkout?product=${product.id}&quantity=1`}
+                          className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-3 px-4 rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-emerald-500/25"
+                        >
+                          Buy Now - ${product.price_usd}
+                        </Link>
+                        <Link
+                          href={`/mock-checkout?product=${product.id}&quantity=1`}
+                          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-blue-500/25"
+                        >
+                          🧪 Mock Test Payment
+                        </Link>
+                      </>
                     )}
                     <Link
                       href={showChat ? `/listing/${product.id}` : `/listing/${product.id}?chat=true`}
