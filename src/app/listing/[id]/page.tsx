@@ -275,7 +275,7 @@ export default function ListingDetailPage() {
 
                 {user ? (
                   <Link
-                    href={`/listing/${product.id}?chat=true`}
+                    href={showChat ? `/listing/${product.id}` : `/listing/${product.id}?chat=true`}
                     className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-3 px-4 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-yellow-500/25"
                   >
                     {showChat ? 'Hide Chat' : (isOwner ? 'View Messages' : 'Start Chat')}
