@@ -274,15 +274,25 @@ export default function ListingDetailPage() {
                 </div>
 
                 {user ? (
-                  <Link
-                    href={showChat ? `/listing/${product.id}` : `/listing/${product.id}?chat=true`}
-                    className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-3 px-4 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-yellow-500/25"
-                  >
-                    {showChat ? 'Hide Chat' : (isOwner ? 'View Messages' : 'Start Chat')}
-                  </Link>
+                  <div className="space-y-3">
+                    {!isOwner && (
+                      <Link
+                        href={`/checkout?product=${product.id}&quantity=1`}
+                        className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-3 px-4 rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-emerald-500/25"
+                      >
+                        Buy Now - ${product.price_usd}
+                      </Link>
+                    )}
+                    <Link
+                      href={showChat ? `/listing/${product.id}` : `/listing/${product.id}?chat=true`}
+                      className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-3 px-4 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-yellow-500/25"
+                    >
+                      {showChat ? 'Hide Chat' : (isOwner ? 'View Messages' : 'Start Chat')}
+                    </Link>
+                  </div>
                 ) : (
-                  <div className="text-center">
-                    <p className="text-sm text-emerald-200 mb-4">Sign in to contact the supplier</p>
+                  <div className="text-center space-y-3">
+                    <p className="text-sm text-emerald-200">Sign in to purchase or contact the supplier</p>
                     <Link
                       href="/login"
                       className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-3 px-4 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium inline-block shadow-lg hover:shadow-yellow-500/25"

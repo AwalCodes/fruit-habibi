@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# project analysis files (to avoid AI-generated code smell)
+feature_inventory.json
+backlog.json
