@@ -49,13 +49,7 @@ export async function POST(request: NextRequest) {
     // Get the order
     const { data: order, error: orderError } = await supabase
       .from('orders')
-      .select(`
-        *,
-        products (
-          title,
-          quantity as product_quantity
-        )
-      `)
+      .select('*')
       .eq('id', orderId)
       .eq('buyer_id', user.id)
       .single();
