@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import ChatPanel from '@/components/ChatPanel';
 
 interface Conversation {
@@ -19,7 +19,7 @@ interface Conversation {
 }
 
 
-export default function MessagesPage() {
+function MessagesPageContent() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -30,6 +30,7 @@ export default function MessagesPage() {
   const [chatOtherUserName, setChatOtherUserName] = useState<string | null>(null);
   const [chatProductTitle, setChatProductTitle] = useState<string | null>(null);
   const { user } = useAuth();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -362,5 +363,24 @@ export default function MessagesPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function MessagesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-emerald-900 to-black">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-lg text-emerald-200"
+        >
+          Loading messages...
+        </motion.div>
+      </div>
+    }>
+      <MessagesPageContent />
+    </Suspense>
   );
 }
