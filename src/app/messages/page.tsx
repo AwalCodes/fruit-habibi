@@ -8,6 +8,8 @@ import { supabase } from '@/lib/supabase';
 import { useSearchParams, useRouter } from 'next/navigation';
 import ChatPanel from '@/components/ChatPanel';
 
+export const dynamic = 'force-dynamic';
+
 interface Conversation {
   product_id: string;
   product_title: string;
