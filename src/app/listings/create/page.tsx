@@ -17,8 +17,8 @@ export default function CreateListingPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-lg">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-emerald-900 to-black">
+        <div className="text-lg text-emerald-200">Loading...</div>
       </div>
     );
   }
@@ -28,7 +28,7 @@ export default function CreateListingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <ListingForm />
       </div>

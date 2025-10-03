@@ -97,7 +97,7 @@ export default function ListingsPage() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-4 drop-shadow-lg">
-                Browse Premium Listings
+                Browse All Listings
               </h1>
               <p className="text-xl text-emerald-100 leading-relaxed">
                 Discover luxury fresh produce from trusted premium suppliers worldwide
@@ -108,7 +108,7 @@ export default function ListingsPage() {
                 href="/listings/create"
                 className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-6 py-3 rounded-full font-bold hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25 flex items-center gap-2"
               >
-                ✨ Create Premium Listing
+                ✨ Create New Listing
               </Link>
             )}
           </div>

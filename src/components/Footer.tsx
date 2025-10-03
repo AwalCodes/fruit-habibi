@@ -67,13 +67,13 @@ export default function Footer() {
             viewport={{ once: true }}
           >
             <h4 className="text-sm font-semibold uppercase tracking-wide text-yellow-400 mb-4">
-              Premium Platform
+              Global Platform
             </h4>
             <ul className="mt-4 space-y-3">
               <li>
                 <Link href="/listings" className="text-emerald-100 hover:text-yellow-300 transition-colors duration-300 flex items-center gap-2">
                   <span className="text-yellow-400">✨</span>
-                  Browse Premium Listings
+                  Browse All Listings
                 </Link>
               </li>
               <li>
@@ -104,7 +104,7 @@ export default function Footer() {
               <li>
                 <Link href="/help" className="text-emerald-100 hover:text-yellow-300 transition-colors duration-300 flex items-center gap-2">
                   <span className="text-yellow-400">🛡️</span>
-                  Premium Help Center
+                  Help Center
                 </Link>
               </li>
               <li>
@@ -136,7 +136,7 @@ export default function Footer() {
             </p>
             <div className="flex justify-center items-center gap-4 mt-4">
               <span className="text-yellow-400 text-lg">💎</span>
-              <span className="text-emerald-200 text-sm font-medium">Premium B2B Marketplace</span>
+              <span className="text-emerald-200 text-sm font-medium">Global B2B Marketplace</span>
               <span className="text-yellow-400 text-lg">👑</span>
             </div>
           </div>

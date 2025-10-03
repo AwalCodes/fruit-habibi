@@ -258,7 +258,7 @@ export default function ListingForm() {
               required
               value={formData.title}
               onChange={handleChange}
-              placeholder="e.g., Premium Kenyan Mangoes - Export Grade"
+              placeholder="e.g., Royal Kenyan Mangoes - Export Grade"
               className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary ${
                 validationErrors.title ? 'border-red-300' : 'border-gray-300'
               }`}

@@ -127,15 +127,15 @@ export default function SearchResults({
   return (
     <div className="space-y-6">
       {/* Search Summary and Controls */}
-      <div className="bg-white rounded-lg shadow-soft p-6">
+      <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg border border-slate-600/30 p-6">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           {/* Results Summary */}
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-white">
               {products.length} product{products.length !== 1 ? 's' : ''} found
             </h2>
             {activeFilters.length > 0 && (
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-emerald-200 mt-1">
                 Filtered by: {activeFilters.join(', ')}
               </p>
             )}
@@ -144,13 +144,13 @@ export default function SearchResults({
           {/* View Controls */}
           <div className="flex items-center gap-4">
             {/* View Mode Toggle */}
-            <div className="flex items-center bg-gray-100 rounded-lg p-1">
+            <div className="flex items-center bg-slate-700/50 rounded-lg p-1 border border-slate-600/30">
               <button
                 onClick={() => setViewMode('grid')}
                 className={`p-2 rounded-md transition-colors ${
                   viewMode === 'grid'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-black shadow-sm'
+                    : 'text-emerald-200 hover:text-yellow-300'
                 }`}
               >
                 <Squares2X2Icon className="w-5 h-5" />
@@ -159,8 +159,8 @@ export default function SearchResults({
                 onClick={() => setViewMode('list')}
                 className={`p-2 rounded-md transition-colors ${
                   viewMode === 'list'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-black shadow-sm'
+                    : 'text-emerald-200 hover:text-yellow-300'
                 }`}
               >
                 <ListBulletIcon className="w-5 h-5" />
@@ -171,7 +171,7 @@ export default function SearchResults({
             <select
               value={filters.sortBy}
               onChange={(e) => onFiltersChange({ ...filters, sortBy: e.target.value as any })}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
             >
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
@@ -185,9 +185,9 @@ export default function SearchResults({
 
         {/* Active Filters */}
         {activeFilters.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-gray-200">
+          <div className="mt-4 pt-4 border-t border-slate-600">
             <div className="flex flex-wrap gap-2">
-              <span className="text-sm text-gray-600">Active filters:</span>
+              <span className="text-sm text-emerald-200">Active filters:</span>
               {filters.searchTerm && (
                 <button
                   onClick={() => clearFilter('searchTerm')}

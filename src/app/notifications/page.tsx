@@ -201,18 +201,18 @@ export default function NotificationsPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
+            <div className="h-8 bg-slate-700 rounded w-48 mb-6"></div>
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="bg-white rounded-lg p-6">
+                <div key={i} className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-lg p-6">
                   <div className="flex items-start space-x-4">
-                    <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
+                    <div className="w-10 h-10 bg-slate-700 rounded-full"></div>
                     <div className="flex-1 space-y-2">
-                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                      <div className="h-4 bg-slate-700 rounded w-3/4"></div>
+                      <div className="h-3 bg-slate-700 rounded w-1/2"></div>
                     </div>
                   </div>
                 </div>
@@ -230,16 +230,16 @@ export default function NotificationsPage() {
   const unreadCount = notifications.filter(n => !n.read_at).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <BellIcon className="w-8 h-8 text-gray-900" />
+              <BellIcon className="w-8 h-8 text-yellow-400" />
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Notifications</h1>
-                <p className="text-gray-600">
+                <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Notifications</h1>
+                <p className="text-emerald-200">
                   {unreadCount > 0 ? `${unreadCount} unread notifications` : 'All caught up!'}
                 </p>
               </div>
@@ -248,7 +248,7 @@ export default function NotificationsPage() {
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllAsRead}
-                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25"
               >
                 <CheckIcon className="w-4 h-4" />
                 <span>Mark all read</span>
@@ -258,26 +258,26 @@ export default function NotificationsPage() {
         </div>
 
         {/* Filters and Actions */}
-        <div className="bg-white rounded-lg shadow-soft p-6 mb-6">
+        <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg p-6 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setFilter('all')}
-                  className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
                     filter === 'all'
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-lg'
+                      : 'text-emerald-200 hover:text-yellow-300 hover:bg-slate-700/50'
                   }`}
                 >
                   All ({notifications.length})
                 </button>
                 <button
                   onClick={() => setFilter('unread')}
-                  className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
                     filter === 'unread'
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-lg'
+                      : 'text-emerald-200 hover:text-yellow-300 hover:bg-slate-700/50'
                   }`}
                 >
                   Unread ({unreadCount})
@@ -287,26 +287,26 @@ export default function NotificationsPage() {
 
             {selectedNotifications.length > 0 && (
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-emerald-200">
                   {selectedNotifications.length} selected
                 </span>
                 <button
                   onClick={() => handleBulkAction('read')}
-                  className="flex items-center space-x-1 px-3 py-1 text-sm text-blue-600 hover:text-blue-700"
+                  className="flex items-center space-x-1 px-3 py-1 text-sm text-yellow-400 hover:text-yellow-300 transition-colors"
                 >
                   <EyeIcon className="w-4 h-4" />
                   <span>Mark read</span>
                 </button>
                 <button
                   onClick={() => handleBulkAction('delete')}
-                  className="flex items-center space-x-1 px-3 py-1 text-sm text-red-600 hover:text-red-700"
+                  className="flex items-center space-x-1 px-3 py-1 text-sm text-red-400 hover:text-red-300 transition-colors"
                 >
                   <TrashIcon className="w-4 h-4" />
                   <span>Delete</span>
                 </button>
                 <button
                   onClick={clearSelection}
-                  className="px-3 py-1 text-sm text-gray-600 hover:text-gray-700"
+                  className="px-3 py-1 text-sm text-emerald-200 hover:text-emerald-100 transition-colors"
                 >
                   Cancel
                 </button>
@@ -317,12 +317,12 @@ export default function NotificationsPage() {
 
         {/* Notifications List */}
         {filteredNotifications.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow-soft">
-            <div className="text-gray-400 text-6xl mb-4">🔔</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <div className="text-center py-12 bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg">
+            <div className="text-yellow-400 text-6xl mb-4">🔔</div>
+            <h3 className="text-lg font-medium text-white mb-2">
               {filter === 'unread' ? 'No unread notifications' : 'No notifications yet'}
             </h3>
-            <p className="text-gray-600">
+            <p className="text-emerald-200">
               {filter === 'unread' 
                 ? 'You&apos;re all caught up!' 
                 : 'Notifications will appear here when you receive messages, reviews, or updates.'
@@ -338,8 +338,8 @@ export default function NotificationsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
                 onClick={() => handleNotificationClick(notification)}
-                className={`bg-white rounded-lg shadow-soft overflow-hidden cursor-pointer hover:shadow-medium transition-shadow ${
-                  !notification.read_at ? 'ring-2 ring-blue-100' : ''
+                className={`bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 ${
+                  !notification.read_at ? 'ring-2 ring-yellow-400/50' : ''
                 }`}
               >
                 <div className="p-6">
@@ -364,16 +364,16 @@ export default function NotificationsPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="text-lg font-medium text-gray-900 mb-1">
+                          <h3 className="text-lg font-medium text-white mb-1">
                             {notification.title}
                           </h3>
-                          <p className="text-gray-600 mb-2">
+                          <p className="text-emerald-200 mb-2">
                             {notification.message}
                           </p>
-                          <div className="flex items-center space-x-4 text-sm text-gray-500">
+                          <div className="flex items-center space-x-4 text-sm text-emerald-300">
                             <span>{formatTime(notification.created_at)}</span>
                             {!notification.read_at && (
-                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-yellow-500 to-yellow-600 text-white">
                                 Unread
                               </span>
                             )}
@@ -388,7 +388,7 @@ export default function NotificationsPage() {
                                 e.stopPropagation();
                                 handleMarkAsRead(notification.id);
                               }}
-                              className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                              className="p-2 text-emerald-300 hover:text-yellow-400 transition-colors"
                               title="Mark as read"
                             >
                               <EyeIcon className="w-5 h-5" />
@@ -399,7 +399,7 @@ export default function NotificationsPage() {
                               e.stopPropagation();
                               handleDeleteNotification(notification.id);
                             }}
-                            className="p-2 text-gray-400 hover:text-red-600 transition-colors"
+                            className="p-2 text-emerald-300 hover:text-red-400 transition-colors"
                             title="Delete"
                           >
                             <TrashIcon className="w-5 h-5" />
@@ -412,10 +412,10 @@ export default function NotificationsPage() {
 
                 {/* Action Link */}
                 {getNotificationLink(notification) !== '#' && (
-                  <div className="px-6 py-3 bg-gray-50 border-t border-gray-100">
+                  <div className="px-6 py-3 bg-slate-700/30 border-t border-slate-600">
                     <Link
                       href={getNotificationLink(notification)}
-                      className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                      className="text-yellow-400 hover:text-yellow-300 text-sm font-medium transition-colors"
                     >
                       View details →
                     </Link>

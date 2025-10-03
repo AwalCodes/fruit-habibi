@@ -156,7 +156,7 @@ function LuxuryHero() {
             transition={{ duration: 0.8, delay: 0.7 }}
             className="text-xl md:text-2xl text-emerald-100 mb-12 max-w-4xl mx-auto leading-relaxed font-light"
           >
-            Bridging Farmers and the World – With Premium Global Harvest Solutions
+            Bridging Farmers and the World – With Global Harvest Solutions
           </motion.p>
 
           {/* Animated Luxury Fruit Display */}
@@ -216,7 +216,7 @@ function LuxuryHero() {
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
                 />
                 <SparklesIcon className="w-6 h-6" />
-                Explore Premium Harvest
+                Explore Global Harvest
                 <ArrowRightIcon className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
               </motion.button>
             </Link>
@@ -270,7 +270,7 @@ function WhyChooseUs() {
   const features = [
     {
       icon: TruckIcon,
-      title: "Premium Global Shipping",
+      title: "Global Shipping",
       description: "Luxury logistics solutions with gemstone-quality care",
       animation: "🚛",
       gemColor: "yellow"
@@ -384,7 +384,7 @@ function CustomerReviews() {
   const reviews = [
     {
       name: "Ahmed Al-Rashid",
-      role: "Premium Date Farmer, UAE",
+      role: "Date Farmer, UAE",
       rating: 5,
       text: "Fruit Habibi transformed my business with luxury-grade service. Direct access to international buyers increased my profits by 40%.",
       gem: "💎"
@@ -508,7 +508,7 @@ function CustomerReviews() {
 // Enhanced Product Showcase with Luxury Styling
 function ProductShowcase() {
   const products = [
-    { name: "Premium Dates", emoji: "🌴", origin: "Saudi Arabia", price: "$12/kg", gem: "💎", special: true },
+    { name: "Royal Dates", emoji: "🌴", origin: "Saudi Arabia", price: "$12/kg", gem: "💎", special: true },
     { name: "Royal Mangoes", emoji: "🥭", origin: "Pakistan", price: "$8/kg", gem: "👑", special: false },
     { name: "Golden Citrus", emoji: "🍊", origin: "Egypt", price: "$6/kg", gem: "✨", special: false },
     { name: "Ruby Pomegranates", emoji: "🍎", origin: "Turkey", price: "$15/kg", gem: "💎", special: true }
@@ -525,7 +525,7 @@ function ProductShowcase() {
           className="text-center mb-20"
         >
           <h2 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6 drop-shadow-lg">
-            Premium Global Harvest
+            Global Harvest
           </h2>
           <p className="text-xl text-emerald-100 max-w-3xl mx-auto leading-relaxed">
             Discover the finest luxury fruits from trusted farmers around the world
@@ -619,7 +619,7 @@ function ProductShowcase() {
               className="group bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 text-white px-10 py-5 rounded-full font-bold text-xl shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 flex items-center gap-4 mx-auto"
             >
               <SparklesIcon className="w-6 h-6" />
-              Explore All Premium Products
+              Explore All Products
               <ArrowRightIcon className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
             </motion.button>
           </Link>
@@ -634,7 +634,7 @@ function SolutionsSection() {
   const solutions = [
     {
       icon: TruckIcon,
-      title: "Premium Global Shipping",
+      title: "Global Shipping",
       description: "Luxury logistics solutions with gemstone-quality care for your harvest",
       animation: "🚢",
       gem: "💎"
@@ -673,7 +673,7 @@ function SolutionsSection() {
           className="text-center mb-20"
         >
           <h2 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6 drop-shadow-lg">
-            Our Premium Solutions
+            Our Global Solutions
           </h2>
           <p className="text-xl text-emerald-100 max-w-3xl mx-auto leading-relaxed">
             Comprehensive luxury tools and services for modern agricultural excellence
@@ -739,7 +739,7 @@ function TrustSecurity() {
     },
     { 
       icon: UserGroupIcon, 
-      title: "Verified Premium Exporters", 
+      title: "Verified Global Exporters", 
       description: "All partners thoroughly vetted with luxury certification",
       gem: "👑"
     },
@@ -855,7 +855,7 @@ function FinalCTA() {
             Join Fruit Habibi Today and
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 drop-shadow-2xl">
-              Taste the World of Premium Opportunities
+              Taste the World of Global Opportunities
             </span>
           </h2>
           
@@ -884,7 +884,7 @@ function FinalCTA() {
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
                 />
                 <SparklesIcon className="w-8 h-8" />
-                Start Your Premium Journey
+                Start Your Global Journey
                 <ArrowRightIcon className="w-8 h-8 group-hover:translate-x-1 transition-transform" />
               </motion.button>
             </Link>
@@ -902,7 +902,7 @@ function FinalCTA() {
                 }}
               >
                 <GlobeAltIcon className="w-8 h-8 group-hover:scale-110 transition-transform" />
-                Browse Premium Products
+                Browse All Products
               </motion.button>
             </Link>
           </div>

@@ -214,7 +214,7 @@ export default function MessagesPage() {
           <div className="flex items-center justify-center h-64">
             <div className="text-lg text-emerald-100 flex items-center gap-3">
               <div className="w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
-              Loading premium conversations...
+              Loading conversations...
             </div>
           </div>
         </div>
@@ -249,10 +249,10 @@ export default function MessagesPage() {
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-4 drop-shadow-lg">
-            Premium Messages
+            Global Messages
           </h1>
           <p className="text-xl text-emerald-100 leading-relaxed">
-            Your luxury conversations with buyers and premium suppliers
+            Your luxury conversations with buyers and verified suppliers
           </p>
         </div>
 
@@ -266,15 +266,15 @@ export default function MessagesPage() {
               >
                 💬
               </motion.div>
-              <h3 className="text-2xl font-bold text-white mb-4">No Premium Conversations Yet</h3>
+              <h3 className="text-2xl font-bold text-white mb-4">No Conversations Yet</h3>
               <p className="text-emerald-100 mb-8 leading-relaxed">
-                Start luxury conversations by browsing premium listings and contacting verified suppliers
+                Start luxury conversations by browsing all listings and contacting verified suppliers
               </p>
               <Link
                 href="/listings"
                 className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-8 py-4 rounded-full font-bold hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25 flex items-center gap-3 mx-auto w-fit"
               >
-                ✨ Browse Premium Listings
+                ✨ Browse All Listings
               </Link>
             </div>
           </div>
@@ -292,8 +292,6 @@ export default function MessagesPage() {
                   }`}
                 >
                   <div className="p-6 relative">
-                    {/* Gemstone Badge */}
-                    <div className="absolute top-4 right-4 text-xl">💎</div>
                     
                     <div className="flex items-start justify-between">
                       <div className="flex-1 min-w-0">

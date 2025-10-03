@@ -108,7 +108,7 @@ export default function AdvancedSearchFilters({
         className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-yellow-400/30 rounded-xl hover:border-yellow-400/50 transition-all duration-300 shadow-lg hover:shadow-yellow-500/10"
       >
         <FunnelIcon className="w-5 h-5 text-yellow-400" />
-        <span className="text-emerald-100 font-medium">Premium Filters</span>
+        <span className="text-emerald-100 font-medium">Advanced Filters</span>
         {hasActiveFilters() && (
           <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold">
             !
@@ -126,7 +126,7 @@ export default function AdvancedSearchFilters({
         >
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
-              💎 Premium Filters
+              💎 Advanced Filters
             </h3>
             <button
               onClick={onToggle}
@@ -141,7 +141,7 @@ export default function AdvancedSearchFilters({
             <div className="lg:col-span-3">
               <label className="block text-sm font-medium text-yellow-400 mb-3">
                 <MagnifyingGlassIcon className="w-4 h-4 inline mr-2" />
-                Premium Search
+                Global Search
               </label>
               <input
                 type="text"
@@ -156,7 +156,7 @@ export default function AdvancedSearchFilters({
             <div>
               <label className="block text-sm font-medium text-yellow-400 mb-3">
                 <TagIcon className="w-4 h-4 inline mr-2" />
-                Premium Category
+                Product Category
               </label>
               <select
                 value={localFilters.category}
@@ -208,7 +208,7 @@ export default function AdvancedSearchFilters({
             <div>
               <label className="block text-sm font-medium text-yellow-400 mb-3">
                 <CurrencyDollarIcon className="w-4 h-4 inline mr-2" />
-                💎 Premium Price Range (USD)
+                💎 Price Range (USD)
               </label>
               <div className="grid grid-cols-2 gap-3">
                 <input
@@ -234,7 +234,7 @@ export default function AdvancedSearchFilters({
             <div>
               <label className="block text-sm font-medium text-yellow-400 mb-3">
                 <StarIcon className="w-4 h-4 inline mr-2" />
-                ⭐ Premium Rating
+                ⭐ Quality Rating
               </label>
               <div className="flex items-center gap-3">
                 <StarRating
@@ -259,7 +259,7 @@ export default function AdvancedSearchFilters({
                     onChange={(e) => handleFilterChange('hasImages', e.target.checked)}
                     className="rounded border-yellow-400/50 text-yellow-400 focus:ring-yellow-400 bg-slate-700/50"
                   />
-                  <span className="ml-3 text-sm text-emerald-100">✨ Has Premium Images</span>
+                  <span className="ml-3 text-sm text-emerald-100">✨ Has Quality Images</span>
                 </label>
 
                 <label className="flex items-center">
@@ -269,7 +269,7 @@ export default function AdvancedSearchFilters({
                     onChange={(e) => handleFilterChange('inStock', e.target.checked)}
                     className="rounded border-yellow-400/50 text-yellow-400 focus:ring-yellow-400 bg-slate-700/50"
                   />
-                  <span className="ml-3 text-sm text-emerald-100">💎 In Premium Stock</span>
+                  <span className="ml-3 text-sm text-emerald-100">💎 In Stock</span>
                 </label>
               </div>
             </div>
@@ -287,7 +287,7 @@ export default function AdvancedSearchFilters({
               onClick={handleApplyFilters}
               className="px-8 py-3 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black rounded-xl hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25 font-bold flex items-center gap-2"
             >
-              ✨ Apply Premium Filters
+              ✨ Apply Filters
             </button>
           </div>
         </motion.div>

@@ -185,8 +185,8 @@ export default function DashboardPage() {
 
   if (loading || dashboardLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading your dashboard...</div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black flex items-center justify-center">
+        <div className="text-lg text-emerald-200">Loading your dashboard...</div>
       </div>
     );
   }
@@ -196,25 +196,25 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black">
       {/* Header */}
-      <div className="bg-white shadow-sm">
+      <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm shadow-lg">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="py-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
                   Welcome back, {user.user_metadata?.full_name || 'Trader'}!
                 </h1>
-                <p className="mt-2 text-gray-600">
+                <p className="mt-2 text-emerald-200">
                   Here's what's happening with your business today
                 </p>
               </div>
               <div className="flex items-center space-x-4">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary">
+                <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border border-yellow-400/30 text-yellow-400">
                   {user.user_metadata?.role === 'farmer' ? '🌱 Farmer/Exporter' : '📦 Importer/Distributor'}
                 </span>
-                <span className="text-sm text-gray-500">{user.user_metadata?.country}</span>
+                <span className="text-sm text-emerald-300">{user.user_metadata?.country}</span>
               </div>
             </div>
           </div>
@@ -228,24 +228,24 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white overflow-hidden shadow-soft rounded-lg"
+            className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm overflow-hidden shadow-lg rounded-lg border border-slate-600/30"
           >
             <div className="p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <DocumentTextIcon className="h-6 w-6 text-primary" />
+                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 flex items-center justify-center border border-yellow-400/30">
+                    <DocumentTextIcon className="h-6 w-6 text-yellow-400" />
                   </div>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-2xl font-bold text-gray-900">{stats.totalListings}</h3>
-                  <p className="text-sm text-gray-500">Total Listings</p>
+                  <h3 className="text-2xl font-bold text-white">{stats.totalListings}</h3>
+                  <p className="text-sm text-emerald-200">Total Listings</p>
                 </div>
               </div>
               <div className="mt-4 flex items-center text-sm">
-                <span className="text-green-600 font-medium">{stats.publishedListings} published</span>
-                <span className="text-gray-300 mx-2">•</span>
-                <span className="text-gray-500">{stats.draftListings} drafts</span>
+                <span className="text-emerald-400 font-medium">{stats.publishedListings} published</span>
+                <span className="text-slate-400 mx-2">•</span>
+                <span className="text-slate-300">{stats.draftListings} drafts</span>
               </div>
             </div>
           </motion.div>
@@ -254,22 +254,22 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white overflow-hidden shadow-soft rounded-lg"
+            className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm overflow-hidden shadow-lg rounded-lg border border-slate-600/30"
           >
             <div className="p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="h-12 w-12 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <ChatBubbleLeftRightIcon className="h-6 w-6 text-blue-600" />
+                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 flex items-center justify-center border border-emerald-400/30">
+                    <ChatBubbleLeftRightIcon className="h-6 w-6 text-emerald-400" />
                   </div>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-2xl font-bold text-gray-900">{stats.totalMessages}</h3>
-                  <p className="text-sm text-gray-500">Total Messages</p>
+                  <h3 className="text-2xl font-bold text-white">{stats.totalMessages}</h3>
+                  <p className="text-sm text-emerald-200">Total Messages</p>
                 </div>
               </div>
               <div className="mt-4">
-                <Link href="/messages" className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+                <Link href="/messages" className="text-yellow-400 hover:text-yellow-300 font-medium text-sm transition-colors">
                   View conversations →
                 </Link>
               </div>
@@ -280,23 +280,23 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white overflow-hidden shadow-soft rounded-lg"
+            className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm overflow-hidden shadow-lg rounded-lg border border-slate-600/30"
           >
             <div className="p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="h-12 w-12 rounded-lg bg-green-100 flex items-center justify-center">
-                    <EyeIcon className="h-6 w-6 text-green-600" />
+                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 flex items-center justify-center border border-emerald-400/30">
+                    <EyeIcon className="h-6 w-6 text-emerald-400" />
                   </div>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-2xl font-bold text-gray-900">{stats.totalViews}</h3>
-                  <p className="text-sm text-gray-500">Total Views</p>
+                  <h3 className="text-2xl font-bold text-white">{stats.totalViews}</h3>
+                  <p className="text-sm text-emerald-200">Total Views</p>
                 </div>
               </div>
               <div className="mt-4 flex items-center text-sm">
-                <ArrowTrendingUpIcon className="h-4 w-4 text-green-500 mr-1" />
-                <span className="text-green-600 font-medium">+12% this month</span>
+                <ArrowTrendingUpIcon className="h-4 w-4 text-emerald-400 mr-1" />
+                <span className="text-emerald-400 font-medium">+12% this month</span>
               </div>
             </div>
           </motion.div>
@@ -305,18 +305,18 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white overflow-hidden shadow-soft rounded-lg"
+            className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm overflow-hidden shadow-lg rounded-lg border border-slate-600/30"
           >
             <div className="p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="h-12 w-12 rounded-lg bg-yellow-100 flex items-center justify-center">
-                    <StarIcon className="h-6 w-6 text-yellow-600" />
+                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 flex items-center justify-center border border-yellow-400/30">
+                    <StarIcon className="h-6 w-6 text-yellow-400" />
                   </div>
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-2xl font-bold text-gray-900">{stats.avgRating}</h3>
-                  <p className="text-sm text-gray-500">Average Rating</p>
+                  <h3 className="text-2xl font-bold text-white">{stats.avgRating}</h3>
+                  <p className="text-sm text-emerald-200">Average Rating</p>
                 </div>
               </div>
               <div className="mt-4 flex items-center text-sm">
@@ -324,11 +324,11 @@ export default function DashboardPage() {
                   {[...Array(5)].map((_, i) => (
                     <StarIcon
                       key={i}
-                      className={`h-4 w-4 ${i < Math.floor(stats.avgRating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                      className={`h-4 w-4 ${i < Math.floor(stats.avgRating) ? 'text-yellow-400 fill-current' : 'text-slate-400'}`}
                     />
                   ))}
                 </div>
-                <span className="ml-2 text-gray-500">({stats.totalReviews} reviews)</span>
+                <span className="ml-2 text-slate-300">({stats.totalReviews} reviews)</span>
               </div>
             </div>
           </motion.div>
@@ -341,48 +341,48 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="bg-white shadow-soft rounded-lg"
+              className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm shadow-lg rounded-lg border border-slate-600/30"
             >
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-medium text-gray-900">Quick Actions</h2>
+              <div className="px-6 py-4 border-b border-slate-600">
+                <h2 className="text-lg font-medium text-white">Quick Actions</h2>
               </div>
               <div className="p-6 space-y-4">
                 <Link
                   href="/listings/create"
-                  className="flex items-center p-4 bg-primary/5 rounded-lg hover:bg-primary/10 transition-colors"
+                  className="flex items-center p-4 bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 rounded-lg hover:from-yellow-500/20 hover:to-yellow-600/20 transition-all duration-300 border border-yellow-400/20"
                 >
-                  <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mr-4">
-                    <DocumentTextIcon className="h-5 w-5 text-primary" />
+                  <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 flex items-center justify-center mr-4 border border-yellow-400/30">
+                    <DocumentTextIcon className="h-5 w-5 text-yellow-400" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">Create New Listing</h3>
-                    <p className="text-sm text-gray-500">Add a new product to your catalog</p>
+                    <h3 className="font-medium text-white">Create New Listing</h3>
+                    <p className="text-sm text-emerald-200">Add a new product to your catalog</p>
                   </div>
                 </Link>
 
                 <Link
                   href="/listings"
-                  className="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                  className="flex items-center p-4 bg-gradient-to-r from-emerald-500/10 to-emerald-600/10 rounded-lg hover:from-emerald-500/20 hover:to-emerald-600/20 transition-all duration-300 border border-emerald-400/20"
                 >
-                  <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center mr-4">
-                    <UserGroupIcon className="h-5 w-5 text-blue-600" />
+                  <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 flex items-center justify-center mr-4 border border-emerald-400/30">
+                    <UserGroupIcon className="h-5 w-5 text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">Browse Marketplace</h3>
-                    <p className="text-sm text-gray-500">Discover products from other suppliers</p>
+                    <h3 className="font-medium text-white">Browse Marketplace</h3>
+                    <p className="text-sm text-emerald-200">Discover products from other suppliers</p>
                   </div>
                 </Link>
 
                 <Link
                   href="/messages"
-                  className="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
+                  className="flex items-center p-4 bg-gradient-to-r from-emerald-500/10 to-emerald-600/10 rounded-lg hover:from-emerald-500/20 hover:to-emerald-600/20 transition-all duration-300 border border-emerald-400/20"
                 >
-                  <div className="h-10 w-10 rounded-lg bg-green-100 flex items-center justify-center mr-4">
-                    <ChatBubbleLeftRightIcon className="h-5 w-5 text-green-600" />
+                  <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 flex items-center justify-center mr-4 border border-emerald-400/30">
+                    <ChatBubbleLeftRightIcon className="h-5 w-5 text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">View Messages</h3>
-                    <p className="text-sm text-gray-500">Check your conversations</p>
+                    <h3 className="font-medium text-white">View Messages</h3>
+                    <p className="text-sm text-emerald-200">Check your conversations</p>
                   </div>
                 </Link>
               </div>
@@ -395,10 +395,10 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="bg-white shadow-soft rounded-lg"
+              className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm shadow-lg rounded-lg border border-slate-600/30"
             >
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-medium text-gray-900">Recent Activity</h2>
+              <div className="px-6 py-4 border-b border-slate-600">
+                <h2 className="text-lg font-medium text-white">Recent Activity</h2>
               </div>
               <div className="p-6">
                 {recentActivity.length > 0 ? (
@@ -409,18 +409,18 @@ export default function DashboardPage() {
                           {getActivityIcon(activity.type)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900">{activity.title}</p>
-                          <p className="text-sm text-gray-500 truncate">{activity.description}</p>
-                          <p className="text-xs text-gray-400 mt-1">{formatTimeAgo(activity.timestamp)}</p>
+                          <p className="text-sm font-medium text-white">{activity.title}</p>
+                          <p className="text-sm text-emerald-200 truncate">{activity.description}</p>
+                          <p className="text-xs text-slate-400 mt-1">{formatTimeAgo(activity.timestamp)}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <ChartBarIcon className="mx-auto h-12 w-12 text-gray-400" />
-                    <h3 className="mt-2 text-sm font-medium text-gray-900">No activity yet</h3>
-                    <p className="mt-1 text-sm text-gray-500">
+                    <ChartBarIcon className="mx-auto h-12 w-12 text-yellow-400" />
+                    <h3 className="mt-2 text-sm font-medium text-white">No activity yet</h3>
+                    <p className="mt-1 text-sm text-emerald-200">
                       {user.user_metadata?.role === 'farmer' 
                         ? 'Create your first listing to get started!' 
                         : 'Browse listings to start making inquiries!'
@@ -429,7 +429,7 @@ export default function DashboardPage() {
                     <div className="mt-6">
                       <Link
                         href={user.user_metadata?.role === 'farmer' ? '/listings/create' : '/listings'}
-                        className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark"
+                        className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-black bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 transition-all duration-300"
                       >
                         Get Started
                       </Link>

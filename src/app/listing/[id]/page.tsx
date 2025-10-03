@@ -123,10 +123,10 @@ export default function ListingDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center h-64">
-            <div className="text-lg text-gray-600">Loading product...</div>
+            <div className="text-lg text-emerald-200">Loading product...</div>
           </div>
         </div>
       </div>
@@ -135,14 +135,14 @@ export default function ListingDetailPage() {
 
   if (error || !product) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center py-12">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
-            <p className="text-gray-600 mb-8">The product you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+            <h1 className="text-2xl font-bold text-white mb-4">Product Not Found</h1>
+            <p className="text-emerald-200 mb-8">The product you&apos;re looking for doesn&apos;t exist or has been removed.</p>
             <Link
               href="/listings"
-              className="bg-primary text-white px-6 py-3 rounded-md hover:bg-primary-dark transition-colors"
+              className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white px-6 py-3 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25"
             >
               Browse All Listings
             </Link>
@@ -155,11 +155,11 @@ export default function ListingDetailPage() {
   const isOwner = user?.id === product.users?.id;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="mb-8">
-          <Link href="/listings" className="text-primary hover:text-primary-dark">
+          <Link href="/listings" className="text-yellow-400 hover:text-yellow-300 transition-colors">
             ← Back to Listings
           </Link>
         </nav>
@@ -169,7 +169,7 @@ export default function ListingDetailPage() {
           <div className={showChat ? 'lg:col-span-1' : ''}>
             <div className="space-y-4">
               {/* Main Image */}
-              <div className="bg-gray-100 rounded-lg overflow-hidden">
+              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg">
                 {product.images && product.images.length > 0 ? (
                   <Image
                     src={product.images[selectedImageIndex]}
@@ -180,8 +180,8 @@ export default function ListingDetailPage() {
                     priority
                   />
                 ) : (
-                  <div className="w-full h-80 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
-                    <span className="text-6xl text-gray-400">🌱</span>
+                  <div className="w-full h-80 bg-gradient-to-br from-emerald-500/10 to-yellow-500/10 flex items-center justify-center">
+                    <span className="text-6xl text-yellow-400">🌱</span>
                   </div>
                 )}
               </div>
@@ -193,10 +193,10 @@ export default function ListingDetailPage() {
                     <button
                       key={index}
                       onClick={() => setSelectedImageIndex(index)}
-                      className={`relative aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 transition-all ${
+                      className={`relative aspect-square bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-lg overflow-hidden border-2 transition-all ${
                         selectedImageIndex === index 
-                          ? 'border-primary ring-2 ring-primary/20' 
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-yellow-400 ring-2 ring-yellow-400/20' 
+                          : 'border-slate-600 hover:border-slate-500'
                       }`}
                     >
                       <Image
@@ -207,8 +207,8 @@ export default function ListingDetailPage() {
                         className="w-full h-full object-cover"
                       />
                       {selectedImageIndex === index && (
-                        <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
-                          <div className="w-2 h-2 bg-primary rounded-full"></div>
+                        <div className="absolute inset-0 bg-yellow-400/20 flex items-center justify-center">
+                          <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
                         </div>
                       )}
                     </button>
@@ -220,44 +220,44 @@ export default function ListingDetailPage() {
 
           {/* Product Details */}
           <div className={showChat ? 'lg:col-span-1' : ''}>
-            <div className="bg-white rounded-lg shadow-soft p-6">
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.title}</h1>
+            <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg p-6">
+              <h1 className="text-3xl font-bold text-white mb-4">{product.title}</h1>
               
               <div className="mb-6">
-                <span className="text-4xl font-bold text-primary">
+                <span className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
                   {formatPrice(product.price_usd)}
                 </span>
-                <span className="text-gray-600 ml-2">per {product.unit}</span>
+                <span className="text-emerald-200 ml-2">per {product.unit}</span>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500">Available Quantity</h3>
-                  <p className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-sm font-medium text-emerald-200">Available Quantity</h3>
+                  <p className="text-lg font-semibold text-white">
                     {product.quantity} {product.unit}
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500">Location</h3>
-                  <p className="text-lg font-semibold text-gray-900">{product.location}</p>
+                  <h3 className="text-sm font-medium text-emerald-200">Location</h3>
+                  <p className="text-lg font-semibold text-white">{product.location}</p>
                 </div>
               </div>
 
               <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Description</h3>
-                <p className="text-gray-700 leading-relaxed">{product.description}</p>
+                <h3 className="text-lg font-medium text-white mb-2">Description</h3>
+                <p className="text-emerald-200 leading-relaxed">{product.description}</p>
               </div>
 
-              <div className="border-t pt-6">
+              <div className="border-t border-slate-600 pt-6">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h3 className="text-lg font-medium text-gray-900">Supplier</h3>
-                    <p className="text-gray-600">{product.users?.full_name || 'Unknown'}</p>
-                    <p className="text-sm text-gray-500">{product.users?.country || 'Unknown'}</p>
+                    <h3 className="text-lg font-medium text-white">Supplier</h3>
+                    <p className="text-emerald-200">{product.users?.full_name || 'Unknown'}</p>
+                    <p className="text-sm text-emerald-300">{product.users?.country || 'Unknown'}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-gray-500">Listed on</p>
-                    <p className="text-sm font-medium text-gray-900">{formatDate(product.created_at)}</p>
+                    <p className="text-sm text-emerald-300">Listed on</p>
+                    <p className="text-sm font-medium text-white">{formatDate(product.created_at)}</p>
                   </div>
                 </div>
 
@@ -276,16 +276,16 @@ export default function ListingDetailPage() {
                 {user ? (
                   <Link
                     href={`/listing/${product.id}?chat=true`}
-                    className="w-full bg-primary text-white py-3 px-4 rounded-md hover:bg-primary-dark transition-colors font-medium inline-block text-center"
+                    className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-3 px-4 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-yellow-500/25"
                   >
                     {showChat ? 'Hide Chat' : (isOwner ? 'View Messages' : 'Start Chat')}
                   </Link>
                 ) : (
                   <div className="text-center">
-                    <p className="text-sm text-gray-600 mb-4">Sign in to contact the supplier</p>
+                    <p className="text-sm text-emerald-200 mb-4">Sign in to contact the supplier</p>
                     <Link
                       href="/login"
-                      className="w-full bg-primary text-white py-3 px-4 rounded-md hover:bg-primary-dark transition-colors font-medium inline-block"
+                      className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-3 px-4 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium inline-block shadow-lg hover:shadow-yellow-500/25"
                     >
                       Sign In
                     </Link>
