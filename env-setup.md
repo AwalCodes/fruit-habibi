@@ -58,3 +58,4 @@ Run the following SQL in your Supabase SQL editor:
 3. Try to purchase it with Stripe test cards:
    - Success: `4242 4242 4242 4242`
    - Decline: `4000 0000 0000 0002`
+
