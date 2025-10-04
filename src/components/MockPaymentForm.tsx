@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
+import { supabase } from '@/lib/supabase'; // ADDED
 
 interface MockPaymentFormProps {
   productId: string;
@@ -46,17 +47,62 @@ export default function MockPaymentForm({
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Mock successful payment
-      const mockOrderId = `order_${Date.now()}`;
-      
-      console.log('Mock Payment Successful:', {
-        orderId: mockOrderId,
-        amount: total,
-        product: productTitle,
-        buyer: user?.email,
-      });
+      // Instead of returning a random id only, create an order record in DB and return its id
+      if (!user) {
+        onError('Please sign in to complete mock payment');
+        setLoading(false);
+        return;
+      }
 
-      // Simulate success
-      onSuccess(mockOrderId);
+      // Compute totals
+      const subtotal = unitPrice * quantity;
+      const shippingCost = 0;
+      const total = subtotal + shippingCost;
+      const commission = total * 0.05;
+      const netAmount = total - commission;
+
+      // Attempt to read product owner (seller) so we can link seller_id
+      let sellerId: string | null = null;
+      try {
+        const { data: productData } = await supabase
+          .from('products')
+          .select('owner_id')
+          .eq('id', productId)
+          .single();
+        sellerId = productData?.owner_id || null;
+      } catch (err) {
+        console.warn('Could not fetch product owner for mock order:', err);
+        sellerId = null;
+      }
+
+      const { data: insertedOrder, error: insertError } = await supabase
+        .from('orders')
+        .insert({
+          buyer_id: user.id,
+          seller_id: sellerId,
+          product_id: productId,
+          quantity,
+          unit_price: unitPrice,
+          total_amount: total,
+          shipping_cost: shippingCost,
+          commission_fee: commission,
+          net_amount: netAmount,
+          status: 'paid'
+        })
+        .select()
+        .single();
+
+      if (insertError || !insertedOrder) {
+        console.error('Error creating mock order:', insertError);
+        onError('Failed to create order after mock payment');
+        setLoading(false);
+        return;
+      }
+
+      console.log('Mock Payment Successful, created order:', insertedOrder.id);
+
+      // Use real DB order id for navigation
+      onSuccess(insertedOrder.id);
     } catch (error) {
       onError('Mock payment failed');
     } finally {
