@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { motion, AnimatePresence } from 'framer-motion';
+import { PaperAirplaneIcon, UserIcon } from '@heroicons/react/24/outline';
 
 interface Message {
   id: string;
@@ -279,77 +281,110 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
 
   if (!user) {
     return (
-      <div className="bg-white rounded-lg shadow-soft p-6">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm rounded-2xl border border-emerald-500/20 p-8 shadow-2xl"
+      >
         <div className="text-center">
-          <p className="text-gray-600 mb-4">Sign in to start a conversation</p>
-          <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark">
+          <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <UserIcon className="w-8 h-8 text-white" />
+          </div>
+          <p className="text-emerald-200 mb-6 text-lg">Sign in to start a conversation</p>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:from-emerald-600 hover:to-teal-600 transition-all duration-200"
+          >
             Sign In
-          </button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-soft">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-medium text-gray-900">
-          {isCurrentUserSeller ? `Messages for your listing` : `Chat with ${sellerName}`}
-        </h3>
-        <p className="text-sm text-gray-500">
-          {isCurrentUserSeller 
-            ? 'Respond to inquiries about your product' 
-            : `Discuss ${sellerName}'s product`
-          }
-        </p>
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm rounded-2xl border border-emerald-500/20 shadow-2xl overflow-hidden"
+    >
+      <div className="px-6 py-4 border-b border-emerald-500/20 bg-gradient-to-r from-emerald-900/30 to-teal-900/30">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
+            <UserIcon className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-white">
+              {isCurrentUserSeller ? `Messages for your listing` : `Chat with ${sellerName}`}
+            </h3>
+            <p className="text-sm text-emerald-200">
+              {isCurrentUserSeller 
+                ? 'Respond to inquiries about your product' 
+                : `Discuss ${sellerName}'s product`
+              }
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="h-96 flex flex-col">
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-b from-slate-900/20 to-slate-800/20">
           {loading ? (
             <div className="flex items-center justify-center h-full">
-              <div className="text-gray-500">Loading messages...</div>
+              <div className="text-center">
+                <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <div className="text-emerald-200">Loading messages...</div>
+              </div>
             </div>
           ) : messages.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <div className="text-center">
-                <p className="text-gray-500 mb-2">No messages yet</p>
-                <p className="text-sm text-gray-400">Start the conversation!</p>
+                <div className="w-16 h-16 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <PaperAirplaneIcon className="w-8 h-8 text-emerald-400" />
+                </div>
+                <p className="text-emerald-200 mb-2 font-medium">No messages yet</p>
+                <p className="text-sm text-emerald-300">Start the conversation!</p>
               </div>
             </div>
           ) : (
-            messages.map((message) => {
+            messages.map((message, index) => {
               const isOwnMessage = message.sender_id === user.id;
               return (
-                <div
+                <motion.div
                   key={message.id}
+                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
                   className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
                 >
                   <div className="max-w-xs lg:max-w-md">
                     {!isOwnMessage && (
-                      <p className="text-xs text-gray-500 mb-1 px-1">
+                      <p className="text-xs text-emerald-300 mb-1 px-2 font-medium">
                         {message.sender.full_name || 'Unknown'}
                       </p>
                     )}
-                    <div
-                      className={`px-4 py-2 rounded-lg ${
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      className={`px-4 py-3 rounded-2xl shadow-lg ${
                         isOwnMessage
-                          ? 'bg-primary text-white'
-                          : 'bg-gray-100 text-gray-900'
+                          ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
+                          : 'bg-slate-700/80 text-emerald-100 border border-emerald-500/20'
                       }`}
                     >
-                      <p className="text-sm">{message.body}</p>
+                      <p className="text-sm leading-relaxed">{message.body}</p>
                       <p
-                        className={`text-xs mt-1 ${
-                          isOwnMessage ? 'text-primary-100' : 'text-gray-500'
+                        className={`text-xs mt-2 ${
+                          isOwnMessage ? 'text-emerald-100' : 'text-emerald-400'
                         }`}
                       >
                         {formatTime(message.created_at)}
                       </p>
-                    </div>
+                    </motion.div>
                   </div>
-                </div>
+                </motion.div>
               );
             })
           )}
@@ -357,26 +392,38 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
         </div>
 
         {/* Message Input */}
-        <div className="border-t border-gray-200 p-4">
+        <div className="border-t border-emerald-500/20 p-4 bg-gradient-to-r from-slate-900/50 to-slate-800/50">
           <form onSubmit={sendMessage} className="flex space-x-4">
             <input
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
+              className="flex-1 px-4 py-3 bg-slate-700/50 border border-emerald-500/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
               disabled={sending}
             />
-            <button
+            <motion.button
               type="submit"
               disabled={!newMessage.trim() || sending}
-              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-lg hover:from-emerald-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2"
             >
-              {sending ? 'Sending...' : 'Send'}
-            </button>
+              {sending ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>Sending...</span>
+                </>
+              ) : (
+                <>
+                  <PaperAirplaneIcon className="w-4 h-4" />
+                  <span>Send</span>
+                </>
+              )}
+            </motion.button>
           </form>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

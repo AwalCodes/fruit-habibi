@@ -13,6 +13,7 @@ export default function Navbar() {
   const navigation = [
     { name: 'Browse Listings', href: '/listings' },
     { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   const userNavigation = [
