@@ -101,3 +101,4 @@ export const loadStripe = async (publishableKey: string) => {
     elements: () => mockStripeElements,
   };
 };
+

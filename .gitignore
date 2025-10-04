@@ -43,3 +43,9 @@ next-env.d.ts
 # project analysis files (to avoid AI-generated code smell)
 feature_inventory.json
 backlog.json
+gap_summary.md
+ai_avatar_architecture.md
+commit_examples.md
+pr_templates.md
+technical_spec.md
+scripts/
