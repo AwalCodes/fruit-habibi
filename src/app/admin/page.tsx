@@ -14,8 +14,13 @@ import {
   ChartBarIcon,
   ShieldCheckIcon,
   EyeIcon,
-  ClockIcon
+  ClockIcon,
+  CurrencyDollarIcon,
+  TrendingUpIcon,
+  GlobeAltIcon,
+  BellIcon
 } from '@heroicons/react/24/outline';
+import AdminAnalytics from '@/components/AdminAnalytics';
 
 interface AdminStats {
   totalUsers: number;
@@ -25,6 +30,9 @@ interface AdminStats {
   draftListings: number;
   flaggedListings: number;
   totalMessages: number;
+  totalOrders: number;
+  totalRevenue: number;
+  pendingDisputes: number;
   recentRegistrations: number;
   recentListings: number;
   recentMessages: number;
@@ -51,6 +59,9 @@ export default function AdminDashboard() {
     draftListings: 0,
     flaggedListings: 0,
     totalMessages: 0,
+    totalOrders: 0,
+    totalRevenue: 0,
+    pendingDisputes: 0,
     recentRegistrations: 0,
     recentListings: 0,
     recentMessages: 0
@@ -105,6 +116,24 @@ export default function AdminDashboard() {
         .from('messages')
         .select('*', { count: 'exact', head: true });
 
+      // Fetch orders and revenue data
+      const { count: totalOrders } = await supabase
+        .from('orders')
+        .select('*', { count: 'exact', head: true });
+
+      const { data: ordersData } = await supabase
+        .from('orders')
+        .select('total_amount_usd')
+        .eq('order_status', 'paid');
+
+      const totalRevenue = ordersData?.reduce((sum, order) => sum + (order.total_amount_usd || 0), 0) || 0;
+
+      // Fetch disputes data
+      const { count: pendingDisputes } = await supabase
+        .from('disputes')
+        .select('*', { count: 'exact', head: true })
+        .in('status', ['open', 'pending_resolution']);
+
       // Fetch recent activity
       const { data: recentUsers } = await supabase
         .from('users')
@@ -158,6 +187,9 @@ export default function AdminDashboard() {
         draftListings: draftListings || 0,
         flaggedListings: 0, // TODO: Implement flagging system
         totalMessages: totalMessages || 0,
+        totalOrders: totalOrders || 0,
+        totalRevenue,
+        pendingDisputes: pendingDisputes || 0,
         recentRegistrations: recentUsers?.length || 0,
         recentListings: recentProducts?.length || 0,
         recentMessages: 0 // TODO: Implement recent message tracking
@@ -235,7 +267,7 @@ export default function AdminDashboard() {
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -339,7 +371,62 @@ export default function AdminDashboard() {
               </div>
             </div>
           </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-white overflow-hidden shadow-soft rounded-lg"
+          >
+            <div className="p-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="h-12 w-12 rounded-lg bg-emerald-100 flex items-center justify-center">
+                    <CurrencyDollarIcon className="h-6 w-6 text-emerald-600" />
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-2xl font-bold text-gray-900">${(stats.totalRevenue / 1000).toFixed(1)}k</h3>
+                  <p className="text-sm text-gray-500">Total Revenue</p>
+                </div>
+              </div>
+              <div className="mt-4">
+                <Link href="/admin/orders" className="text-emerald-600 hover:text-emerald-700 font-medium text-sm">
+                  View orders →
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="bg-white overflow-hidden shadow-soft rounded-lg"
+          >
+            <div className="p-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="h-12 w-12 rounded-lg bg-orange-100 flex items-center justify-center">
+                    <ExclamationTriangleIcon className="h-6 w-6 text-orange-600" />
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-2xl font-bold text-gray-900">{stats.pendingDisputes}</h3>
+                  <p className="text-sm text-gray-500">Pending Disputes</p>
+                </div>
+              </div>
+              <div className="mt-4">
+                <Link href="/admin/disputes" className="text-orange-600 hover:text-orange-700 font-medium text-sm">
+                  Resolve disputes →
+                </Link>
+              </div>
+            </div>
+          </motion.div>
         </div>
+
+        {/* Analytics Section */}
+        <AdminAnalytics className="mb-8" />
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Quick Actions */}
@@ -403,6 +490,32 @@ export default function AdminDashboard() {
                   <div>
                     <h3 className="font-medium text-gray-900">View Reports</h3>
                     <p className="text-sm text-gray-500">Analytics and system reports</p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin/disputes"
+                  className="flex items-center p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
+                >
+                  <div className="h-10 w-10 rounded-lg bg-orange-100 flex items-center justify-center mr-4">
+                    <ExclamationTriangleIcon className="h-5 w-5 text-orange-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-900">Dispute Resolution</h3>
+                    <p className="text-sm text-gray-500">Manage customer disputes</p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/admin/orders"
+                  className="flex items-center p-4 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors"
+                >
+                  <div className="h-10 w-10 rounded-lg bg-emerald-100 flex items-center justify-center mr-4">
+                    <CurrencyDollarIcon className="h-5 w-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-900">Order Management</h3>
+                    <p className="text-sm text-gray-500">Monitor transactions and payments</p>
                   </div>
                 </Link>
               </div>
