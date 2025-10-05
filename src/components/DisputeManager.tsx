@@ -168,7 +168,7 @@ export default function DisputeManager({ orderId, onClose }: DisputeManagerProps
     switch (status) {
       case 'open':
         return <ClockIcon className="w-5 h-5 text-yellow-500" />;
-      case 'under_review':
+      case 'pending_resolution':
         return <EyeIcon className="w-5 h-5 text-blue-500" />;
       case 'resolved':
         return <CheckCircleIcon className="w-5 h-5 text-green-500" />;
@@ -185,7 +185,7 @@ export default function DisputeManager({ orderId, onClose }: DisputeManagerProps
     switch (status) {
       case 'open':
         return 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30';
-      case 'under_review':
+      case 'pending_resolution':
         return 'text-blue-400 bg-blue-500/20 border-blue-500/30';
       case 'resolved':
         return 'text-green-400 bg-green-500/20 border-green-500/30';
