@@ -26,7 +26,6 @@ export interface Dispute {
   resolver?: {
     full_name: string;
   };
-  // Joined data
   orders?: {
     id: string;
     total_amount_usd: number;
