@@ -384,7 +384,7 @@ export default function DisputeManager({ orderId, onClose }: DisputeManagerProps
                       
                       <div className="flex items-center justify-between text-sm text-emerald-300">
                         <span>
-                          {dispute.initiator_id === user?.id ? 'You initiated' : 'Filed against you'}
+                          {dispute.complainant_id === user?.id ? 'You initiated' : 'Filed against you'}
                         </span>
                         <span>{new Date(dispute.created_at).toLocaleDateString()}</span>
                       </div>
