@@ -645,7 +645,7 @@ export default function DisputeManager({ orderId, onClose }: DisputeManagerProps
                     <div className="space-y-3">
                       <div>
                         <span className="text-sm text-emerald-300">Initiator:</span>
-                        <p className="text-white">{selectedDispute.initiator?.full_name || 'Unknown'}</p>
+                        <p className="text-white">{selectedDispute.complainant?.full_name || 'Unknown'}</p>
                       </div>
                       <div>
                         <span className="text-sm text-emerald-300">Respondent:</span>

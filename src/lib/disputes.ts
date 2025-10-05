@@ -17,6 +17,16 @@ export interface Dispute {
   created_at: string;
   updated_at: string;
   // Joined data
+  complainant?: {
+    full_name: string;
+  };
+  respondent?: {
+    full_name: string;
+  };
+  resolver?: {
+    full_name: string;
+  };
+  // Joined data
   orders?: {
     id: string;
     total_amount_usd: number;
