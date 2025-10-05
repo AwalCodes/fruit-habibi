@@ -1,0 +1,25 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" fill="#0f172a" rx="6"/>
+  
+  <!-- Golden frame -->
+  <rect x="2" y="2" width="28" height="28" fill="none" stroke="#fbbf24" stroke-width="1" rx="4"/>
+  
+  <!-- Woman's face (simplified for small size) -->
+  <circle cx="16" cy="12" r="4" fill="#fbbf24" opacity="0.9"/>
+  
+  <!-- Woman's headscarf -->
+  <path d="M 12 12 Q 16 8 20 12 Q 16 16 12 12" fill="#10b981"/>
+  
+  <!-- Palm tree -->
+  <line x1="22" y1="18" x2="22" y2="26" stroke="#fbbf24" stroke-width="1.5"/>
+  <path d="M 22 18 Q 20 16 22 14 Q 24 16 22 18" fill="#10b981"/>
+  
+  <!-- Date cluster -->
+  <ellipse cx="21" cy="22" rx="1.5" ry="2" fill="#10b981"/>
+  
+  <!-- Sparkles -->
+  <circle cx="10" cy="10" r="0.5" fill="#ffffff"/>
+  <circle cx="22" cy="8" r="0.5" fill="#10b981"/>
+</svg>
+

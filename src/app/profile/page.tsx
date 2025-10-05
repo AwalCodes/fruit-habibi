@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { UserCircleIcon, PencilIcon, CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { UserCircleIcon, PencilIcon, CheckIcon, XMarkIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
+import VerificationDashboard from '@/components/VerificationDashboard';
 
 interface UserProfile {
   id: string;
@@ -29,6 +30,7 @@ export default function ProfilePage() {
     full_name: '',
     country: '',
   });
+  const [showVerification, setShowVerification] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -282,6 +284,56 @@ export default function ProfilePage() {
           </div>
         </div>
 
+        {/* Account Verification */}
+        <div className="mt-8 bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-600">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-medium text-white">Account Verification</h2>
+                <p className="text-sm text-emerald-200">Build trust and unlock premium features</p>
+              </div>
+              <button
+                onClick={() => setShowVerification(true)}
+                className="inline-flex items-center px-4 py-2 border border-emerald-400/30 shadow-sm text-sm leading-4 font-medium rounded-lg text-emerald-400 bg-slate-700/50 hover:bg-slate-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 transition-all duration-300"
+              >
+                <ShieldCheckIcon className="h-4 w-4 mr-2" />
+                Verify Account
+              </button>
+            </div>
+          </div>
+          <div className="px-6 py-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-slate-700/30 p-4 rounded-lg border border-slate-600">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
+                    <CheckIcon className="w-4 h-4 text-blue-400" />
+                  </div>
+                  <h3 className="text-sm font-medium text-white">Email Verified</h3>
+                </div>
+                <p className="text-xs text-emerald-300">Secure your account</p>
+              </div>
+              <div className="bg-slate-700/30 p-4 rounded-lg border border-slate-600">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
+                    <CheckIcon className="w-4 h-4 text-green-400" />
+                  </div>
+                  <h3 className="text-sm font-medium text-white">Phone Verified</h3>
+                </div>
+                <p className="text-xs text-emerald-300">Enhanced security</p>
+              </div>
+              <div className="bg-slate-700/30 p-4 rounded-lg border border-slate-600">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center">
+                    <CheckIcon className="w-4 h-4 text-purple-400" />
+                  </div>
+                  <h3 className="text-sm font-medium text-white">ID Verified</h3>
+                </div>
+                <p className="text-xs text-emerald-300">Full verification</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Account Actions */}
         <div className="mt-8 bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-600">
@@ -306,6 +358,15 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      {/* Verification Dashboard Modal */}
+      {showVerification && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+            <VerificationDashboard onClose={() => setShowVerification(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

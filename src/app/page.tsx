@@ -14,6 +14,7 @@ import {
   ChatBubbleLeftRightIcon,
   SparklesIcon
 } from '@heroicons/react/24/outline';
+import Logo from '@/components/Logo';
 
 // Luxury Hero Section with Middle Eastern Aesthetics
 function LuxuryHero() {
@@ -112,6 +113,11 @@ function LuxuryHero() {
                     💎
                   </motion.div>
                 </div>
+              </div>
+
+              {/* New Logo Component */}
+              <div className="mt-8">
+                <Logo size="xl" showText={true} href="/" />
               </div>
 
               {/* Arabic Text */}

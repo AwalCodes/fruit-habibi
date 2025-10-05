@@ -101,15 +101,35 @@ export default function ListingsPage() {
               </h1>
               <p className="text-xl text-emerald-100 leading-relaxed">
                 Discover luxury fresh produce from trusted premium suppliers worldwide
+                {!user && (
+                  <span className="block text-sm text-emerald-200 mt-2">
+                    💡 Sign up to create listings and connect with suppliers directly
+                  </span>
+                )}
               </p>
             </div>
-            {user && (
+            {user ? (
               <Link
                 href="/listings/create"
                 className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-6 py-3 rounded-full font-bold hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25 flex items-center gap-2"
               >
                 ✨ Create New Listing
               </Link>
+            ) : (
+              <div className="flex gap-3">
+                <Link
+                  href="/register"
+                  className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-full font-bold hover:from-emerald-400 hover:to-emerald-500 transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 flex items-center gap-2"
+                >
+                  🚀 Join Marketplace
+                </Link>
+                <Link
+                  href="/login"
+                  className="bg-gradient-to-r from-slate-600 to-slate-700 text-white px-6 py-3 rounded-full font-bold hover:from-slate-500 hover:to-slate-600 transition-all duration-300 shadow-lg hover:shadow-slate-500/25 flex items-center gap-2"
+                >
+                  Sign In
+                </Link>
+              </div>
             )}
           </div>
         </div>

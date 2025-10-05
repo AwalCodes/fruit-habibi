@@ -38,12 +38,14 @@ export class SearchService {
         .select(`
           *,
           users!products_owner_id_fkey(full_name)
-        `)
-        .in('status', ['published', 'draft']);
+        `);
 
-      // For non-logged in users or non-owners, only show published products
+      // For non-logged in users, only show published products
+      // For logged in users, show published products and their own drafts
       if (!currentUserId) {
         query = query.eq('status', 'published');
+      } else {
+        query = query.in('status', ['published', 'draft']);
       }
 
       // Apply text search

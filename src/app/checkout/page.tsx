@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/lib/supabase';
 import PaymentForm from '@/components/PaymentForm';
 import StripeProvider from '@/components/StripeProvider';
@@ -27,6 +28,7 @@ function CheckoutContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, loading: authLoading } = useAuth();
+  const { items: cartItems, clearCart } = useCart();
   
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
@@ -36,6 +38,7 @@ function CheckoutContent() {
 
   const productId = searchParams?.get('product');
   const requestedQuantity = searchParams?.get('quantity');
+  const isCartCheckout = searchParams?.get('cart') === 'true';
 
   useEffect(() => {
     if (requestedQuantity) {
@@ -49,10 +52,13 @@ function CheckoutContent() {
       return;
     }
 
-    if (productId && user) {
+    if (isCartCheckout && user) {
+      // Cart checkout mode - no need to fetch product
+      setLoading(false);
+    } else if (productId && user) {
       fetchProduct();
     }
-  }, [productId, user, authLoading]);
+  }, [productId, user, authLoading, isCartCheckout]);
 
   const fetchProduct = async () => {
     try {

@@ -14,7 +14,8 @@ import {
   StarIcon,
   ArrowTrendingUpIcon,
   UserGroupIcon,
-  DocumentTextIcon
+  DocumentTextIcon,
+  ShoppingBagIcon
 } from '@heroicons/react/24/outline';
 
 interface DashboardStats {
@@ -51,6 +52,7 @@ export default function DashboardPage() {
   });
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [dashboardLoading, setDashboardLoading] = useState(true);
+  const [showOnboardingPrompt, setShowOnboardingPrompt] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -68,47 +70,72 @@ export default function DashboardPage() {
     if (!user) return;
     
     try {
+      console.log('Loading dashboard data for user:', user.id);
       setDashboardLoading(true);
 
       // Fetch listings stats
-      const { count: totalListings } = await supabase
+      const { count: totalListings, error: totalError } = await supabase
         .from('products')
         .select('*', { count: 'exact', head: true })
         .eq('owner_id', user.id);
 
-      const { count: publishedListings } = await supabase
+      if (totalError) {
+        console.error('Error fetching total listings:', totalError);
+      }
+
+      const { count: publishedListings, error: publishedError } = await supabase
         .from('products')
         .select('*', { count: 'exact', head: true })
         .eq('owner_id', user.id)
         .eq('status', 'published');
 
-      const { count: draftListings } = await supabase
+      if (publishedError) {
+        console.error('Error fetching published listings:', publishedError);
+      }
+
+      const { count: draftListings, error: draftError } = await supabase
         .from('products')
         .select('*', { count: 'exact', head: true })
         .eq('owner_id', user.id)
         .eq('status', 'draft');
 
+      if (draftError) {
+        console.error('Error fetching draft listings:', draftError);
+      }
+
       // Fetch messages stats
-      const { count: totalMessages } = await supabase
+      const { count: totalMessages, error: messagesError } = await supabase
         .from('messages')
         .select('*', { count: 'exact', head: true })
         .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`);
 
+      if (messagesError) {
+        console.error('Error fetching messages:', messagesError);
+      }
+
       // Get recent products for activity
-      const { data: recentProducts } = await supabase
+      const { data: recentProducts, error: productsError } = await supabase
         .from('products')
         .select('id, title, created_at, status')
         .eq('owner_id', user.id)
         .order('created_at', { ascending: false })
         .limit(5);
 
+      if (productsError) {
+        console.error('Error fetching recent products:', productsError);
+      }
+
       // Get recent messages for activity
-      const { data: recentMessages } = await supabase
+      const { data: recentMessages, error: messagesRecentError } = await supabase
         .from('messages')
-        .select('id, content, created_at, products(title)')
+        .select('id, body, created_at, product_id')
         .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
         .order('created_at', { ascending: false })
         .limit(3);
+
+      if (messagesRecentError) {
+        console.error('Error fetching recent messages:', messagesRecentError);
+      }
 
       // Build recent activity
       const activity: RecentActivity[] = [];
@@ -131,7 +158,7 @@ export default function DashboardPage() {
             id: message.id,
             type: 'message_received',
             title: 'Message received',
-            description: `"${message.content.substring(0, 50)}..."`,
+            description: `"${message.body.substring(0, 50)}..."`,
             timestamp: message.created_at
           });
         });
@@ -152,6 +179,11 @@ export default function DashboardPage() {
       });
 
       setRecentActivity(activity.slice(0, 8));
+
+      // Check if user needs onboarding (incomplete business profile)
+      const hasBusinessInfo = user.user_metadata?.business_name || false;
+      const needsOnboarding = !hasBusinessInfo;
+      setShowOnboardingPrompt(needsOnboarding);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     } finally {
@@ -215,6 +247,12 @@ export default function DashboardPage() {
                   {user.user_metadata?.role === 'farmer' ? '🌱 Farmer/Exporter' : '📦 Importer/Distributor'}
                 </span>
                 <span className="text-sm text-emerald-300">{user.user_metadata?.country}</span>
+                <button
+                  onClick={() => router.push('/seller-onboarding')}
+                  className="inline-flex items-center px-4 py-2 border border-emerald-400/30 shadow-sm text-sm leading-4 font-medium rounded-lg text-emerald-400 bg-slate-700/50 hover:bg-slate-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 transition-all duration-300"
+                >
+                  🚀 Seller Onboarding
+                </button>
               </div>
             </div>
           </div>
@@ -222,6 +260,45 @@ export default function DashboardPage() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Seller Onboarding Prompt */}
+        {showOnboardingPrompt && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 rounded-xl p-6 mb-8"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Ready to Start Selling?</h3>
+                  <p className="text-emerald-200 text-sm">
+                    Complete your seller onboarding to unlock all features and start building your business
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowOnboardingPrompt(false)}
+                  className="px-4 py-2 text-emerald-300 hover:text-white transition-colors"
+                >
+                  Maybe Later
+                </button>
+                <button
+                  onClick={() => router.push('/seller-onboarding')}
+                  className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-2 rounded-lg hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 font-medium"
+                >
+                  Start Onboarding
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
           <motion.div
@@ -370,6 +447,19 @@ export default function DashboardPage() {
                   <div>
                     <h3 className="font-medium text-white">Browse Marketplace</h3>
                     <p className="text-sm text-emerald-200">Discover products from other suppliers</p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/orders"
+                  className="flex items-center p-4 bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-lg hover:from-blue-500/20 hover:to-blue-600/20 transition-all duration-300 border border-blue-400/20"
+                >
+                  <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/20 flex items-center justify-center mr-4 border border-blue-400/30">
+                    <ShoppingBagIcon className="h-5 w-5 text-blue-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-white">View Orders</h3>
+                    <p className="text-sm text-emerald-200">Manage your purchases and sales</p>
                   </div>
                 </Link>
 

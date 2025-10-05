@@ -329,7 +329,7 @@ export default function ChatPanel({ productId, sellerId, sellerName }: ChatPanel
         </div>
       </div>
 
-      <div className="h-96 flex flex-col">
+      <div className="h-[60vh] max-h-[600px] flex flex-col">
         {/* Messages */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-b from-slate-900/20 to-slate-800/20">
           {loading ? (

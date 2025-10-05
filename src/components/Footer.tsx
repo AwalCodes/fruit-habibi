@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Logo from './Logo';
 
 export default function Footer() {
   return (
@@ -44,9 +45,9 @@ export default function Footer() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h3 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-4">
-                Fruit Habibi
-              </h3>
+              <div className="mb-6">
+                <Logo size="lg" showText={true} href="/" className="mb-4" />
+              </div>
               <p className="mt-4 text-emerald-100 leading-relaxed text-lg">
                 Connecting premium growers with trusted buyers across borders. Building a sustainable 
                 future for the global luxury fruits and vegetables trade.

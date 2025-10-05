@@ -1,31 +1,88 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import StarRating from './StarRating';
 import { motion } from 'framer-motion';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
+import { CheckCircleIcon, XCircleIcon, StarIcon } from '@heroicons/react/24/solid';
 
 interface ReviewFormProps {
   productId: string;
   onReviewSubmitted?: () => void;
   onCancel?: () => void;
+  existingReview?: {
+    id: string;
+    rating: number;
+    title: string;
+    comment: string | null;
+  } | null;
 }
 
-export default function ReviewForm({ productId, onReviewSubmitted, onCancel }: ReviewFormProps) {
+export default function ReviewForm({ productId, onReviewSubmitted, onCancel, existingReview }: ReviewFormProps) {
   const { user } = useAuth();
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState('');
   const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [internalExistingReview, setInternalExistingReview] = useState<any>(null);
+
+  // Check for existing review when component mounts (if not provided as prop)
+  useEffect(() => {
+    const checkExistingReview = async () => {
+      if (!user || existingReview) return; // Skip if existingReview is provided as prop
+
+      try {
+        const { data, error } = await supabase
+          .from('reviews')
+          .select('*')
+          .eq('product_id', productId)
+          .eq('reviewer_id', user.id)
+          .single();
+
+        if (data) {
+          setInternalExistingReview(data);
+          setMessage({ 
+            type: 'error', 
+            text: 'You have already reviewed this product. Click "Edit Review" to modify your review.' 
+          });
+        }
+      } catch (error) {
+        // No existing review found, which is fine
+        console.log('No existing review found');
+      }
+    };
+
+    checkExistingReview();
+  }, [user, productId, existingReview]);
+
+  // Pre-fill form when existingReview is provided
+  useEffect(() => {
+    if (existingReview) {
+      setRating(existingReview.rating);
+      setTitle(existingReview.title);
+      setComment(existingReview.comment || '');
+    }
+  }, [existingReview]);
+
+  // Calculate current existing review for use throughout the component
+  const currentExistingReview = existingReview || internalExistingReview;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!user) {
       setMessage({ type: 'error', text: 'You must be logged in to write a review.' });
+      return;
+    }
+
+    // Prevent duplicate submission only if we're trying to create a new review when one already exists
+    if (!currentExistingReview && internalExistingReview) {
+      setMessage({ 
+        type: 'error', 
+        text: 'You have already reviewed this product. Please close this form and use the "Edit Review" button to modify your review.' 
+      });
       return;
     }
 
@@ -43,30 +100,74 @@ export default function ReviewForm({ productId, onReviewSubmitted, onCancel }: R
     setMessage(null);
 
     try {
-      const { error } = await supabase
-        .from('reviews')
-        .insert({
-          product_id: productId,
-          reviewer_id: user.id,
-          rating,
-          title: title.trim(),
-          comment: comment.trim() || null
-        });
+      let error;
+      
+      if (currentExistingReview) {
+        // Update existing review
+        const { error: updateError } = await supabase
+          .from('reviews')
+          .update({
+            rating,
+            title: title.trim(),
+            comment: comment.trim() || null,
+          })
+          .eq('id', currentExistingReview.id);
+
+        error = updateError;
+      } else {
+        // Create new review
+        const { error: insertError } = await supabase
+          .from('reviews')
+          .insert({
+            product_id: productId,
+            reviewer_id: user.id,
+            rating,
+            title: title.trim(),
+            comment: comment.trim() || null,
+          });
+
+        error = insertError;
+      }
 
       if (error) {
+        console.error('Review submission error:');
+        console.error('- Message:', error.message);
+        console.error('- Code:', error.code);
+        console.error('- Details:', error.details);
+        console.error('- Hint:', error.hint);
+        console.error('- Full error object:', error);
+        console.error('- Error type:', typeof error);
+        console.error('- Error keys:', Object.keys(error));
+        
         if (error.code === '23505') {
           setMessage({ type: 'error', text: 'You have already reviewed this product.' });
+        } else if (error.code === '42P17') {
+          setMessage({ 
+            type: 'error', 
+            text: 'Reviews system is being updated. Please refresh the page and try again.' 
+          });
         } else if (error.code === '42P01' || error.message?.includes('does not exist')) {
-          setMessage({ type: 'error', text: 'Reviews feature is not available yet. Please try again later.' });
+          setMessage({ 
+            type: 'error', 
+            text: 'Reviews feature is being updated. Please try again in a few minutes.' 
+          });
+        } else if (error.code === '42501') {
+          setMessage({ 
+            type: 'error', 
+            text: 'Permission denied. Please make sure you are logged in and try again.' 
+          });
         } else {
-          setMessage({ type: 'error', text: 'Failed to submit review. Please try again.' });
+          setMessage({ type: 'error', text: `Failed to ${currentExistingReview ? 'update' : 'submit'} review: ${error.message || 'Unknown error'}` });
         }
-        console.error('Review submission error:', error);
       } else {
-        setMessage({ type: 'success', text: 'Review submitted successfully!' });
-        setRating(0);
-        setTitle('');
-        setComment('');
+        setMessage({ type: 'success', text: `Review ${currentExistingReview ? 'updated' : 'submitted'} successfully!` });
+        
+        // Reset form only if it was a new review
+        if (!currentExistingReview) {
+          setRating(0);
+          setTitle('');
+          setComment('');
+        }
         
         // Call the callback after a short delay
         setTimeout(() => {
@@ -75,8 +176,12 @@ export default function ReviewForm({ productId, onReviewSubmitted, onCancel }: R
           }
         }, 1500);
       }
-    } catch (error) {
-      console.error('Review submission error:', error);
+    } catch (error: any) {
+      console.error('Review submission catch error:');
+      console.error('- Message:', error?.message || 'Unknown error');
+      console.error('- Stack:', error?.stack);
+      console.error('- Full error:', error);
+      console.error('- Error type:', typeof error);
       setMessage({ type: 'error', text: 'An unexpected error occurred. Please try again.' });
     } finally {
       setIsSubmitting(false);
@@ -97,14 +202,20 @@ export default function ReviewForm({ productId, onReviewSubmitted, onCancel }: R
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm rounded-2xl border border-emerald-500/20 p-8 shadow-2xl"
+      className="bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm rounded-2xl border border-emerald-500/30 p-8 shadow-2xl relative"
     >
-      <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-        <span className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
-          ⭐
-        </span>
-        Write a Review
-      </h3>
+      {/* Close Button */}
+      <button
+        onClick={onCancel}
+        className="absolute top-4 right-4 w-8 h-8 bg-red-500/80 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition-colors shadow-lg z-10"
+        title="Close review form"
+      >
+        ✕
+      </button>
+         <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6 flex items-center gap-3">
+           <StarIcon className="w-8 h-8 text-yellow-400" />
+           {currentExistingReview ? 'Edit Review' : 'Write a Review'}
+         </h3>
       
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Rating Selection */}
@@ -189,9 +300,9 @@ export default function ReviewForm({ productId, onReviewSubmitted, onCancel }: R
         <div className="flex gap-4 pt-6">
           <motion.button
             type="submit"
-            disabled={isSubmitting || rating === 0 || !title.trim()}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            disabled={isSubmitting || rating === 0 || !title.trim() || existingReview}
+            whileHover={{ scale: existingReview ? 1 : 1.02 }}
+            whileTap={{ scale: existingReview ? 1 : 0.98 }}
             className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold py-3 px-6 rounded-lg hover:from-emerald-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             {isSubmitting ? (
@@ -199,6 +310,8 @@ export default function ReviewForm({ productId, onReviewSubmitted, onCancel }: R
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 <span>Submitting...</span>
               </div>
+            ) : currentExistingReview ? (
+              'Update Review'
             ) : (
               'Submit Review'
             )}
@@ -210,7 +323,7 @@ export default function ReviewForm({ productId, onReviewSubmitted, onCancel }: R
               onClick={handleCancel}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="px-6 py-3 border border-emerald-500/30 rounded-lg text-emerald-200 hover:bg-emerald-500/10 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-800 transition-all duration-200"
+              className="px-6 py-3 border border-slate-500/30 rounded-lg text-slate-300 hover:bg-slate-500/10 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-slate-800 transition-all duration-200"
             >
               Cancel
             </motion.button>

@@ -49,6 +49,7 @@ export default function ReviewList({ productId, onEditReview, onDeleteReview }: 
       setLoading(true);
       setError(null);
 
+      // First try to fetch reviews with user join
       const { data, error } = await supabase
         .from('reviews')
         .select(`
@@ -58,31 +59,59 @@ export default function ReviewList({ productId, onEditReview, onDeleteReview }: 
           comment,
           created_at,
           updated_at,
-          reviewer:reviewer_id (
-            id,
-            full_name,
-            avatar_url
-          )
+          reviewer_id
         `)
         .eq('product_id', productId)
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Error fetching reviews:', error);
-        setError('Failed to load reviews');
+        console.warn('Error fetching reviews:', error.message);
+        setError(null); // Don't show error to user, just log it
+        setReviews([]);
         return;
       }
 
-      // Transform data to match Review interface
-      const transformedData = data?.map((review: any) => ({
-        ...review,
-        reviewer: Array.isArray(review.reviewer) ? review.reviewer[0] : review.reviewer
-      })) || [];
+      // If we have reviews, try to fetch user data for each reviewer
+      const reviewsWithUsers = await Promise.all(
+        (data || []).map(async (review) => {
+          try {
+            const { data: userData } = await supabase
+              .from('users')
+              .select('id, full_name, avatar_url')
+              .eq('id', review.reviewer_id)
+              .single();
+
+            return {
+              ...review,
+              reviewer: userData ? {
+                id: userData.id,
+                full_name: userData.full_name || 'User',
+                avatar_url: userData.avatar_url
+              } : {
+                id: review.reviewer_id,
+                full_name: 'User',
+                avatar_url: null
+              }
+            };
+          } catch (userError) {
+            console.warn('Error fetching user data:', userError);
+            return {
+              ...review,
+              reviewer: {
+                id: review.reviewer_id,
+                full_name: 'User',
+                avatar_url: null
+              }
+            };
+          }
+        })
+      );
       
-      setReviews(transformedData);
+      setReviews(reviewsWithUsers);
     } catch (error) {
-      console.error('Error fetching reviews:', error);
-      setError('Failed to load reviews');
+      console.warn('Unexpected error fetching reviews:', error);
+      setError(null); // Don't show error to user
+      setReviews([]);
     } finally {
       setLoading(false);
     }
@@ -153,28 +182,29 @@ export default function ReviewList({ productId, onEditReview, onDeleteReview }: 
     );
   }
 
-  if (error) {
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-        <p className="text-red-700 text-sm">{error}</p>
-        <button
-          onClick={fetchReviews}
-          className="mt-2 text-red-600 hover:text-red-700 text-sm font-medium"
-        >
-          Try again
-        </button>
-      </div>
-    );
-  }
+  // Don't show error messages to users - just show empty state
+  // if (error) {
+  //   return (
+  //     <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+  //       <p className="text-red-700 text-sm">{error}</p>
+  //       <button
+  //         onClick={fetchReviews}
+  //         className="mt-2 text-red-600 hover:text-red-700 text-sm font-medium"
+  //       >
+  //         Try again
+  //       </button>
+  //     </div>
+  //   );
+  // }
 
   if (reviews.length === 0) {
     return (
       <div className="text-center py-8">
-        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <UserIcon className="w-8 h-8 text-gray-400" />
+        <div className="w-16 h-16 bg-gradient-to-br from-emerald-500/20 to-emerald-600/30 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/30">
+          <UserIcon className="w-8 h-8 text-emerald-400" />
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No reviews yet</h3>
-        <p className="text-gray-500">Be the first to review this product!</p>
+        <h3 className="text-lg font-medium text-emerald-100 mb-2">No reviews yet</h3>
+        <p className="text-emerald-200">Be the first to review this product!</p>
       </div>
     );
   }
@@ -187,11 +217,11 @@ export default function ReviewList({ productId, onEditReview, onDeleteReview }: 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
-          className="bg-white border border-gray-200 rounded-lg p-4"
+          className="bg-gradient-to-br from-slate-800/30 to-emerald-900/20 border border-emerald-500/20 rounded-xl p-6 backdrop-blur-sm"
         >
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500/30 to-emerald-600/40 rounded-full flex items-center justify-center border border-emerald-500/30">
                   {review.reviewer.avatar_url ? (
                     <Image
                       src={review.reviewer.avatar_url}
@@ -201,53 +231,40 @@ export default function ReviewList({ productId, onEditReview, onDeleteReview }: 
                       className="w-10 h-10 rounded-full object-cover"
                     />
                   ) : (
-                    <UserIcon className="w-6 h-6 text-gray-400" />
+                    <UserIcon className="w-6 h-6 text-emerald-400" />
                   )}
               </div>
               <div>
-                <h4 className="font-medium text-gray-900">
-                  {review.reviewer.full_name || 'Anonymous User'}
+                <h4 className="font-medium text-emerald-100">
+                  {review.reviewer.full_name || 'User'}
                 </h4>
                 <div className="flex items-center gap-2">
                   <StarRating rating={review.rating} size="sm" />
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-emerald-300">
                     {formatDate(review.created_at)}
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Review Actions (for review owner) */}
+            {/* Review Actions (for review owner) - Only show delete button */}
             {user && user.id === review.reviewer.id && (
               <div className="relative">
-                <button className="p-1 hover:bg-gray-100 rounded-full">
-                  <EllipsisVerticalIcon className="w-5 h-5 text-gray-400" />
+                <button 
+                  onClick={() => handleDeleteReview(review.id)}
+                  className="p-1 hover:bg-red-800/30 rounded-full transition-colors"
+                  title="Delete review"
+                >
+                  <TrashIcon className="w-5 h-5 text-red-400" />
                 </button>
-                {/* Dropdown menu would go here - simplified for now */}
-                <div className="absolute right-0 top-8 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-10">
-                  <button
-                    onClick={() => onEditReview?.(review.id)}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full text-left"
-                  >
-                    <PencilIcon className="w-4 h-4" />
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteReview(review.id)}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 w-full text-left"
-                  >
-                    <TrashIcon className="w-4 h-4" />
-                    Delete
-                  </button>
-                </div>
               </div>
             )}
           </div>
 
           <div>
-            <h5 className="font-medium text-gray-900 mb-2">{review.title}</h5>
+            <h5 className="font-medium text-emerald-100 mb-2">{review.title}</h5>
             {review.comment && (
-              <p className="text-gray-700 leading-relaxed">{review.comment}</p>
+              <p className="text-emerald-200 leading-relaxed">{review.comment}</p>
             )}
           </div>
         </motion.div>
@@ -258,7 +275,7 @@ export default function ReviewList({ productId, onEditReview, onDeleteReview }: 
         <div className="text-center pt-4">
           <button
             onClick={() => setShowAll(!showAll)}
-            className="text-green-600 hover:text-green-700 font-medium text-sm"
+            className="text-emerald-400 hover:text-emerald-300 font-medium text-sm px-4 py-2 rounded-lg hover:bg-emerald-800/30 transition-colors"
           >
             {showAll ? 'Show Less' : `Show All ${reviews.length} Reviews`}
           </button>

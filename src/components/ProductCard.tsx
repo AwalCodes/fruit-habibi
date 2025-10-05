@@ -3,6 +3,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/contexts/AuthContext';
+import { useCart } from '@/contexts/CartContext';
+import { ShoppingCartIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
 import StarRating from './StarRating';
 
 interface ProductCardProps {
@@ -40,6 +44,35 @@ export default function ProductCard({
   averageRating,
   reviewCount,
 }: ProductCardProps) {
+  const { user } = useAuth();
+  const { addItem } = useCart();
+  const [addedToCart, setAddedToCart] = useState(false);
+
+  const handleAddToCart = () => {
+    if (!user) {
+      // Redirect to login if not authenticated
+      window.location.href = '/login';
+      return;
+    }
+
+    if (ownerId === user.id) {
+      // Don't add own products to cart
+      return;
+    }
+
+    addItem({
+      id,
+      title,
+      price,
+      image_url: images[0] || '/placeholder-product.jpg',
+      seller_id: ownerId,
+      seller_name: ownerName,
+    });
+
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 2000);
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
@@ -155,10 +188,38 @@ export default function ProductCard({
             </span>
           </div>
           
-          <div className="flex items-center justify-between text-xs text-emerald-300 border-t border-yellow-400/20 pt-3">
+          <div className="flex items-center justify-between text-xs text-emerald-300 border-t border-yellow-400/20 pt-3 mb-3">
             <span>by {getOwnerDisplayName()}</span>
             <span>{formatDate(createdAt)}</span>
           </div>
+
+          {/* Add to Cart Button */}
+          {ownerId !== user?.id && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleAddToCart();
+              }}
+              className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2 ${
+                addedToCart
+                  ? 'bg-green-500 text-white'
+                  : 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-black hover:from-yellow-600 hover:to-yellow-700'
+              }`}
+            >
+              {addedToCart ? (
+                <>
+                  <CheckIcon className="w-4 h-4" />
+                  Added to Cart!
+                </>
+              ) : (
+                <>
+                  <ShoppingCartIcon className="w-4 h-4" />
+                  Add to Cart
+                </>
+              )}
+            </button>
+          )}
         </div>
       </Link>
     </motion.div>

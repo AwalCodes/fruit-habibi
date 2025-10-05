@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import DirectMessageModal from '@/components/DirectMessageModal';
 import { 
   CheckCircleIcon, 
   TruckIcon, 
@@ -21,32 +22,15 @@ interface Order {
   seller_id: string;
   product_id: string;
   quantity: number;
-  unit_price: number;
-  total_amount: number;
-  shipping_cost: number;
-  commission_fee: number;
-  net_amount: number;
-  status: string;
-  payment_intent_id: string;
+  unit_price_usd: number;
+  total_amount_usd: number;
+  commission_amount_usd: number;
+  order_status: 'pending' | 'paid' | 'shipped' | 'delivered' | 'cancelled' | 'refunded';
+  stripe_payment_intent_id?: string;
   shipping_address: any;
-  tracking_number?: string;
-  estimated_delivery?: string;
-  actual_delivery?: string;
+  notes?: string;
   created_at: string;
   updated_at: string;
-  products: {
-    title: string;
-    images: string[];
-    unit: string;
-  };
-  buyer: {
-    full_name: string;
-    email: string;
-  };
-  seller: {
-    full_name: string;
-    email: string;
-  };
 }
 
 const statusConfig = {
@@ -101,6 +85,7 @@ export default function OrderDetailPage() {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showMessageModal, setShowMessageModal] = useState(false);
 
   const orderId = params.id as string;
   const isSuccess = searchParams?.get('success') === 'true';
@@ -121,22 +106,7 @@ export default function OrderDetailPage() {
     try {
       const { data, error } = await supabase
         .from('orders')
-        .select(`
-          *,
-          products (
-            title,
-            images,
-            unit
-          ),
-          buyer:users!orders_buyer_id_fkey (
-            full_name,
-            email
-          ),
-          seller:users!orders_seller_id_fkey (
-            full_name,
-            email
-          )
-        `)
+        .select('*')
         .eq('id', orderId)
         .single();
 
@@ -197,10 +167,9 @@ export default function OrderDetailPage() {
     );
   }
 
-  const statusInfo = statusConfig[order.status as keyof typeof statusConfig] || statusConfig.pending;
+  const statusInfo = statusConfig[order.order_status as keyof typeof statusConfig] || statusConfig.pending;
   const StatusIcon = statusInfo.icon;
   const isBuyer = user?.id === order.buyer_id;
-  const otherParty = isBuyer ? order.seller : order.buyer;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
@@ -257,26 +226,18 @@ export default function OrderDetailPage() {
                 <h2 className="text-xl font-semibold text-white mb-4">Product Details</h2>
                 <div className="bg-slate-700/30 rounded-lg p-6 space-y-4">
                   <div className="flex items-start space-x-4">
-                    {order.products.images && order.products.images.length > 0 ? (
-                      <img
-                        src={order.products.images[0]}
-                        alt={order.products.title}
-                        className="w-20 h-20 object-cover rounded-lg"
-                      />
-                    ) : (
-                      <div className="w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-yellow-500/20 rounded-lg flex items-center justify-center">
-                        <span className="text-2xl">🥭</span>
-                      </div>
-                    )}
+                    <div className="w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-yellow-500/20 rounded-lg flex items-center justify-center">
+                      <span className="text-2xl">🥭</span>
+                    </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-white">
-                        {order.products.title}
+                        Product ID: {order.product_id.slice(-8)}
                       </h3>
                       <p className="text-emerald-200">
-                        Quantity: {order.quantity} {order.products.unit}
+                        Quantity: {order.quantity} items
                       </p>
                       <p className="text-emerald-200">
-                        Unit Price: ${order.unit_price}
+                        Unit Price: ${order.unit_price_usd.toFixed(2)}
                       </p>
                     </div>
                   </div>
@@ -289,25 +250,25 @@ export default function OrderDetailPage() {
                 <div className="bg-slate-700/30 rounded-lg p-6 space-y-3">
                   <div className="flex justify-between text-emerald-200">
                     <span>Subtotal:</span>
-                    <span className="text-white">${(order.unit_price * order.quantity).toFixed(2)}</span>
+                    <span className="text-white">${(order.unit_price_usd * order.quantity).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-emerald-200">
                     <span>Shipping:</span>
-                    <span className="text-white">${order.shipping_cost.toFixed(2)}</span>
+                    <span className="text-white">$0.00</span>
                   </div>
                   <div className="flex justify-between text-emerald-200">
                     <span>Commission:</span>
-                    <span className="text-white">-${order.commission_fee.toFixed(2)}</span>
+                    <span className="text-white">-${order.commission_amount_usd.toFixed(2)}</span>
                   </div>
                   <div className="border-t border-slate-600 pt-3">
                     <div className="flex justify-between text-lg font-semibold">
                       <span className="text-yellow-400">Total Paid:</span>
-                      <span className="text-yellow-400">${order.total_amount.toFixed(2)}</span>
+                      <span className="text-yellow-400">${order.total_amount_usd.toFixed(2)}</span>
                     </div>
                     {isBuyer && (
                       <div className="flex justify-between text-sm text-emerald-300 mt-1">
                         <span>Seller receives:</span>
-                        <span>${order.net_amount.toFixed(2)}</span>
+                        <span>${(order.total_amount_usd - order.commission_amount_usd).toFixed(2)}</span>
                       </div>
                     )}
                   </div>
@@ -321,13 +282,9 @@ export default function OrderDetailPage() {
                 <h2 className="text-xl font-semibold text-white mb-4">Shipping Address</h2>
                 <div className="bg-slate-700/30 rounded-lg p-6">
                   <div className="text-emerald-200">
-                    <p className="font-medium text-white">{order.shipping_address.name}</p>
-                    <p>{order.shipping_address.address.line1}</p>
-                    {order.shipping_address.address.line2 && (
-                      <p>{order.shipping_address.address.line2}</p>
-                    )}
-                    <p>{order.shipping_address.address.city}, {order.shipping_address.address.state} {order.shipping_address.address.postal_code}</p>
-                    <p>{order.shipping_address.address.country}</p>
+                    <p className="font-medium text-white">{order.shipping_address.name || 'Demo User'}</p>
+                    <p>{order.shipping_address.address || '123 Demo Street'}</p>
+                    <p>{order.shipping_address.city || 'Demo City'}, {order.shipping_address.country || 'Demo Country'}</p>
                   </div>
                 </div>
               </div>
@@ -361,15 +318,25 @@ export default function OrderDetailPage() {
               <div className="bg-slate-700/30 rounded-lg p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-white font-medium">{otherParty.full_name}</p>
-                    <p className="text-emerald-200">{otherParty.email}</p>
+                    <p className="text-white font-medium">{isBuyer ? 'Seller' : 'Buyer'}</p>
+                    <p className="text-emerald-200">User ID: {isBuyer ? order.seller_id.slice(-8) : order.buyer_id.slice(-8)}</p>
                   </div>
-                  <Link
-                    href={`/messages?product=${order.product_id}`}
-                    className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black py-2 px-4 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium shadow-lg hover:shadow-yellow-500/25"
-                  >
-                    Send Message
-                  </Link>
+                  <div className="flex space-x-3">
+                    <button
+                      onClick={() => setShowMessageModal(true)}
+                      className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black py-2 px-4 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium shadow-lg hover:shadow-yellow-500/25"
+                    >
+                      Send Message
+                    </button>
+                    {order.order_status !== 'cancelled' && (
+                      <Link
+                        href={`/disputes?create=${order.id}`}
+                        className="bg-gradient-to-r from-red-500 to-orange-500 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-orange-600 transition-all duration-300 font-medium shadow-lg hover:shadow-red-500/25"
+                      >
+                        Report Dispute
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -387,6 +354,18 @@ export default function OrderDetailPage() {
           </Link>
         </div>
       </div>
+
+      {/* Direct Message Modal */}
+      {order && (
+        <DirectMessageModal
+          isOpen={showMessageModal}
+          onClose={() => setShowMessageModal(false)}
+          recipientId={isBuyer ? order.seller_id : order.buyer_id}
+          recipientName={isBuyer ? 'Seller' : 'Buyer'}
+          productId={order.product_id}
+          orderId={order.id}
+        />
+      )}
     </div>
   );
 }

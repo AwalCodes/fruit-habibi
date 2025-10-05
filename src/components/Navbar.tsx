@@ -3,12 +3,15 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useCart } from '@/contexts/CartContext';
+import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 import NotificationBell from './NotificationBell';
+import Logo from './Logo';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, loading, signOut } = useAuth();
+  const { getTotalItems } = useCart();
 
   const navigation = [
     { name: 'Browse Listings', href: '/listings' },
@@ -18,6 +21,7 @@ export default function Navbar() {
 
   const userNavigation = [
     { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Orders', href: '/orders' },
     { name: 'Messages', href: '/messages' },
     { name: 'Notifications', href: '/notifications' },
     { name: 'Profile', href: '/profile' },
@@ -36,9 +40,7 @@ export default function Navbar() {
         <div className="flex h-16 justify-between">
           <div className="flex">
             <div className="flex flex-shrink-0 items-center">
-              <Link href="/" className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300">
-                Fruit Habibi
-              </Link>
+              <Logo size="md" showText={true} href="/" />
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {navigation.map((item) => (
@@ -83,6 +85,19 @@ export default function Navbar() {
                 
                 {/* Notifications */}
                 <NotificationBell />
+                
+                {/* Shopping Cart */}
+                <Link
+                  href="/cart"
+                  className="relative text-emerald-100 hover:text-yellow-300 transition-colors duration-300"
+                >
+                  <ShoppingCartIcon className="h-6 w-6" />
+                  {getTotalItems() > 0 && (
+                    <span className="absolute -top-2 -right-2 h-5 w-5 bg-yellow-400 text-black text-xs rounded-full flex items-center justify-center font-bold">
+                      {getTotalItems()}
+                    </span>
+                  )}
+                </Link>
                 
                 {/* Regular User Navigation */}
                 {userNavigation.map((item) => (
