@@ -29,6 +29,7 @@ interface Order {
   stripe_payment_intent_id?: string;
   shipping_address: any;
   tracking_number?: string;
+  estimated_delivery?: string;
   notes?: string;
   created_at: string;
   updated_at: string;
