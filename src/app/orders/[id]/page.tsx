@@ -175,7 +175,7 @@ export default function OrderDetailPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Success Message */}
-        {isSuccess && order.status === 'paid' && (
+        {isSuccess && order.order_status === 'paid' && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
