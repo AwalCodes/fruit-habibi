@@ -28,6 +28,7 @@ interface Order {
   order_status: 'pending' | 'paid' | 'shipped' | 'delivered' | 'cancelled' | 'refunded';
   stripe_payment_intent_id?: string;
   shipping_address: any;
+  tracking_number?: string;
   notes?: string;
   created_at: string;
   updated_at: string;
