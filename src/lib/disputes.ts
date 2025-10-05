@@ -39,15 +39,6 @@ export interface Dispute {
       full_name: string;
     };
   };
-  complainant?: {
-    full_name: string;
-  };
-  respondent?: {
-    full_name: string;
-  };
-  resolver?: {
-    full_name: string;
-  };
 }
 
 export interface DisputeMessage {
