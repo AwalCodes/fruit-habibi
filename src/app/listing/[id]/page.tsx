@@ -22,6 +22,7 @@ interface Product {
   images: string[];
   status: string;
   created_at: string;
+  owner_id: string;
   users: {
     id: string;
     full_name: string;
