@@ -300,7 +300,7 @@ export default function ReviewForm({ productId, onReviewSubmitted, onCancel, exi
         <div className="flex gap-4 pt-6">
           <motion.button
             type="submit"
-            disabled={isSubmitting || rating === 0 || !title.trim() || existingReview}
+            disabled={isSubmitting || rating === 0 || !title.trim() || !!existingReview}
             whileHover={{ scale: existingReview ? 1 : 1.02 }}
             whileTap={{ scale: existingReview ? 1 : 0.98 }}
             className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold py-3 px-6 rounded-lg hover:from-emerald-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
