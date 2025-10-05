@@ -75,7 +75,7 @@ export default function MockPaymentForm({
         sellerId = null;
       }
 
-      const { data: insertedOrder, error: insertError } = await supabase
+          const { data: insertedOrder, error: insertError } = await supabase
         .from('orders')
         .insert({
           buyer_id: user.id,
@@ -94,12 +94,73 @@ export default function MockPaymentForm({
 
       if (insertError || !insertedOrder) {
         console.error('Error creating mock order:', insertError);
+
+        // If orders table doesn't exist (PGRST205) — fallback to an in-memory/session mock
+        if (insertError?.code === 'PGRST205') {
+          const fallbackId = `mock_${Date.now()}`;
+
+          // Build a minimal mock order object that matches the shape the order page expects
+          const mockOrder = {
+            id: fallbackId,
+            buyer_id: user.id,
+            seller_id: sellerId,
+            product_id: productId,
+            quantity,
+            unit_price: unitPrice,
+            total_amount: total,
+            shipping_cost: shippingCost,
+            commission_fee: commission,
+            net_amount: netAmount,
+            status: 'paid',
+            payment_intent_id: null,
+            shipping_address: {
+              address: {
+                line1: '123 Test Street',
+                city: 'Test City',
+                state: 'TC',
+                postal_code: '12345',
+                country: 'Test Country'
+              }
+            },
+            tracking_number: null,
+            estimated_delivery: null,
+            actual_delivery: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            products: {
+              title: productTitle,
+              images: [],
+              unit: 'unit'
+            },
+            buyer: {
+              full_name: user.user_metadata?.full_name || 'Buyer',
+              email: user.email || ''
+            },
+            seller: {
+              full_name: sellerName || 'Seller',
+              email: ''
+            }
+          };
+
+          try {
+            // Save mock order to sessionStorage so order page can load it
+            sessionStorage.setItem(`mock_order_${fallbackId}`, JSON.stringify(mockOrder));
+            console.warn('Orders table missing — using mock order stored in sessionStorage:', fallbackId);
+            onSuccess(fallbackId);
+            setLoading(false);
+            return;
+          } catch (e) {
+            console.error('Failed to store mock order in sessionStorage:', e);
+            onError('Failed to create order after mock payment');
+            setLoading(false);
+            return;
+          }
+        }
+
         onError('Failed to create order after mock payment');
         setLoading(false);
         return;
       }
-
-      console.log('Mock Payment Successful, created order:', insertedOrder.id);
 
       // Use real DB order id for navigation
       onSuccess(insertedOrder.id);

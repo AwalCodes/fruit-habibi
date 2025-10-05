@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   FunnelIcon, 
@@ -42,6 +42,13 @@ export default function AdvancedSearchFilters({
 }: AdvancedSearchFiltersProps) {
   const [localFilters, setLocalFilters] = useState<SearchFilters>(filters);
 
+
+   useEffect(() => {
+    if (isOpen) {
+      setLocalFilters(filters);
+    }
+  }, [isOpen, filters]);
+
   const categories = [
     { value: '', label: 'All Categories' },
     { value: 'fruits', label: 'Fruits' },
@@ -62,15 +69,14 @@ export default function AdvancedSearchFilters({
     { value: 'rating_low', label: 'Lowest Rated' },
   ];
 
-  const handleFilterChange = (key: keyof SearchFilters, value: any) => {
-    const newFilters = { ...localFilters, [key]: value };
-    setLocalFilters(newFilters);
-    onFiltersChange(newFilters);
+ const handleFilterChange = (key: keyof SearchFilters, value: any) => {
+    setLocalFilters(prev => ({ ...prev, [key]: value }));
   };
 
-  const handleApplyFilters = () => {
+ const handleApplyFilters = () => {
     onFiltersChange(localFilters);
   };
+
 
   const handleReset = () => {
     const resetFilters: SearchFilters = {
@@ -88,16 +94,19 @@ export default function AdvancedSearchFilters({
     onReset();
   };
 
-  const hasActiveFilters = () => {
-    return localFilters.searchTerm ||
-           localFilters.category ||
-           localFilters.location ||
-           localFilters.minPrice > 0 ||
-           localFilters.maxPrice < 10000 ||
-           localFilters.minRating > 0 ||
-           localFilters.sortBy !== 'newest' ||
-           localFilters.hasImages ||
-           !localFilters.inStock;
+ // Show badge when there are applied filters OR pending (unsaved) changes
+  const hasPendingChanges = JSON.stringify(localFilters) !== JSON.stringify(filters);
+   const hasActiveFilters = () => {
+    const applied = filters.searchTerm ||
+           filters.category ||
+           filters.location ||
+           filters.minPrice > 0 ||
+           filters.maxPrice < 10000 ||
+           filters.minRating > 0 ||
+           filters.sortBy !== 'newest' ||
+           filters.hasImages ||
+           !filters.inStock;
+    return applied || hasPendingChanges;
   };
 
   return (

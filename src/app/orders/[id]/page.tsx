@@ -105,7 +105,7 @@ export default function OrderDetailPage() {
   const orderId = params.id as string;
   const isSuccess = searchParams?.get('success') === 'true';
 
-  useEffect(() => {
+   useEffect(() => {
     if (!authLoading && !user) {
       setError('Please sign in to view order details');
       setLoading(false);
@@ -113,9 +113,34 @@ export default function OrderDetailPage() {
     }
 
     if (orderId && user) {
+      // If mock mode or synthetic mock id, load from sessionStorage instead of querying Supabase
+      const isMockParam = searchParams?.get('mock') === 'true';
+      const isMockId = orderId.startsWith('mock_');
+
+      if (isMockParam || isMockId) {
+        try {
+          const raw = typeof window !== 'undefined' ? sessionStorage.getItem(`mock_order_${orderId}`) : null;
+          if (raw) {
+            const mockData = JSON.parse(raw);
+            setOrder(mockData);
+            setLoading(false);
+            return;
+          } else {
+            setError('Mock order data not found');
+            setLoading(false);
+            return;
+          }
+        } catch (e) {
+          console.error('Error loading mock order:', e);
+          setError('Failed to load mock order');
+          setLoading(false);
+          return;
+        }
+      }
+
       fetchOrder();
     }
-  }, [orderId, user, authLoading]);
+  }, [orderId, user, authLoading, searchParams]);
 
   const fetchOrder = async () => {
     try {
