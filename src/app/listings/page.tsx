@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
+import Pagination from '@/components/Pagination';
 import AdvancedSearchFilters, { SearchFilters } from '@/components/AdvancedSearchFilters';
 import SearchResults from '@/components/SearchResults';
 import { SearchService, SearchResult } from '@/lib/searchUtils';
@@ -10,6 +11,8 @@ import Link from 'next/link';
 
 
 export default function ListingsPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(12);
   const [products, setProducts] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
@@ -66,6 +69,15 @@ export default function ListingsPage() {
     setFilters(resetFilters);
   };
 
+  useEffect(() => {
+    // reset to first page when filters change
+    setCurrentPage(1);
+  }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const totalItems = products.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const paginatedProducts = products.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
 
   if (loading) {
     return (
@@ -81,6 +93,8 @@ export default function ListingsPage() {
       </div>
     );
   }
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8 relative overflow-hidden">
@@ -128,13 +142,25 @@ export default function ListingsPage() {
         </div>
 
         {/* Search Results */}
-        <SearchResults
-          products={products}
+         <SearchResults
+          products={paginatedProducts}
           filters={filters}
           onFiltersChange={handleFiltersChange}
           loading={loading}
           currentUserId={user?.id}
         />
+
+       <Pagination
+           totalItems={totalItems}
+           currentPage={currentPage}
+           pageSize={pageSize}
+           onPageChange={setCurrentPage}
+           onPageSizeChange={(size) => {
+             setPageSize(size);
+             setCurrentPage(1);
+           }}
+         />
+      
       </div>
     </div>
   );
