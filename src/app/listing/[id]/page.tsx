@@ -368,19 +368,12 @@ export default function ListingDetailPage() {
                               href={`/checkout?product=${product.id}&quantity=${quantity}`}
                               className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-3 px-4 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-yellow-500/25 text-sm"
                             >
-                              ⚡ Buy Now
+                              💳 Buy Now (Real Stripe Payment)
                             </Link>
                           </div>
 
                           {/* Secondary Actions Row */}
-                          <div className="grid grid-cols-2 gap-3">
-                            <Link
-                              href={`/mock-checkout?product=${product.id}&quantity=${quantity}`}
-                              className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 px-3 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-blue-500/25 text-xs"
-                            >
-                              🧪 Test Payment
-                            </Link>
-
+                          <div className="grid grid-cols-1 gap-3 mt-3">
                             <Link
                               href={showChat ? `/listing/${product.id}` : `/listing/${product.id}?chat=true`}
                               className="bg-gradient-to-r from-purple-500 to-purple-600 text-white py-2 px-3 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-purple-500/25 text-xs"

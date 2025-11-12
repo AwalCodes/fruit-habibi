@@ -11,6 +11,12 @@ export default function SellerOnboardingPage() {
   const router = useRouter();
   const [completed, setCompleted] = useState(false);
 
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [authLoading, user, router]);
+
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-emerald-900 to-black">
@@ -25,12 +31,6 @@ export default function SellerOnboardingPage() {
       </div>
     );
   }
-
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/login');
-    }
-  }, [authLoading, user, router]);
 
   if (!user) {
     return null;

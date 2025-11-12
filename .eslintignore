@@ -1,0 +1,19 @@
+# Ignore linting for script files (they use require)
+scripts/**/*.js
+test-payment.js
+
+# Ignore build outputs
+.next/
+out/
+dist/
+build/
+
+# Ignore node_modules
+node_modules/
+
+# Ignore test files (if any)
+**/*.test.js
+**/*.test.ts
+**/*.spec.js
+**/*.spec.ts
+

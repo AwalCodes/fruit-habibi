@@ -76,9 +76,6 @@ class VerificationService {
       }
 
       // TODO: Integrate with email service (SendGrid, AWS SES, etc.)
-      // For now, we'll log the code to console
-      console.log(`📧 Email verification code for ${email}: ${code}`);
-      
       // In production, send actual email
       // await this.sendEmail(email, 'Verify Your Email', `Your verification code is: ${code}`);
 
@@ -112,9 +109,6 @@ class VerificationService {
       }
 
       // TODO: Integrate with SMS service (Twilio, AWS SNS, etc.)
-      // For now, we'll log the code to console
-      console.log(`📱 SMS verification code for ${phoneNumber}: ${code}`);
-      
       // In production, send actual SMS
       // await this.sendSMS(phoneNumber, `Your Fruit Habibi verification code is: ${code}`);
 
@@ -367,4 +361,6 @@ class VerificationService {
 }
 
 export const verificationService = new VerificationService();
+
+
 

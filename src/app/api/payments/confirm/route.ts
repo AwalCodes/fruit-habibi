@@ -2,31 +2,27 @@ import { NextRequest, NextResponse } from 'next/server';
 import { stripe, OrderStatus } from '@/lib/stripe';
 import { supabase } from '@/lib/supabase';
 import { handleStripeError } from '@/lib/stripe';
+import { requireAuth, requireOrderParticipation } from '@/lib/auth-server';
+import { validateRequestBody, paymentIntentSchema, checkRateLimit } from '@/lib/validation';
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { paymentIntentId, orderId } = body;
-
-    if (!paymentIntentId || !orderId) {
+    // Rate limiting
+    const clientId = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    const rateLimit = checkRateLimit(`payment-confirm:${clientId}`, 20, 60000); // 20 requests per minute
+    if (!rateLimit.allowed) {
       return NextResponse.json(
-        { error: 'Missing paymentIntentId or orderId' },
-        { status: 400 }
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rateLimit.resetTime - Date.now()) / 1000)) } }
       );
     }
 
-    // Get current user
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader) {
-      return NextResponse.json({ error: 'Authorization required' }, { status: 401 });
-    }
+    // Require authentication
+    const user = await requireAuth(request);
 
-    const token = authHeader.replace('Bearer ', '');
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Invalid authentication' }, { status: 401 });
-    }
+    // Validate request body
+    const body = await validateRequestBody(request, paymentIntentSchema);
+    const { paymentIntentId, orderId } = body;
 
     // Retrieve payment intent from Stripe
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
@@ -46,18 +42,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get the order
+    // Get the order and verify user has access
     const { data: order, error: orderError } = await supabase
       .from('orders')
       .select('*')
       .eq('id', orderId)
-      .eq('buyer_id', user.id)
       .single();
 
     if (orderError || !order) {
       return NextResponse.json(
         { error: 'Order not found' },
         { status: 404 }
+      );
+    }
+
+    // Verify user is the buyer of this order (or admin)
+    await requireOrderParticipation(request, order.buyer_id, order.seller_id);
+    
+    // Additional check: only buyer can confirm payment
+    if (user.role !== 'admin' && user.id !== order.buyer_id) {
+      return NextResponse.json(
+        { error: 'Only the buyer can confirm payment' },
+        { status: 403 }
       );
     }
 
@@ -104,6 +110,15 @@ export async function POST(request: NextRequest) {
       }
 
 
+      // Get product title for notifications
+      const { data: productData } = await supabase
+        .from('products')
+        .select('title')
+        .eq('id', order.product_id)
+        .single();
+
+      const productTitle = productData?.title || 'your product';
+
       // Create notification for seller
       await supabase
         .from('notifications')
@@ -111,7 +126,7 @@ export async function POST(request: NextRequest) {
           user_id: order.seller_id,
           type: 'order',
           title: 'New Order Received',
-          body: `You received a new order for ${order.quantity} units of ${order.products.title}`,
+          message: `You received a new order for ${order.quantity} units of ${productTitle}`,
           data: {
             orderId: order.id,
             productId: order.product_id,
@@ -126,7 +141,7 @@ export async function POST(request: NextRequest) {
           user_id: order.buyer_id,
           type: 'order',
           title: 'Order Confirmed',
-          body: `Your order for ${order.products.title} has been confirmed and payment received`,
+          message: `Your order for ${productTitle} has been confirmed and payment received`,
           data: {
             orderId: order.id,
             productId: order.product_id,
@@ -166,6 +181,28 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Payment confirmation error:', error);
+
+    // Handle authentication errors
+    if (error instanceof Error && error.message.includes('Unauthorized')) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    if (error instanceof Error && error.message.includes('Forbidden')) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 403 }
+      );
+    }
+
+    if (error instanceof Error && error.message.includes('Validation error')) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      );
+    }
 
     if (error && typeof error === 'object' && 'type' in error) {
       const stripeError = handleStripeError(error);

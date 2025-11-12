@@ -54,18 +54,19 @@ export default function PaymentForm({
   const commission = total * 0.05; // 5% commission
   const netAmount = total - commission;
 
-  useEffect(() => {
-    if (!user || !session) {
-      onError('Please sign in to continue with payment');
-      return;
-    }
+  // Don't create payment intent until shipping address is provided
+  // Payment intent will be created when user fills shipping address
 
-    createPaymentIntent();
-  }, [user, session]);
-
-  const createPaymentIntent = async () => {
+  const createPaymentIntent = async (address?: ShippingAddress) => {
     try {
       setLoading(true);
+
+      const addressToUse = address || shippingAddress;
+      if (!addressToUse) {
+        // Wait for shipping address
+        setLoading(false);
+        return;
+      }
 
       const response = await fetch('/api/payments/create-intent', {
         method: 'POST',
@@ -76,7 +77,7 @@ export default function PaymentForm({
         body: JSON.stringify({
           productId,
           quantity,
-          shippingAddress: shippingAddress?.address,
+          shippingAddress: addressToUse.address,
         }),
       });
 
@@ -154,6 +155,10 @@ export default function PaymentForm({
   const handleAddressChange = (event: any) => {
     if (event.complete) {
       setShippingAddress(event.value);
+      // Create payment intent once shipping address is complete
+      if (!clientSecret && user && session) {
+        createPaymentIntent(event.value);
+      }
     }
   };
 
@@ -180,7 +185,10 @@ export default function PaymentForm({
               Complete Your Purchase
             </h1>
             <p className="text-emerald-200 mt-2">
-              Secure payment powered by Stripe
+              💳 Secure payment powered by Stripe (Real Payment Processing)
+            </p>
+            <p className="text-yellow-400 text-xs mt-1">
+              ⚠️ This is a REAL payment - test cards only in test mode
             </p>
           </div>
 

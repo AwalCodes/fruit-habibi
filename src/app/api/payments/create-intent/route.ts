@@ -2,19 +2,27 @@ import { NextRequest, NextResponse } from 'next/server';
 import { stripe, calculateCommission, PaymentIntentMetadata, OrderStatus } from '@/lib/stripe';
 import { supabase } from '@/lib/supabase';
 import { handleStripeError } from '@/lib/stripe';
+import { requireAuth } from '@/lib/auth-server';
+import { validateRequestBody, orderCreateSchema, checkRateLimit } from '@/lib/validation';
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { productId, quantity, shippingAddress, paymentMethodId } = body;
-
-    // Validate required fields
-    if (!productId || !quantity || !shippingAddress) {
+    // Rate limiting
+    const clientId = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    const rateLimit = checkRateLimit(`payment:${clientId}`, 10, 60000); // 10 requests per minute
+    if (!rateLimit.allowed) {
       return NextResponse.json(
-        { error: 'Missing required fields: productId, quantity, shippingAddress' },
-        { status: 400 }
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rateLimit.resetTime - Date.now()) / 1000)) } }
       );
     }
+
+    // Require authentication
+    const user = await requireAuth(request);
+
+    // Validate request body
+    const body = await validateRequestBody(request, orderCreateSchema);
+    const { productId, quantity, shippingAddress } = body;
 
     // Get the product details
     const { data: product, error: productError } = await supabase
@@ -54,20 +62,9 @@ export async function POST(request: NextRequest) {
 
     // Calculate commission based on seller's subscription tier
     const sellerTier = product.users?.subscription_tier || 'basic';
-    const commissionFee = calculateCommission(totalAmount, sellerTier as any);
-
-    // Get current user (buyer)
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader) {
-      return NextResponse.json({ error: 'Authorization required' }, { status: 401 });
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Invalid authentication' }, { status: 401 });
-    }
+    // Map 'premium' to 'pro' for commission calculation
+    const tierForCommission = sellerTier === 'premium' ? 'pro' : (sellerTier as 'basic' | 'pro' | 'enterprise');
+    const commissionFee = calculateCommission(totalAmount, tierForCommission);
 
     // Prevent users from buying their own products
     if (user.id === product.owner_id) {
@@ -91,6 +88,9 @@ export async function POST(request: NextRequest) {
         commission_fee: commissionFee,
         shipping_address: shippingAddress,
         status: OrderStatus.PENDING,
+        // Set escrow release date (e.g., 7 days after order)
+        escrow_release_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        dispute_deadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
       })
       .select()
       .single();
@@ -144,6 +144,21 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Payment intent creation error:', error);
+    
+    // Handle authentication errors
+    if (error instanceof Error && error.message.includes('Unauthorized')) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    if (error instanceof Error && error.message.includes('Validation error')) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      );
+    }
     
     if (error instanceof Error && error.name === 'StripeError') {
       return NextResponse.json(

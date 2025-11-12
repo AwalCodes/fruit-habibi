@@ -28,6 +28,7 @@ interface Order {
   unit_price_usd: number;
   total_amount_usd: number;
   order_status: 'pending' | 'paid' | 'shipped' | 'delivered' | 'cancelled' | 'refunded';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   shipping_address: any;
   notes: string;
   created_at: string;

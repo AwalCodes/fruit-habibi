@@ -144,7 +144,7 @@ function CheckoutContent() {
   }
 
   return (
-    <StripeProvider clientSecret={clientSecret}>
+    <StripeProvider>
       <PaymentForm
         productId={product.id}
         quantity={quantity}

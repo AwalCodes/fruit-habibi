@@ -179,6 +179,7 @@ export default function ListingModeration() {
       // Update local state
       setListings(prev => prev.map(listing => 
         selectedListings.includes(listing.id) 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ? { ...listing, status: statusMap[action] as any }
           : listing
       ));

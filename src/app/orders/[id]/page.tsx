@@ -27,6 +27,7 @@ interface Order {
   commission_amount_usd: number;
   order_status: 'pending' | 'paid' | 'shipped' | 'delivered' | 'cancelled' | 'refunded';
   stripe_payment_intent_id?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   shipping_address: any;
   tracking_number?: string;
   estimated_delivery?: string;

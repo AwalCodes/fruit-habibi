@@ -58,7 +58,7 @@ export default function StripeProvider({ children, clientSecret }: StripeProvide
   };
 
   return (
-    <Elements stripe={stripePromise} options={clientSecret ? options : undefined}>
+    <Elements stripe={stripePromise} options={clientSecret ? options : { appearance: options.appearance }}>
       {children}
     </Elements>
   );

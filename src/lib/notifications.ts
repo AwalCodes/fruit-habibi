@@ -3,7 +3,7 @@ import { supabase } from './supabase';
 export interface Notification {
   id: string;
   user_id: string;
-  type: 'message' | 'review' | 'listing_update' | 'admin_alert' | 'system';
+  type: 'message' | 'review' | 'listing_update' | 'admin_alert' | 'system' | 'order' | 'payment' | 'escrow' | 'order_update' | 'dispute_update';
   title: string;
   message: string;
   data?: any;
