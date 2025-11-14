@@ -1,0 +1,60 @@
+export type Locale = 'en' | 'ar' | 'zh' | 'hi' | 'es' | 'fr' | 'pt';
+
+export const locales: Locale[] = ['en', 'ar', 'zh', 'hi', 'es', 'fr', 'pt'];
+
+export const defaultLocale: Locale = 'en';
+
+export const localeNames: Record<Locale, string> = {
+  en: 'English',
+  ar: 'العربية',
+  zh: '中文',
+  hi: 'हिन्दी',
+  es: 'Español',
+  fr: 'Français',
+  pt: 'Português',
+};
+
+export async function getTranslations(locale: Locale) {
+  const translations = await import(`./translations/${locale}.json`);
+  return translations.default;
+}
+
+export function getLocaleFromPath(pathname: string): Locale {
+  const segments = pathname.split('/').filter(Boolean);
+  const firstSegment = segments[0];
+  
+  if (locales.includes(firstSegment as Locale)) {
+    return firstSegment as Locale;
+  }
+  
+  return defaultLocale;
+}
+
+export function removeLocaleFromPath(pathname: string): string {
+  const segments = pathname.split('/').filter(Boolean);
+  const firstSegment = segments[0];
+  
+  if (locales.includes(firstSegment as Locale)) {
+    return '/' + segments.slice(1).join('/');
+  }
+  
+  return pathname;
+}
+
+export function addLocaleToPath(pathname: string, locale: Locale): string {
+  if (pathname === '/') {
+    return `/${locale}`;
+  }
+  
+  const segments = pathname.split('/').filter(Boolean);
+  const firstSegment = segments[0];
+  
+  if (locales.includes(firstSegment as Locale)) {
+    // Replace existing locale
+    return `/${locale}/${segments.slice(1).join('/')}`;
+  }
+  
+  // Add locale
+  return `/${locale}${pathname}`;
+}
+

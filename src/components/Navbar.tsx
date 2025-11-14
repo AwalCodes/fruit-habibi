@@ -4,34 +4,37 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 import NotificationBell from './NotificationBell';
+import LanguageSwitcher from './LanguageSwitcher';
 import Logo from './Logo';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, loading, signOut } = useAuth();
   const { getTotalItems } = useCart();
+  const { t } = useI18n();
 
   const navigation = [
-    { name: 'Browse Listings', href: '/listings' },
-    { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
+    { name: t('common.browseListings'), href: '/listings' },
+    { name: t('common.about'), href: '/about' },
+    { name: t('common.contact'), href: '/contact' },
   ];
 
   const userNavigation = [
-    { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Orders', href: '/orders' },
-    { name: 'Messages', href: '/messages' },
-    { name: 'Notifications', href: '/notifications' },
-    { name: 'Profile', href: '/profile' },
+    { name: t('common.dashboard'), href: '/dashboard' },
+    { name: t('common.orders'), href: '/orders' },
+    { name: t('common.messages'), href: '/messages' },
+    { name: t('common.notifications'), href: '/notifications' },
+    { name: t('common.profile'), href: '/profile' },
   ];
 
   const adminNavigation = [
-    { name: 'Admin Dashboard', href: '/admin' },
-    { name: 'Users', href: '/admin/users' },
-    { name: 'Listings', href: '/admin/listings' },
-    { name: 'Messages', href: '/admin/messages' },
+    { name: t('common.adminDashboard'), href: '/admin' },
+    { name: t('common.users'), href: '/admin/users' },
+    { name: t('common.listings'), href: '/admin/listings' },
+    { name: t('common.messages'), href: '/admin/messages' },
   ];
 
   return (
@@ -56,6 +59,9 @@ export default function Navbar() {
           </div>
 
           <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+            
             {user ? (
               <div className="flex items-center space-x-4">
                 {/* Admin Navigation */}
@@ -67,7 +73,7 @@ export default function Navbar() {
                   <div className="flex items-center space-x-1 border-r border-gray-200 pr-4 mr-2">
                     <div className="flex items-center space-x-1 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-1.5 rounded-lg border border-blue-200">
                       <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                      <span className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Admin</span>
+                      <span className="text-xs font-semibold text-blue-700 uppercase tracking-wide">{t('common.admin')}</span>
                     </div>
                     <div className="flex items-center space-x-1">
                       {adminNavigation.map((item) => (
@@ -113,7 +119,7 @@ export default function Navbar() {
                   onClick={signOut}
                   className="rounded-md bg-gradient-to-r from-yellow-400 to-yellow-600 px-4 py-2 text-sm font-medium text-black hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25"
                 >
-                  Sign Out
+                  {t('common.signOut')}
                 </button>
               </div>
             ) : (
@@ -122,13 +128,13 @@ export default function Navbar() {
                   href="/login"
                   className="text-sm font-medium text-emerald-100 hover:text-yellow-300 transition-colors duration-300"
                 >
-                  Sign In
+                  {t('common.signIn')}
                 </Link>
                 <Link
                   href="/register"
                   className="rounded-md bg-gradient-to-r from-yellow-400 to-yellow-600 px-4 py-2 text-sm font-medium text-black hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25"
                 >
-                  Get Started
+                  {t('common.getStarted')}
                 </Link>
               </div>
             )}
@@ -204,7 +210,7 @@ export default function Navbar() {
                   onClick={signOut}
                   className="block w-full px-3 py-2 text-left text-base font-medium text-emerald-100 hover:text-yellow-300 hover:bg-emerald-800/30 transition-all duration-300"
                 >
-                  Sign Out
+                  {t('common.signOut')}
                 </button>
               </div>
             ) : (
@@ -213,13 +219,13 @@ export default function Navbar() {
                   href="/login"
                   className="block px-3 py-2 text-base font-medium text-emerald-100 hover:text-yellow-300 hover:bg-emerald-800/30 transition-all duration-300"
                 >
-                  Sign In
+                  {t('common.signIn')}
                 </Link>
                 <Link
                   href="/register"
                   className="block px-3 py-2 text-base font-medium text-yellow-400 hover:text-yellow-300 hover:bg-emerald-800/30 transition-all duration-300"
                 >
-                  Get Started
+                  {t('common.getStarted')}
                 </Link>
               </div>
             )}

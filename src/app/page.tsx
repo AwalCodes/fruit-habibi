@@ -15,9 +15,11 @@ import {
   SparklesIcon
 } from '@heroicons/react/24/outline';
 import Logo from '@/components/Logo';
+import { useI18n } from '@/contexts/I18nContext';
 
 // Luxury Hero Section with Middle Eastern Aesthetics
 function LuxuryHero() {
+  const { t } = useI18n();
   const [currentFruit, setCurrentFruit] = useState(0);
   const fruits = ['🥭', '🌴', '🍊', '💎', '👑'];
 
@@ -141,7 +143,7 @@ function LuxuryHero() {
                 textShadow: '0 0 30px rgba(251, 191, 36, 0.5), 0 0 60px rgba(251, 191, 36, 0.3)'
               }}
             >
-              Fruit Habibi
+              {t('home.brandName')}
             </motion.h1>
 
             {/* Tagline */}
@@ -151,7 +153,7 @@ function LuxuryHero() {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="text-2xl md:text-3xl text-yellow-200 mb-2 font-light tracking-wide"
             >
-              GLOBAL HARVEST SOLUTIONS
+              {t('home.tagline')}
             </motion.div>
           </motion.div>
 
@@ -162,7 +164,7 @@ function LuxuryHero() {
             transition={{ duration: 0.8, delay: 0.7 }}
             className="text-xl md:text-2xl text-emerald-100 mb-12 max-w-4xl mx-auto leading-relaxed font-light"
           >
-            Bridging Farmers and the World – With Global Harvest Solutions
+            {t('home.mainTagline')}
           </motion.p>
 
           {/* Animated Luxury Fruit Display */}
@@ -222,7 +224,7 @@ function LuxuryHero() {
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
                 />
                 <SparklesIcon className="w-6 h-6" />
-                Explore Global Harvest
+                {t('home.exploreGlobalHarvest')}
                 <ArrowRightIcon className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
               </motion.button>
             </Link>
@@ -240,7 +242,7 @@ function LuxuryHero() {
                 }}
               >
                 <UserGroupIcon className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                Join Our Network
+                {t('home.joinOurNetwork')}
               </motion.button>
             </Link>
           </motion.div>
@@ -273,32 +275,33 @@ function LuxuryHero() {
 
 // Enhanced Why Choose Us with Luxury Cards
 function WhyChooseUs() {
+  const { t } = useI18n();
   const features = [
     {
       icon: TruckIcon,
-      title: "Global Shipping",
-      description: "Luxury logistics solutions with gemstone-quality care",
+      title: t('home.globalShipping'),
+      description: t('home.globalShippingDesc'),
       animation: "🚛",
       gemColor: "yellow"
     },
     {
       icon: UserGroupIcon,
-      title: "Direct Farmer-to-Buyer",
-      description: "Exclusive connections eliminating middlemen",
+      title: t('home.directFarmerToBuyer'),
+      description: t('home.directFarmerToBuyerDesc'),
       animation: "🤝",
       gemColor: "emerald"
     },
     {
       icon: GlobeAltIcon,
-      title: "Trusted Exporter Network",
-      description: "Verified partners across golden trade routes",
+      title: t('home.trustedExporterNetwork'),
+      description: t('home.trustedExporterNetworkDesc'),
       animation: "🌍",
       gemColor: "yellow"
     },
     {
       icon: HeartIcon,
-      title: "Sustainability & Fair Trade",
-      description: "Ethical practices with luxury standards",
+      title: t('home.sustainability'),
+      description: t('home.sustainabilityDesc'),
       animation: "🌱",
       gemColor: "emerald"
     }
@@ -322,10 +325,10 @@ function WhyChooseUs() {
           className="text-center mb-20"
         >
           <h2 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6 drop-shadow-lg">
-            Why Fruit Habibi?
+            {t('home.whyFruitHabibi')}
           </h2>
           <p className="text-xl text-emerald-100 max-w-3xl mx-auto leading-relaxed">
-            Experience the pinnacle of global agricultural excellence
+            {t('home.whyFruitHabibiDesc')}
           </p>
         </motion.div>
 

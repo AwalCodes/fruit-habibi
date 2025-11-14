@@ -1,11 +1,17 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { defaultLocale } from './lib/i18n';
 
 /**
  * Middleware to protect routes and add security headers
  */
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Skip middleware for API routes and static files
+  if (pathname.startsWith('/api') || pathname.startsWith('/_next')) {
+    return NextResponse.next();
+  }
 
   // Security headers
   const response = NextResponse.next();
@@ -19,6 +25,12 @@ export function middleware(request: NextRequest) {
     'Content-Security-Policy',
     "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.stripe.com https://*.supabase.co;"
   );
+
+  // Ensure locale cookie is set (for client-side use)
+  const localeCookie = request.cookies.get('locale');
+  if (!localeCookie) {
+    response.cookies.set('locale', defaultLocale, { path: '/', maxAge: 60 * 60 * 24 * 365 });
+  }
 
   // Protect admin routes - redirect to login if not authenticated
   // Note: Actual authentication check happens in the page component
@@ -68,7 +80,7 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public files
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
 
