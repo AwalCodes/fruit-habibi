@@ -2,7 +2,8 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import type { Locale } from '@/lib/i18n';
-import { defaultLocale, getTranslations } from '@/lib/i18n';
+import { defaultLocale, getTranslations, isRTL } from '@/lib/i18n';
+import { getTranslationWithWarning } from '@/lib/i18n/validation';
 
 type Translations = Record<string, any>;
 
@@ -65,8 +66,8 @@ export function I18nProvider({ children, initialLocale, initialTranslations }: {
     // Update HTML lang and dir attributes
     if (typeof document !== 'undefined') {
       const html = document.documentElement;
-      html.lang = newLocale === 'ar' ? 'ar' : newLocale === 'zh' ? 'zh' : newLocale === 'hi' ? 'hi' : newLocale === 'es' ? 'es' : newLocale === 'fr' ? 'fr' : newLocale === 'pt' ? 'pt' : 'en';
-      html.dir = newLocale === 'ar' ? 'rtl' : 'ltr';
+      html.lang = newLocale;
+      html.dir = isRTL(newLocale) ? 'rtl' : 'ltr';
     }
   };
 
@@ -74,12 +75,18 @@ export function I18nProvider({ children, initialLocale, initialTranslations }: {
   useEffect(() => {
     if (typeof document !== 'undefined') {
       const html = document.documentElement;
-      html.lang = locale === 'ar' ? 'ar' : locale === 'zh' ? 'zh' : locale === 'hi' ? 'hi' : locale === 'es' ? 'es' : locale === 'fr' ? 'fr' : locale === 'pt' ? 'pt' : 'en';
-      html.dir = locale === 'ar' ? 'rtl' : 'ltr';
+      html.lang = locale;
+      html.dir = isRTL(locale) ? 'rtl' : 'ltr';
     }
   }, [locale]);
 
   const t = (key: string): string => {
+    // Use validation function in development mode for warnings
+    if (process.env.NODE_ENV === 'development') {
+      return getTranslationWithWarning(translations, key, locale);
+    }
+    
+    // Production mode - simple lookup
     const keys = key.split('.');
     let value: any = translations;
     

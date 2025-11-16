@@ -11,7 +11,7 @@ function getLocaleFromCookie(): Locale {
   const localeCookie = cookies.find(c => c.trim().startsWith('locale='));
   if (localeCookie) {
     const locale = localeCookie.split('=')[1].trim() as Locale;
-    if (['en', 'ar', 'zh', 'hi', 'es', 'fr', 'pt'].includes(locale)) {
+    if (['en', 'fr', 'ar', 'hi'].includes(locale)) {
       return locale;
     }
   }

@@ -40,3 +40,132 @@ body {
 .shadow-medium {
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
+
+/* RTL Support */
+/* Automatically flip layout for RTL languages */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+/* Flip flex direction for RTL */
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+/* Flip margins for RTL */
+[dir="rtl"] .ml-auto {
+  margin-left: unset;
+  margin-right: auto;
+}
+
+[dir="rtl"] .mr-auto {
+  margin-right: unset;
+  margin-left: auto;
+}
+
+/* Flip text alignment for RTL */
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+/* Flip padding for navigation items */
+[dir="rtl"] .pl-3 {
+  padding-left: unset;
+  padding-right: 0.75rem;
+}
+
+[dir="rtl"] .pr-3 {
+  padding-right: unset;
+  padding-left: 0.75rem;
+}
+
+[dir="rtl"] .pl-4 {
+  padding-left: unset;
+  padding-right: 1rem;
+}
+
+[dir="rtl"] .pr-4 {
+  padding-right: unset;
+  padding-left: 1rem;
+}
+
+/* Flip border for RTL */
+[dir="rtl"] .border-l-4 {
+  border-left-width: 0;
+  border-right-width: 4px;
+}
+
+[dir="rtl"] .border-r {
+  border-right-width: 0;
+  border-left-width: 1px;
+}
+
+/* Flip transform for icons and arrows */
+[dir="rtl"] .group-hover\:translate-x-1 {
+  transform: none;
+}
+
+[dir="rtl"] .group:hover .group-hover\:translate-x-1 {
+  transform: translateX(-0.25rem);
+}
+
+/* Flip space for lists */
+[dir="rtl"] .space-x-1 > * + * {
+  margin-left: unset;
+  margin-right: 0.25rem;
+}
+
+[dir="rtl"] .space-x-2 > * + * {
+  margin-left: unset;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .space-x-3 > * + * {
+  margin-left: unset;
+  margin-right: 0.75rem;
+}
+
+[dir="rtl"] .space-x-4 > * + * {
+  margin-left: unset;
+  margin-right: 1rem;
+}
+
+[dir="rtl"] .space-x-6 > * + * {
+  margin-left: unset;
+  margin-right: 1.5rem;
+}
+
+[dir="rtl"] .space-x-8 > * + * {
+  margin-left: unset;
+  margin-right: 2rem;
+}
+
+/* Flip gap for grids */
+[dir="rtl"] .gap-2,
+[dir="rtl"] .gap-3,
+[dir="rtl"] .gap-4,
+[dir="rtl"] .gap-6,
+[dir="rtl"] .gap-8 {
+  /* Gap is already symmetric, no flip needed */
+}
+
+/* Better font rendering for Arabic */
+[dir="rtl"] body {
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+/* Ensure icons don't flip in RTL */
+[dir="rtl"] svg,
+[dir="rtl"] img {
+  transform: scaleX(1);
+}
+
+/* Flip specific navigation arrows in RTL */
+[dir="rtl"] .arrow-right {
+  transform: scaleX(-1);
+}

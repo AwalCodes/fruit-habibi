@@ -3,8 +3,12 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Logo from './Logo';
+import { useI18n } from '@/contexts/I18nContext';
 
 export default function Footer() {
+  const { t } = useI18n();
+  const currentYear = new Date().getFullYear();
+  
   return (
     <footer className="bg-gradient-to-br from-slate-900 via-emerald-900 to-black relative overflow-hidden">
       {/* Luxury Background Pattern */}
@@ -49,14 +53,13 @@ export default function Footer() {
                 <Logo size="lg" showText={true} href="/" className="mb-4" />
               </div>
               <p className="mt-4 text-emerald-100 leading-relaxed text-lg">
-                Connecting premium growers with trusted buyers across borders. Building a sustainable 
-                future for the global luxury fruits and vegetables trade.
+                {t('footer.description')}
               </p>
               
               {/* Luxury Tagline */}
               <div className="mt-6 flex items-center gap-3">
                 <span className="text-2xl">💎</span>
-                <span className="text-yellow-300 font-medium">Global Harvest Solutions</span>
+                <span className="text-yellow-300 font-medium">{t('footer.globalHarvestSolutions')}</span>
               </div>
             </motion.div>
           </div>
@@ -68,25 +71,25 @@ export default function Footer() {
             viewport={{ once: true }}
           >
             <h4 className="text-sm font-semibold uppercase tracking-wide text-yellow-400 mb-4">
-              Global Platform
+              {t('footer.globalPlatform')}
             </h4>
             <ul className="mt-4 space-y-3">
               <li>
                 <Link href="/listings" className="text-emerald-100 hover:text-yellow-300 transition-colors duration-300 flex items-center gap-2">
                   <span className="text-yellow-400">✨</span>
-                  Browse All Listings
+                  {t('footer.browseAllListings')}
                 </Link>
               </li>
               <li>
                 <Link href="/about" className="text-emerald-100 hover:text-yellow-300 transition-colors duration-300 flex items-center gap-2">
                   <span className="text-yellow-400">👑</span>
-                  About Us
+                  {t('footer.aboutUs')}
                 </Link>
               </li>
               <li>
                 <Link href="/contact" className="text-emerald-100 hover:text-yellow-300 transition-colors duration-300 flex items-center gap-2">
                   <span className="text-yellow-400">💎</span>
-                  Contact
+                  {t('footer.contact')}
                 </Link>
               </li>
             </ul>
@@ -99,25 +102,25 @@ export default function Footer() {
             viewport={{ once: true }}
           >
             <h4 className="text-sm font-semibold uppercase tracking-wide text-yellow-400 mb-4">
-              Luxury Support
+              {t('footer.luxurySupport')}
             </h4>
             <ul className="mt-4 space-y-3">
               <li>
                 <Link href="/help" className="text-emerald-100 hover:text-yellow-300 transition-colors duration-300 flex items-center gap-2">
                   <span className="text-yellow-400">🛡️</span>
-                  Help Center
+                  {t('footer.helpCenter')}
                 </Link>
               </li>
               <li>
                 <Link href="/terms" className="text-emerald-100 hover:text-yellow-300 transition-colors duration-300 flex items-center gap-2">
                   <span className="text-yellow-400">📜</span>
-                  Terms of Service
+                  {t('footer.termsOfService')}
                 </Link>
               </li>
               <li>
                 <Link href="/privacy" className="text-emerald-100 hover:text-yellow-300 transition-colors duration-300 flex items-center gap-2">
                   <span className="text-yellow-400">🔒</span>
-                  Privacy Policy
+                  {t('footer.privacyPolicy')}
                 </Link>
               </li>
             </ul>
@@ -133,11 +136,11 @@ export default function Footer() {
         >
           <div className="text-center">
             <p className="text-emerald-100 text-sm">
-              © {new Date().getFullYear()} Fruit Habibi – Global Harvest Solutions. All rights reserved.
+              {t('footer.copyright').replace('{year}', currentYear.toString())}
             </p>
             <div className="flex justify-center items-center gap-4 mt-4">
               <span className="text-yellow-400 text-lg">💎</span>
-              <span className="text-emerald-200 text-sm font-medium">Global B2B Marketplace</span>
+              <span className="text-emerald-200 text-sm font-medium">{t('footer.globalMarketplace')}</span>
               <span className="text-yellow-400 text-lg">👑</span>
             </div>
           </div>

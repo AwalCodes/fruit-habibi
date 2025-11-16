@@ -13,6 +13,7 @@
     "profile": "प्रोफ़ाइल",
     "admin": "व्यवस्थापक",
     "adminDashboard": "व्यवस्थापक डैशबोर्ड",
+    "adminPanel": "[HI] Admin Panel",
     "users": "उपयोगकर्ता",
     "listings": "सूचियां",
     "cart": "कार्ट",
@@ -25,7 +26,8 @@
     "search": "खोजें",
     "filter": "फ़िल्टर करें",
     "close": "बंद करें",
-    "submit": "सबमिट करें"
+    "submit": "सबमिट करें",
+    "openMainMenu": "[HI] Open main menu"
   },
   "home": {
     "brandName": "फ्रूट हबीबी",
@@ -65,7 +67,8 @@
     "tasteWorld": "वैश्विक अवसरों की दुनिया का स्वाद लें",
     "experienceLuxury": "हमारे प्रीमियम मार्केटप्लेस के साथ वैश्विक कृषि उत्कृष्टता की लक्जरी का अनुभव करें",
     "startGlobalJourney": "अपनी वैश्विक यात्रा शुरू करें",
-    "browseAllProducts": "सभी उत्पाद ब्राउज़ करें"
+    "browseAllProducts": "सभी उत्पाद ब्राउज़ करें",
+    "exploreAllProducts": "सभी उत्पादों का अन्वेषण करें"
   },
   "products": {
     "royalDates": "रॉयल खजूर",
@@ -74,6 +77,63 @@
     "rubyPomegranates": "रूबी अनार",
     "specialDeal": "विशेष सौदा",
     "exploreAllProducts": "सभी उत्पादों का अन्वेषण करें"
+  },
+  "reviews": {
+    "ahmedAlRashid": "[HI] Ahmed Al-Rashid",
+    "ahmedRole": "[HI] Date Farmer, UAE",
+    "ahmedReview": "[HI] Fruit Habibi transformed my business with luxury-grade service. Direct access to international buyers increased my profits by 40%.",
+    "mariaSantos": "[HI] Maria Santos",
+    "mariaRole": "[HI] Import Director, Spain",
+    "mariaReview": "[HI] The quality and reliability of suppliers on this platform is unmatched. It's like dealing with luxury brands.",
+    "omarHassan": "[HI] Omar Hassan",
+    "omarRole": "[HI] Citrus Exporter, Egypt",
+    "omarReview": "[HI] Finally, a platform that understands premium Middle Eastern exporters. Game changer for our industry!"
+  },
+  "hero": {
+    "welcomeBack": "[HI] Welcome back,",
+    "trader": "[HI] Trader",
+    "readyToGrow": "[HI] Ready to grow your business? Manage your listings, connect with buyers, and expand your reach in the global marketplace.",
+    "createNewListing": "[HI] Create New Listing",
+    "browseListings": "[HI] Browse Listings",
+    "yourDashboard": "[HI] Your Dashboard",
+    "yourListings": "[HI] Your Listings",
+    "messages": "[HI] Messages",
+    "marketplaceStats": "[HI] Marketplace Stats",
+    "activeListings": "[HI] Active Listings",
+    "verifiedSuppliers": "[HI] Verified Suppliers",
+    "connectGrowers": "[HI] Connect growers with",
+    "trustedBuyers": "[HI] trusted buyers",
+    "acrossBorders": "[HI] across borders",
+    "heroDescription": "[HI] Fruit Habibi is the B2B marketplace connecting African and Asian farmers with Middle Eastern importers. Trade fresh produce with confidence.",
+    "joinAsFarmer": "[HI] Join as Farmer",
+    "joinAsImporter": "[HI] Join as Importer",
+    "liveMarketplace": "[HI] Live Marketplace",
+    "featuredProduct": "[HI] Featured Product",
+    "kenyanMangoes": "[HI] Kenyan Mangoes — Export Grade",
+    "kenyanMangoesDesc": "[HI] 20 tons • $2.50/kg • November harvest"
+  },
+  "footer": {
+    "description": "[HI] Connecting premium growers with trusted buyers across borders. Building a sustainable future for the global luxury fruits and vegetables trade.",
+    "globalHarvestSolutions": "वैश्विक फसल समाधान",
+    "globalPlatform": "[HI] Global Platform",
+    "browseAllListings": "[HI] Browse All Listings",
+    "aboutUs": "[HI] About Us",
+    "contact": "[HI] Contact",
+    "luxurySupport": "[HI] Luxury Support",
+    "helpCenter": "[HI] Help Center",
+    "termsOfService": "[HI] Terms of Service",
+    "privacyPolicy": "[HI] Privacy Policy",
+    "copyright": "[HI] © {year} Fruit Habibi – Global Harvest Solutions. All rights reserved.",
+    "globalMarketplace": "[HI] Global B2B Marketplace"
+  },
+  "productShowcase": {
+    "saudiArabia": "[HI] Saudi Arabia",
+    "pakistan": "[HI] Pakistan",
+    "egypt": "[HI] Egypt",
+    "turkey": "[HI] Turkey"
+  },
+  "solutions": {
+    "globalShipping": "[HI] Global Shipping",
+    "globalShippingDesc": "[HI] Luxury logistics solutions with gemstone-quality care for your harvest"
   }
 }
-

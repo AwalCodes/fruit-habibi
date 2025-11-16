@@ -13,6 +13,7 @@
     "profile": "الملف الشخصي",
     "admin": "المسؤول",
     "adminDashboard": "لوحة تحكم المسؤول",
+    "adminPanel": "[AR] Admin Panel",
     "users": "المستخدمون",
     "listings": "القوائم",
     "cart": "السلة",
@@ -25,7 +26,8 @@
     "search": "بحث",
     "filter": "تصفية",
     "close": "إغلاق",
-    "submit": "إرسال"
+    "submit": "إرسال",
+    "openMainMenu": "[AR] Open main menu"
   },
   "home": {
     "brandName": "فاكهة حبيبي",
@@ -65,7 +67,8 @@
     "tasteWorld": "تذوق عالم الفرص العالمية",
     "experienceLuxury": "اختبر فخامة التميز الزراعي العالمي مع سوقنا المميز",
     "startGlobalJourney": "ابدأ رحلتك العالمية",
-    "browseAllProducts": "تصفح جميع المنتجات"
+    "browseAllProducts": "تصفح جميع المنتجات",
+    "exploreAllProducts": "استكشف جميع المنتجات"
   },
   "products": {
     "royalDates": "التمور الملكية",
@@ -74,6 +77,63 @@
     "rubyPomegranates": "الرمان الياقوتي",
     "specialDeal": "عرض خاص",
     "exploreAllProducts": "استكشف جميع المنتجات"
+  },
+  "reviews": {
+    "ahmedAlRashid": "أحمد الرشيد",
+    "ahmedRole": "[AR] Date Farmer, UAE",
+    "ahmedReview": "[AR] Fruit Habibi transformed my business with luxury-grade service. Direct access to international buyers increased my profits by 40%.",
+    "mariaSantos": "ماريا سانتوس",
+    "mariaRole": "[AR] Import Director, Spain",
+    "mariaReview": "[AR] The quality and reliability of suppliers on this platform is unmatched. It's like dealing with luxury brands.",
+    "omarHassan": "عمر حسن",
+    "omarRole": "[AR] Citrus Exporter, Egypt",
+    "omarReview": "[AR] Finally, a platform that understands premium Middle Eastern exporters. Game changer for our industry!"
+  },
+  "hero": {
+    "welcomeBack": "[AR] Welcome back,",
+    "trader": "[AR] Trader",
+    "readyToGrow": "[AR] Ready to grow your business? Manage your listings, connect with buyers, and expand your reach in the global marketplace.",
+    "createNewListing": "[AR] Create New Listing",
+    "browseListings": "[AR] Browse Listings",
+    "yourDashboard": "[AR] Your Dashboard",
+    "yourListings": "[AR] Your Listings",
+    "messages": "[AR] Messages",
+    "marketplaceStats": "[AR] Marketplace Stats",
+    "activeListings": "[AR] Active Listings",
+    "verifiedSuppliers": "[AR] Verified Suppliers",
+    "connectGrowers": "[AR] Connect growers with",
+    "trustedBuyers": "[AR] trusted buyers",
+    "acrossBorders": "[AR] across borders",
+    "heroDescription": "[AR] Fruit Habibi is the B2B marketplace connecting African and Asian farmers with Middle Eastern importers. Trade fresh produce with confidence.",
+    "joinAsFarmer": "[AR] Join as Farmer",
+    "joinAsImporter": "[AR] Join as Importer",
+    "liveMarketplace": "[AR] Live Marketplace",
+    "featuredProduct": "[AR] Featured Product",
+    "kenyanMangoes": "[AR] Kenyan Mangoes — Export Grade",
+    "kenyanMangoesDesc": "[AR] 20 tons • $2.50/kg • November harvest"
+  },
+  "footer": {
+    "description": "[AR] Connecting premium growers with trusted buyers across borders. Building a sustainable future for the global luxury fruits and vegetables trade.",
+    "globalHarvestSolutions": "حلول الحصاد العالمية",
+    "globalPlatform": "[AR] Global Platform",
+    "browseAllListings": "[AR] Browse All Listings",
+    "aboutUs": "[AR] About Us",
+    "contact": "[AR] Contact",
+    "luxurySupport": "[AR] Luxury Support",
+    "helpCenter": "[AR] Help Center",
+    "termsOfService": "[AR] Terms of Service",
+    "privacyPolicy": "[AR] Privacy Policy",
+    "copyright": "[AR] © {year} Fruit Habibi – Global Harvest Solutions. All rights reserved.",
+    "globalMarketplace": "[AR] Global B2B Marketplace"
+  },
+  "productShowcase": {
+    "saudiArabia": "[AR] Saudi Arabia",
+    "pakistan": "[AR] Pakistan",
+    "egypt": "[AR] Egypt",
+    "turkey": "[AR] Turkey"
+  },
+  "solutions": {
+    "globalShipping": "[AR] Global Shipping",
+    "globalShippingDesc": "[AR] Luxury logistics solutions with gemstone-quality care for your harvest"
   }
 }
-

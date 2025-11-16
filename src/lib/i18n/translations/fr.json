@@ -13,6 +13,7 @@
     "profile": "Profil",
     "admin": "Administrateur",
     "adminDashboard": "Tableau de Bord Admin",
+    "adminPanel": "[FR] Admin Panel",
     "users": "Utilisateurs",
     "listings": "Annonces",
     "cart": "Panier",
@@ -25,7 +26,8 @@
     "search": "Rechercher",
     "filter": "Filtrer",
     "close": "Fermer",
-    "submit": "Soumettre"
+    "submit": "Soumettre",
+    "openMainMenu": "[FR] Open main menu"
   },
   "home": {
     "brandName": "Fruit Habibi",
@@ -65,7 +67,8 @@
     "tasteWorld": "Goûtez le Monde des Opportunités Mondiales",
     "experienceLuxury": "Découvrez le luxe de l'excellence agricole mondiale avec notre marché premium",
     "startGlobalJourney": "Commencez Votre Voyage Mondial",
-    "browseAllProducts": "Parcourir Tous les Produits"
+    "browseAllProducts": "Parcourir Tous les Produits",
+    "exploreAllProducts": "Explorer Tous les Produits"
   },
   "products": {
     "royalDates": "Dattes Royales",
@@ -74,6 +77,63 @@
     "rubyPomegranates": "Grenades Rubis",
     "specialDeal": "Offre Spéciale",
     "exploreAllProducts": "Explorer Tous les Produits"
+  },
+  "reviews": {
+    "ahmedAlRashid": "Ahmed Al-Rashid",
+    "ahmedRole": "[FR] Date Farmer, UAE",
+    "ahmedReview": "[FR] Fruit Habibi transformed my business with luxury-grade service. Direct access to international buyers increased my profits by 40%.",
+    "mariaSantos": "Maria Santos",
+    "mariaRole": "[FR] Import Director, Spain",
+    "mariaReview": "[FR] The quality and reliability of suppliers on this platform is unmatched. It's like dealing with luxury brands.",
+    "omarHassan": "Omar Hassan",
+    "omarRole": "[FR] Citrus Exporter, Egypt",
+    "omarReview": "[FR] Finally, a platform that understands premium Middle Eastern exporters. Game changer for our industry!"
+  },
+  "hero": {
+    "welcomeBack": "[FR] Welcome back,",
+    "trader": "[FR] Trader",
+    "readyToGrow": "[FR] Ready to grow your business? Manage your listings, connect with buyers, and expand your reach in the global marketplace.",
+    "createNewListing": "[FR] Create New Listing",
+    "browseListings": "[FR] Browse Listings",
+    "yourDashboard": "[FR] Your Dashboard",
+    "yourListings": "[FR] Your Listings",
+    "messages": "[FR] Messages",
+    "marketplaceStats": "[FR] Marketplace Stats",
+    "activeListings": "[FR] Active Listings",
+    "verifiedSuppliers": "[FR] Verified Suppliers",
+    "connectGrowers": "[FR] Connect growers with",
+    "trustedBuyers": "[FR] trusted buyers",
+    "acrossBorders": "[FR] across borders",
+    "heroDescription": "[FR] Fruit Habibi is the B2B marketplace connecting African and Asian farmers with Middle Eastern importers. Trade fresh produce with confidence.",
+    "joinAsFarmer": "[FR] Join as Farmer",
+    "joinAsImporter": "[FR] Join as Importer",
+    "liveMarketplace": "[FR] Live Marketplace",
+    "featuredProduct": "[FR] Featured Product",
+    "kenyanMangoes": "[FR] Kenyan Mangoes — Export Grade",
+    "kenyanMangoesDesc": "[FR] 20 tons • $2.50/kg • November harvest"
+  },
+  "footer": {
+    "description": "[FR] Connecting premium growers with trusted buyers across borders. Building a sustainable future for the global luxury fruits and vegetables trade.",
+    "globalHarvestSolutions": "Solutions de Récolte Mondiale",
+    "globalPlatform": "[FR] Global Platform",
+    "browseAllListings": "[FR] Browse All Listings",
+    "aboutUs": "[FR] About Us",
+    "contact": "[FR] Contact",
+    "luxurySupport": "[FR] Luxury Support",
+    "helpCenter": "[FR] Help Center",
+    "termsOfService": "[FR] Terms of Service",
+    "privacyPolicy": "[FR] Privacy Policy",
+    "copyright": "[FR] © {year} Fruit Habibi – Global Harvest Solutions. All rights reserved.",
+    "globalMarketplace": "[FR] Global B2B Marketplace"
+  },
+  "productShowcase": {
+    "saudiArabia": "[FR] Saudi Arabia",
+    "pakistan": "[FR] Pakistan",
+    "egypt": "[FR] Egypt",
+    "turkey": "[FR] Turkey"
+  },
+  "solutions": {
+    "globalShipping": "[FR] Global Shipping",
+    "globalShippingDesc": "[FR] Luxury logistics solutions with gemstone-quality care for your harvest"
   }
 }
-

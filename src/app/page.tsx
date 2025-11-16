@@ -390,26 +390,27 @@ function WhyChooseUs() {
 
 // Enhanced Customer Reviews with Luxury Styling
 function CustomerReviews() {
+  const { t } = useI18n();
   const reviews = [
     {
-      name: "Ahmed Al-Rashid",
-      role: "Date Farmer, UAE",
+      name: t('reviews.ahmedAlRashid'),
+      role: t('reviews.ahmedRole'),
       rating: 5,
-      text: "Fruit Habibi transformed my business with luxury-grade service. Direct access to international buyers increased my profits by 40%.",
+      text: t('reviews.ahmedReview'),
       gem: "💎"
     },
     {
-      name: "Maria Santos",
-      role: "Import Director, Spain",
+      name: t('reviews.mariaSantos'),
+      role: t('reviews.mariaRole'),
       rating: 5,
-      text: "The quality and reliability of suppliers on this platform is unmatched. It's like dealing with luxury brands.",
+      text: t('reviews.mariaReview'),
       gem: "👑"
     },
     {
-      name: "Omar Hassan",
-      role: "Citrus Exporter, Egypt",
+      name: t('reviews.omarHassan'),
+      role: t('reviews.omarRole'),
       rating: 5,
-      text: "Finally, a platform that understands premium Middle Eastern exporters. Game changer for our industry!",
+      text: t('reviews.omarReview'),
       gem: "✨"
     }
   ];
@@ -451,10 +452,10 @@ function CustomerReviews() {
           className="text-center mb-20"
         >
           <h2 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6 drop-shadow-lg">
-            Voices of Trust
+            {t('home.voicesOfTrust')}
           </h2>
           <p className="text-xl text-emerald-100 max-w-3xl mx-auto leading-relaxed">
-            Hear from premium farmers and buyers who have transformed their businesses with Fruit Habibi
+            {t('home.voicesOfTrustDesc')}
           </p>
         </motion.div>
 
@@ -516,11 +517,12 @@ function CustomerReviews() {
 
 // Enhanced Product Showcase with Luxury Styling
 function ProductShowcase() {
+  const { t } = useI18n();
   const products = [
-    { name: "Royal Dates", emoji: "🌴", origin: "Saudi Arabia", price: "$12/kg", gem: "💎", special: true },
-    { name: "Royal Mangoes", emoji: "🥭", origin: "Pakistan", price: "$8/kg", gem: "👑", special: false },
-    { name: "Golden Citrus", emoji: "🍊", origin: "Egypt", price: "$6/kg", gem: "✨", special: false },
-    { name: "Ruby Pomegranates", emoji: "🍎", origin: "Turkey", price: "$15/kg", gem: "💎", special: true }
+    { name: t('products.royalDates'), emoji: "🌴", origin: t('productShowcase.saudiArabia'), price: "$12/kg", gem: "💎", special: true },
+    { name: t('products.royalMangoes'), emoji: "🥭", origin: t('productShowcase.pakistan'), price: "$8/kg", gem: "👑", special: false },
+    { name: t('products.goldenCitrus'), emoji: "🍊", origin: t('productShowcase.egypt'), price: "$6/kg", gem: "✨", special: false },
+    { name: t('products.rubyPomegranates'), emoji: "🍎", origin: t('productShowcase.turkey'), price: "$15/kg", gem: "💎", special: true }
   ];
 
   return (
@@ -534,10 +536,10 @@ function ProductShowcase() {
           className="text-center mb-20"
         >
           <h2 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6 drop-shadow-lg">
-            Global Harvest
+            {t('home.globalHarvest')}
           </h2>
           <p className="text-xl text-emerald-100 max-w-3xl mx-auto leading-relaxed">
-            Discover the finest luxury fruits from trusted farmers around the world
+            {t('home.globalHarvestDesc')}
           </p>
         </motion.div>
 
@@ -571,7 +573,7 @@ function ProductShowcase() {
                   transition={{ duration: 2, repeat: Infinity }}
                   className="absolute top-4 left-4 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-3 py-1 rounded-full text-sm font-bold"
                 >
-                  Special Deal
+                  {t('products.specialDeal')}
                 </motion.div>
               )}
 
@@ -628,7 +630,7 @@ function ProductShowcase() {
               className="group bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 text-white px-10 py-5 rounded-full font-bold text-xl shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 flex items-center gap-4 mx-auto"
             >
               <SparklesIcon className="w-6 h-6" />
-              Explore All Products
+              {t('home.exploreAllProducts')}
               <ArrowRightIcon className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
             </motion.button>
           </Link>
@@ -640,25 +642,26 @@ function ProductShowcase() {
 
 // Enhanced Solutions Section
 function SolutionsSection() {
+  const { t } = useI18n();
   const solutions = [
     {
       icon: TruckIcon,
-      title: "Global Shipping",
-      description: "Luxury logistics solutions with gemstone-quality care for your harvest",
+      title: t('home.globalShipping'),
+      description: t('home.globalShippingDesc'),
       animation: "🚢",
       gem: "💎"
     },
     {
       icon: ChatBubbleLeftRightIcon,
-      title: "Luxury Marketplace & Chat",
-      description: "Direct premium communication between farmers and buyers",
+      title: t('home.luxuryMarketplace'),
+      description: t('home.luxuryMarketplaceDesc'),
       animation: "💬",
       gem: "👑"
     },
     {
       icon: UserGroupIcon,
-      title: "Exclusive Exporter Network",
-      description: "Join our network of verified premium exporters",
+      title: t('home.exclusiveExporterNetwork'),
+      description: t('home.exclusiveExporterNetworkDesc'),
       animation: "🤝",
       gem: "✨"
     }
@@ -682,10 +685,10 @@ function SolutionsSection() {
           className="text-center mb-20"
         >
           <h2 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6 drop-shadow-lg">
-            Our Global Solutions
+            {t('home.ourGlobalSolutions')}
           </h2>
           <p className="text-xl text-emerald-100 max-w-3xl mx-auto leading-relaxed">
-            Comprehensive luxury tools and services for modern agricultural excellence
+            {t('home.ourGlobalSolutionsDesc')}
           </p>
         </motion.div>
 
@@ -739,23 +742,24 @@ function SolutionsSection() {
 
 // Enhanced Trust & Security Section
 function TrustSecurity() {
+  const { t } = useI18n();
   const trustFeatures = [
     { 
       icon: ShieldCheckIcon, 
-      title: "Bank-Grade Security", 
-      description: "Military-level encryption for all premium transactions",
+      title: t('home.bankGradeSecurity'), 
+      description: t('home.bankGradeSecurityDesc'),
       gem: "🛡️"
     },
     { 
       icon: UserGroupIcon, 
-      title: "Verified Global Exporters", 
-      description: "All partners thoroughly vetted with luxury certification",
+      title: t('home.verifiedGlobalExporters'), 
+      description: t('home.verifiedGlobalExportersDesc'),
       gem: "👑"
     },
     { 
       icon: HeartIcon, 
-      title: "100% Buyer Protection", 
-      description: "Complete money-back guarantee on all premium orders",
+      title: t('home.buyerProtection'), 
+      description: t('home.buyerProtectionDesc'),
       gem: "💎"
     }
   ];
@@ -771,10 +775,10 @@ function TrustSecurity() {
           className="text-center mb-20"
         >
           <h2 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6 drop-shadow-lg">
-            Trust & Security
+            {t('home.trustSecurity')}
           </h2>
           <p className="text-xl text-emerald-100 max-w-3xl mx-auto leading-relaxed">
-            Your premium peace of mind is our highest priority
+            {t('home.trustSecurityDesc')}
           </p>
         </motion.div>
 
@@ -814,6 +818,7 @@ function TrustSecurity() {
 
 // Enhanced Final CTA Section
 function FinalCTA() {
+  const { t } = useI18n();
   return (
     <section className="py-24 bg-gradient-to-br from-black via-slate-900 to-emerald-900 relative overflow-hidden">
       {/* Luxury Animated Background */}
@@ -861,15 +866,15 @@ function FinalCTA() {
           viewport={{ once: true }}
         >
           <h2 className="text-6xl md:text-8xl font-bold text-white mb-8 leading-tight">
-            Join Fruit Habibi Today and
+            {t('home.joinToday')}
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 drop-shadow-2xl">
-              Taste the World of Global Opportunities
+              {t('home.tasteWorld')}
             </span>
           </h2>
           
           <p className="text-xl text-emerald-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Experience the luxury of global agricultural excellence with our premium marketplace
+            {t('home.experienceLuxury')}
           </p>
           
           <div className="flex flex-col sm:flex-row gap-8 justify-center items-center mt-12">
@@ -893,7 +898,7 @@ function FinalCTA() {
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
                 />
                 <SparklesIcon className="w-8 h-8" />
-                Start Your Global Journey
+                {t('home.startGlobalJourney')}
                 <ArrowRightIcon className="w-8 h-8 group-hover:translate-x-1 transition-transform" />
               </motion.button>
             </Link>
@@ -911,7 +916,7 @@ function FinalCTA() {
                 }}
               >
                 <GlobeAltIcon className="w-8 h-8 group-hover:scale-110 transition-transform" />
-                Browse All Products
+                {t('home.browseAllProducts')}
               </motion.button>
             </Link>
           </div>

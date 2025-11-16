@@ -1,18 +1,22 @@
-export type Locale = 'en' | 'ar' | 'zh' | 'hi' | 'es' | 'fr' | 'pt';
+export type Locale = 'en' | 'fr' | 'ar' | 'hi';
 
-export const locales: Locale[] = ['en', 'ar', 'zh', 'hi', 'es', 'fr', 'pt'];
+export const locales: Locale[] = ['en', 'fr', 'ar', 'hi'];
 
 export const defaultLocale: Locale = 'en';
 
 export const localeNames: Record<Locale, string> = {
   en: 'English',
-  ar: 'العربية',
-  zh: '中文',
-  hi: 'हिन्दी',
-  es: 'Español',
   fr: 'Français',
-  pt: 'Português',
+  ar: 'العربية',
+  hi: 'हिन्दी',
 };
+
+// RTL languages
+export const rtlLocales: Locale[] = ['ar'];
+
+export function isRTL(locale: Locale): boolean {
+  return rtlLocales.includes(locale);
+}
 
 export async function getTranslations(locale: Locale) {
   const translations = await import(`./translations/${locale}.json`);

@@ -146,7 +146,7 @@ export default function Navbar() {
               className="inline-flex items-center justify-center rounded-md p-2 text-emerald-100 hover:bg-emerald-800/50 hover:text-yellow-300 transition-all duration-300"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <span className="sr-only">Open main menu</span>
+              <span className="sr-only">{t('common.openMainMenu')}</span>
               {mobileMenuOpen ? (
                 <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
               ) : (
@@ -175,12 +175,12 @@ export default function Navbar() {
             {user ? (
               <div className="space-y-1">
                 {/* Admin Navigation */}
-                {user.user_metadata?.role === 'admin' && (
+                  {user.user_metadata?.role === 'admin' && (
                   <>
                     <div className="px-3 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 mx-3 rounded-lg border border-blue-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                        <span className="text-sm font-semibold text-blue-700 uppercase tracking-wide">Admin Panel</span>
+                        <span className="text-sm font-semibold text-blue-700 uppercase tracking-wide">{t('common.adminPanel')}</span>
                       </div>
                     </div>
                     {adminNavigation.map((item) => (
