@@ -14,11 +14,13 @@ import {
   EyeSlashIcon
 } from '@heroicons/react/24/outline';
 import { NotificationService, Notification } from '@/lib/notifications';
+import { useI18n } from '@/contexts/I18nContext';
 import Link from 'next/link';
 
 export default function NotificationsPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const { t } = useI18n();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
@@ -240,9 +242,9 @@ export default function NotificationsPage() {
             <div className="flex items-center space-x-3">
               <BellIcon className="w-8 h-8 text-yellow-400" />
               <div>
-                <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Notifications</h1>
+                <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">{t('notifications.title')}</h1>
                 <p className="text-emerald-200">
-                  {unreadCount > 0 ? `${unreadCount} unread notifications` : 'All caught up!'}
+                  {unreadCount > 0 ? t('notifications.unreadCount').replace('{count}', unreadCount.toString()) : t('notifications.allCaughtUp')}
                 </p>
               </div>
             </div>
@@ -253,7 +255,7 @@ export default function NotificationsPage() {
                 className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25"
               >
                 <CheckIcon className="w-4 h-4" />
-                <span>Mark all read</span>
+                <span>{t('notifications.markAllRead')}</span>
               </button>
             )}
           </div>
@@ -272,7 +274,7 @@ export default function NotificationsPage() {
                       : 'text-emerald-200 hover:text-yellow-300 hover:bg-slate-700/50'
                   }`}
                 >
-                  All ({notifications.length})
+                  {t('notifications.all')} ({notifications.length})
                 </button>
                 <button
                   onClick={() => setFilter('unread')}
@@ -282,7 +284,7 @@ export default function NotificationsPage() {
                       : 'text-emerald-200 hover:text-yellow-300 hover:bg-slate-700/50'
                   }`}
                 >
-                  Unread ({unreadCount})
+                  {t('notifications.unread')} ({unreadCount})
                 </button>
               </div>
             </div>
@@ -290,27 +292,27 @@ export default function NotificationsPage() {
             {selectedNotifications.length > 0 && (
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-emerald-200">
-                  {selectedNotifications.length} selected
+                  {t('notifications.selected').replace('{count}', selectedNotifications.length.toString())}
                 </span>
                 <button
                   onClick={() => handleBulkAction('read')}
                   className="flex items-center space-x-1 px-3 py-1 text-sm text-yellow-400 hover:text-yellow-300 transition-colors"
                 >
                   <EyeIcon className="w-4 h-4" />
-                  <span>Mark read</span>
+                  <span>{t('notifications.markRead')}</span>
                 </button>
                 <button
                   onClick={() => handleBulkAction('delete')}
                   className="flex items-center space-x-1 px-3 py-1 text-sm text-red-400 hover:text-red-300 transition-colors"
                 >
                   <TrashIcon className="w-4 h-4" />
-                  <span>Delete</span>
+                  <span>{t('notifications.delete')}</span>
                 </button>
                 <button
                   onClick={clearSelection}
                   className="px-3 py-1 text-sm text-emerald-200 hover:text-emerald-100 transition-colors"
                 >
-                  Cancel
+                  {t('notifications.cancel')}
                 </button>
               </div>
             )}
@@ -322,12 +324,12 @@ export default function NotificationsPage() {
           <div className="text-center py-12 bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg">
             <div className="text-yellow-400 text-6xl mb-4">🔔</div>
             <h3 className="text-lg font-medium text-white mb-2">
-              {filter === 'unread' ? 'No unread notifications' : 'No notifications yet'}
+              {filter === 'unread' ? t('notifications.noUnreadNotifications') : t('notifications.noNotificationsYet')}
             </h3>
             <p className="text-emerald-200">
               {filter === 'unread' 
-                ? 'You&apos;re all caught up!' 
-                : 'Notifications will appear here when you receive messages, reviews, or updates.'
+                ? t('notifications.youreAllCaughtUp')
+                : t('notifications.notificationsWillAppear')
               }
             </p>
           </div>
@@ -376,7 +378,7 @@ export default function NotificationsPage() {
                             <span>{formatTime(notification.created_at)}</span>
                             {!notification.read_at && (
                               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-yellow-500 to-yellow-600 text-white">
-                                Unread
+                                {t('notifications.unread')}
                               </span>
                             )}
                           </div>
@@ -419,7 +421,7 @@ export default function NotificationsPage() {
                       href={getNotificationLink(notification)}
                       className="text-yellow-400 hover:text-yellow-300 text-sm font-medium transition-colors"
                     >
-                      View details →
+                      {t('notifications.viewDetails')}
                     </Link>
                   </div>
                 )}

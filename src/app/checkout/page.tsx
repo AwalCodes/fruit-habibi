@@ -6,6 +6,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { supabase } from '@/lib/supabase';
 import PaymentForm from '@/components/PaymentForm';
 import StripeProvider from '@/components/StripeProvider';
@@ -31,6 +32,7 @@ function CheckoutContent() {
   const searchParams = useSearchParams();
   const { user, loading: authLoading } = useAuth();
   const { items: cartItems, clearCart } = useCart();
+  const { t } = useI18n();
   
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
@@ -79,14 +81,14 @@ function CheckoutContent() {
       if (error) throw error;
 
       if (data.quantity < quantity) {
-        setError(`Only ${data.quantity} units available`);
+        setError(t('checkout.onlyAvailable').replace('{quantity}', data.quantity.toString()));
         return;
       }
 
       setProduct(data);
     } catch (error) {
       console.error('Error fetching product:', error);
-      setError('Product not found or not available');
+      setError(t('checkout.productNotFoundOrNotAvailable'));
     } finally {
       setLoading(false);
     }
@@ -109,7 +111,7 @@ function CheckoutContent() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-emerald-900 to-black">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <div className="text-lg text-emerald-200">Loading checkout...</div>
+          <div className="text-lg text-emerald-200">{t('checkout.loadingCheckout')}</div>
         </div>
       </div>
     );
@@ -124,13 +126,13 @@ function CheckoutContent() {
           className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-600/30 p-8 text-center max-w-md mx-4"
         >
           <div className="text-red-400 text-6xl mb-4">⚠️</div>
-          <h1 className="text-2xl font-bold text-white mb-4">Checkout Error</h1>
+          <h1 className="text-2xl font-bold text-white mb-4">{t('checkout.checkoutError')}</h1>
           <p className="text-emerald-200 mb-6">{error}</p>
           <button
             onClick={() => router.back()}
             className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black py-3 px-6 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium shadow-lg hover:shadow-yellow-500/25"
           >
-            Go Back
+            {t('checkout.goBack')}
           </button>
         </motion.div>
       </div>
@@ -140,7 +142,7 @@ function CheckoutContent() {
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-emerald-900 to-black">
-        <div className="text-lg text-emerald-200">Product not found</div>
+        <div className="text-lg text-emerald-200">{t('checkout.productNotFound')}</div>
       </div>
     );
   }
