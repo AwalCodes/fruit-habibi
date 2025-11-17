@@ -3,6 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -45,6 +46,7 @@ interface RecentActivity {
 export default function AdminDashboard() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const { t } = useI18n();
   const [stats, setStats] = useState<AdminStats>({
     totalUsers: 0,
     activeUsers: 0,
@@ -128,7 +130,7 @@ export default function AdminDashboard() {
           activity.push({
             id: user.id,
             type: 'user_registration',
-            title: 'New user registered',
+            title: t('admin.newUserRegistered'),
             description: user.full_name || 'Unknown User',
             timestamp: user.created_at,
             user_id: user.id,
@@ -142,7 +144,7 @@ export default function AdminDashboard() {
           activity.push({
             id: product.id,
             type: 'listing_created',
-            title: 'New listing created',
+            title: t('admin.newListingCreated'),
             description: product.title,
             timestamp: product.created_at
           });
@@ -193,16 +195,16 @@ export default function AdminDashboard() {
     const time = new Date(timestamp);
     const diffInHours = Math.floor((now.getTime() - time.getTime()) / (1000 * 60 * 60));
     
-    if (diffInHours < 1) return 'Just now';
-    if (diffInHours < 24) return `${diffInHours}h ago`;
-    if (diffInHours < 48) return 'Yesterday';
-    return `${Math.floor(diffInHours / 24)}d ago`;
+    if (diffInHours < 1) return t('admin.justNow');
+    if (diffInHours < 24) return t('admin.hoursAgo').replace('{hours}', diffInHours.toString());
+    if (diffInHours < 48) return t('admin.yesterday');
+    return t('admin.daysAgo').replace('{days}', Math.floor(diffInHours / 24).toString());
   };
 
   if (loading || dashboardLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading admin dashboard...</div>
+        <div className="text-lg">{t('admin.loadingAdminDashboard')}</div>
       </div>
     );
   }
@@ -219,15 +221,15 @@ export default function AdminDashboard() {
           <div className="py-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+                <h1 className="text-3xl font-bold text-gray-900">{t('admin.title')}</h1>
                 <p className="mt-2 text-gray-600">
-                  Monitor and manage the Fruit Habibi marketplace
+                  {t('admin.subtitle')}
                 </p>
               </div>
               <div className="flex items-center space-x-4">
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
                   <ShieldCheckIcon className="h-4 w-4 mr-1" />
-                  Admin Access
+                  {t('admin.adminAccess')}
                 </span>
               </div>
             </div>
@@ -253,12 +255,12 @@ export default function AdminDashboard() {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-2xl font-bold text-gray-900">{stats.totalUsers}</h3>
-                  <p className="text-sm text-gray-500">Total Users</p>
+                  <p className="text-sm text-gray-500">{t('admin.totalUsers')}</p>
                 </div>
               </div>
               <div className="mt-4">
                 <Link href="/admin/users" className="text-blue-600 hover:text-blue-700 font-medium text-sm">
-                  Manage users →
+                  {t('admin.manageUsers')}
                 </Link>
               </div>
             </div>
@@ -279,13 +281,13 @@ export default function AdminDashboard() {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-2xl font-bold text-gray-900">{stats.totalListings}</h3>
-                  <p className="text-sm text-gray-500">Total Listings</p>
+                  <p className="text-sm text-gray-500">{t('admin.totalListings')}</p>
                 </div>
               </div>
               <div className="mt-4 flex items-center text-sm">
-                <span className="text-green-600 font-medium">{stats.publishedListings} published</span>
+                <span className="text-green-600 font-medium">{stats.publishedListings} {t('admin.published')}</span>
                 <span className="text-gray-300 mx-2">•</span>
-                <span className="text-gray-500">{stats.draftListings} drafts</span>
+                <span className="text-gray-500">{stats.draftListings} {t('admin.drafts')}</span>
               </div>
             </div>
           </motion.div>
@@ -305,12 +307,12 @@ export default function AdminDashboard() {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-2xl font-bold text-gray-900">{stats.totalMessages}</h3>
-                  <p className="text-sm text-gray-500">Total Messages</p>
+                  <p className="text-sm text-gray-500">{t('admin.totalMessages')}</p>
                 </div>
               </div>
               <div className="mt-4">
                 <Link href="/admin/messages" className="text-purple-600 hover:text-purple-700 font-medium text-sm">
-                  Monitor messages →
+                  {t('admin.monitorMessages')}
                 </Link>
               </div>
             </div>
@@ -331,12 +333,12 @@ export default function AdminDashboard() {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-2xl font-bold text-gray-900">{stats.flaggedListings}</h3>
-                  <p className="text-sm text-gray-500">Flagged Content</p>
+                  <p className="text-sm text-gray-500">{t('admin.flaggedContent')}</p>
                 </div>
               </div>
               <div className="mt-4">
                 <Link href="/admin/moderation" className="text-red-600 hover:text-red-700 font-medium text-sm">
-                  Review flagged →
+                  {t('admin.reviewFlagged')}
                 </Link>
               </div>
             </div>
@@ -353,7 +355,7 @@ export default function AdminDashboard() {
               className="bg-white shadow-soft rounded-lg"
             >
               <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-medium text-gray-900">Quick Actions</h2>
+                <h2 className="text-lg font-medium text-gray-900">{t('admin.quickActions')}</h2>
               </div>
               <div className="p-6 space-y-4">
                 <Link
@@ -364,8 +366,8 @@ export default function AdminDashboard() {
                     <UsersIcon className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">Manage Users</h3>
-                    <p className="text-sm text-gray-500">View, suspend, or delete users</p>
+                    <h3 className="font-medium text-gray-900">{t('admin.manageUsersTitle')}</h3>
+                    <p className="text-sm text-gray-500">{t('admin.manageUsersDesc')}</p>
                   </div>
                 </Link>
 
@@ -377,8 +379,8 @@ export default function AdminDashboard() {
                     <DocumentTextIcon className="h-5 w-5 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">Moderate Listings</h3>
-                    <p className="text-sm text-gray-500">Review and approve listings</p>
+                    <h3 className="font-medium text-gray-900">{t('admin.moderateListings')}</h3>
+                    <p className="text-sm text-gray-500">{t('admin.moderateListingsDesc')}</p>
                   </div>
                 </Link>
 
@@ -390,8 +392,8 @@ export default function AdminDashboard() {
                     <ChatBubbleLeftRightIcon className="h-5 w-5 text-purple-600" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">Monitor Messages</h3>
-                    <p className="text-sm text-gray-500">Review conversations for abuse</p>
+                    <h3 className="font-medium text-gray-900">{t('admin.monitorMessagesTitle')}</h3>
+                    <p className="text-sm text-gray-500">{t('admin.monitorMessagesDesc')}</p>
                   </div>
                 </Link>
 
@@ -403,8 +405,8 @@ export default function AdminDashboard() {
                     <ChartBarIcon className="h-5 w-5 text-yellow-600" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">View Reports</h3>
-                    <p className="text-sm text-gray-500">Analytics and system reports</p>
+                    <h3 className="font-medium text-gray-900">{t('admin.viewReports')}</h3>
+                    <p className="text-sm text-gray-500">{t('admin.viewReportsDesc')}</p>
                   </div>
                 </Link>
               </div>
@@ -420,7 +422,7 @@ export default function AdminDashboard() {
               className="bg-white shadow-soft rounded-lg"
             >
               <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-medium text-gray-900">Recent Activity</h2>
+                <h2 className="text-lg font-medium text-gray-900">{t('admin.recentActivity')}</h2>
               </div>
               <div className="p-6">
                 {recentActivity.length > 0 ? (
@@ -441,8 +443,8 @@ export default function AdminDashboard() {
                 ) : (
                   <div className="text-center py-8">
                     <ChartBarIcon className="mx-auto h-12 w-12 text-gray-400" />
-                    <h3 className="mt-2 text-sm font-medium text-gray-900">No recent activity</h3>
-                    <p className="mt-1 text-sm text-gray-500">Activity will appear here as users interact with the platform</p>
+                    <h3 className="mt-2 text-sm font-medium text-gray-900">{t('admin.noRecentActivity')}</h3>
+                    <p className="mt-1 text-sm text-gray-500">{t('admin.activityWillAppear')}</p>
                   </div>
                 )}
               </div>

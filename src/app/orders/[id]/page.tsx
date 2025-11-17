@@ -9,6 +9,7 @@ import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import DirectMessageModal from '@/components/DirectMessageModal';
+import { useI18n } from '@/contexts/I18nContext';
 import { 
   CheckCircleIcon, 
   TruckIcon, 
@@ -38,55 +39,56 @@ interface Order {
   updated_at: string;
 }
 
-const statusConfig = {
-  pending: {
-    label: 'Pending Payment',
-    color: 'text-yellow-400',
-    bgColor: 'bg-yellow-500/20',
-    icon: ClockIcon,
-  },
-  paid: {
-    label: 'Paid',
-    color: 'text-green-400',
-    bgColor: 'bg-green-500/20',
-    icon: CheckCircleIcon,
-  },
-  shipped: {
-    label: 'Shipped',
-    color: 'text-blue-400',
-    bgColor: 'bg-blue-500/20',
-    icon: TruckIcon,
-  },
-  delivered: {
-    label: 'Delivered',
-    color: 'text-emerald-400',
-    bgColor: 'bg-emerald-500/20',
-    icon: CheckCircleIcon,
-  },
-  cancelled: {
-    label: 'Cancelled',
-    color: 'text-red-400',
-    bgColor: 'bg-red-500/20',
-    icon: XCircleIcon,
-  },
-  disputed: {
-    label: 'Disputed',
-    color: 'text-orange-400',
-    bgColor: 'bg-orange-500/20',
-    icon: ExclamationTriangleIcon,
-  },
-  refunded: {
-    label: 'Refunded',
-    color: 'text-gray-400',
-    bgColor: 'bg-gray-500/20',
-    icon: CurrencyDollarIcon,
-  },
-};
-
 export default function OrderDetailPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const { user, loading: authLoading } = useAuth();
+  const { t } = useI18n();
+  
+  const statusConfig = {
+    pending: {
+      label: t('orders.pendingPayment'),
+      color: 'text-yellow-400',
+      bgColor: 'bg-yellow-500/20',
+      icon: ClockIcon,
+    },
+    paid: {
+      label: t('orders.paymentReceived'),
+      color: 'text-green-400',
+      bgColor: 'bg-green-500/20',
+      icon: CheckCircleIcon,
+    },
+    shipped: {
+      label: t('orders.shipped'),
+      color: 'text-blue-400',
+      bgColor: 'bg-blue-500/20',
+      icon: TruckIcon,
+    },
+    delivered: {
+      label: t('orders.delivered'),
+      color: 'text-emerald-400',
+      bgColor: 'bg-emerald-500/20',
+      icon: CheckCircleIcon,
+    },
+    cancelled: {
+      label: t('orders.cancelled'),
+      color: 'text-red-400',
+      bgColor: 'bg-red-500/20',
+      icon: XCircleIcon,
+    },
+    disputed: {
+      label: 'Disputed',
+      color: 'text-orange-400',
+      bgColor: 'bg-orange-500/20',
+      icon: ExclamationTriangleIcon,
+    },
+    refunded: {
+      label: t('orders.refunded'),
+      color: 'text-gray-400',
+      bgColor: 'bg-gray-500/20',
+      icon: CurrencyDollarIcon,
+    },
+  };
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -96,8 +98,8 @@ export default function OrderDetailPage() {
   const isSuccess = searchParams?.get('success') === 'true';
 
    useEffect(() => {
-    if (!authLoading && !user) {
-      setError('Please sign in to view order details');
+      if (!authLoading && !user) {
+      setError(t('orderDetail.pleaseSignIn'));
       setLoading(false);
       return;
     }
@@ -144,13 +146,13 @@ export default function OrderDetailPage() {
 
       // Check if user has access to this order
       if (data.buyer_id !== user?.id && data.seller_id !== user?.id) {
-        throw new Error('Access denied');
+        throw new Error(t('orderDetail.accessDenied'));
       }
 
       setOrder(data);
     } catch (error) {
       console.error('Error fetching order:', error);
-      setError(error instanceof Error ? error.message : 'Failed to fetch order');
+      setError(error instanceof Error ? error.message : t('orderDetail.failedToFetchOrder'));
     } finally {
       setLoading(false);
     }
@@ -161,7 +163,7 @@ export default function OrderDetailPage() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-emerald-900 to-black">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <div className="text-lg text-emerald-200">Loading order details...</div>
+          <div className="text-lg text-emerald-200">{t('orderDetail.loadingOrderDetails')}</div>
         </div>
       </div>
     );
@@ -176,13 +178,13 @@ export default function OrderDetailPage() {
           className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-600/30 p-8 text-center max-w-md mx-4"
         >
           <div className="text-red-400 text-6xl mb-4">⚠️</div>
-          <h1 className="text-2xl font-bold text-white mb-4">Error</h1>
+          <h1 className="text-2xl font-bold text-white mb-4">{t('orderDetail.error')}</h1>
           <p className="text-emerald-200 mb-6">{error}</p>
           <Link
             href="/dashboard"
             className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black py-3 px-6 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium shadow-lg hover:shadow-yellow-500/25"
           >
-            Go to Dashboard
+            {t('orderDetail.goToDashboard')}
           </Link>
         </motion.div>
       </div>
@@ -192,7 +194,7 @@ export default function OrderDetailPage() {
   if (!order) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-emerald-900 to-black">
-        <div className="text-lg text-emerald-200">Order not found</div>
+        <div className="text-lg text-emerald-200">{t('orderDetail.orderNotFound')}</div>
       </div>
     );
   }
@@ -214,9 +216,9 @@ export default function OrderDetailPage() {
             <div className="flex items-center space-x-3">
               <CheckCircleIcon className="w-6 h-6 text-green-400" />
               <div>
-                <h3 className="text-green-400 font-semibold">Payment Successful!</h3>
+                <h3 className="text-green-400 font-semibold">{t('orderDetail.paymentSuccessful')}</h3>
                 <p className="text-emerald-200 text-sm">
-                  Your order has been confirmed and payment received.
+                  {t('orderDetail.orderConfirmed')}
                 </p>
               </div>
             </div>
@@ -233,10 +235,10 @@ export default function OrderDetailPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
-                  Order #{order.id.slice(-8)}
+                  {t('orderDetail.order').replace('{id}', order.id.slice(-8))}
                 </h1>
                 <p className="text-emerald-200 mt-1">
-                  Placed on {new Date(order.created_at).toLocaleDateString()}
+                  {t('orderDetail.placedOn').replace('{date}', new Date(order.created_at).toLocaleDateString())}
                 </p>
               </div>
               <div className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${statusInfo.bgColor}`}>
@@ -253,7 +255,7 @@ export default function OrderDetailPage() {
             <div className="grid lg:grid-cols-2 gap-8">
               {/* Product Information */}
               <div>
-                <h2 className="text-xl font-semibold text-white mb-4">Product Details</h2>
+                <h2 className="text-xl font-semibold text-white mb-4">{t('orderDetail.productDetails')}</h2>
                 <div className="bg-slate-700/30 rounded-lg p-6 space-y-4">
                   <div className="flex items-start space-x-4">
                     <div className="w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-yellow-500/20 rounded-lg flex items-center justify-center">
@@ -261,13 +263,13 @@ export default function OrderDetailPage() {
                     </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-white">
-                        Product ID: {order.product_id.slice(-8)}
+                        {t('orderDetail.productId').replace('{id}', order.product_id.slice(-8))}
                       </h3>
                       <p className="text-emerald-200">
-                        Quantity: {order.quantity} items
+                        {t('orderDetail.quantityItems').replace('{quantity}', order.quantity.toString())}
                       </p>
                       <p className="text-emerald-200">
-                        Unit Price: ${order.unit_price_usd.toFixed(2)}
+                        {t('orderDetail.unitPrice').replace('{price}', order.unit_price_usd.toFixed(2))}
                       </p>
                     </div>
                   </div>
@@ -276,28 +278,28 @@ export default function OrderDetailPage() {
 
               {/* Order Summary */}
               <div>
-                <h2 className="text-xl font-semibold text-white mb-4">Order Summary</h2>
+                <h2 className="text-xl font-semibold text-white mb-4">{t('orderDetail.orderSummary')}</h2>
                 <div className="bg-slate-700/30 rounded-lg p-6 space-y-3">
                   <div className="flex justify-between text-emerald-200">
-                    <span>Subtotal:</span>
+                    <span>{t('orderDetail.subtotal')}</span>
                     <span className="text-white">${(order.unit_price_usd * order.quantity).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-emerald-200">
-                    <span>Shipping:</span>
+                    <span>{t('orderDetail.shipping')}</span>
                     <span className="text-white">$0.00</span>
                   </div>
                   <div className="flex justify-between text-emerald-200">
-                    <span>Commission:</span>
+                    <span>{t('orderDetail.commission')}</span>
                     <span className="text-white">-${order.commission_amount_usd.toFixed(2)}</span>
                   </div>
                   <div className="border-t border-slate-600 pt-3">
                     <div className="flex justify-between text-lg font-semibold">
-                      <span className="text-yellow-400">Total Paid:</span>
+                      <span className="text-yellow-400">{t('orderDetail.totalPaid')}</span>
                       <span className="text-yellow-400">${order.total_amount_usd.toFixed(2)}</span>
                     </div>
                     {isBuyer && (
                       <div className="flex justify-between text-sm text-emerald-300 mt-1">
-                        <span>Seller receives:</span>
+                        <span>{t('orderDetail.sellerReceives')}</span>
                         <span>${(order.total_amount_usd - order.commission_amount_usd).toFixed(2)}</span>
                       </div>
                     )}
@@ -309,7 +311,7 @@ export default function OrderDetailPage() {
             {/* Shipping Information */}
             {order.shipping_address && (
               <div>
-                <h2 className="text-xl font-semibold text-white mb-4">Shipping Address</h2>
+                <h2 className="text-xl font-semibold text-white mb-4">{t('orderDetail.shippingAddress')}</h2>
                 <div className="bg-slate-700/30 rounded-lg p-6">
                   <div className="text-emerald-200">
                     <p className="font-medium text-white">{order.shipping_address.name || 'Demo User'}</p>
@@ -323,15 +325,15 @@ export default function OrderDetailPage() {
             {/* Tracking Information */}
             {order.tracking_number && (
               <div>
-                <h2 className="text-xl font-semibold text-white mb-4">Tracking Information</h2>
+                <h2 className="text-xl font-semibold text-white mb-4">{t('orderDetail.trackingInformation')}</h2>
                 <div className="bg-slate-700/30 rounded-lg p-6">
                   <div className="flex items-center space-x-4">
                     <TruckIcon className="w-8 h-8 text-blue-400" />
                     <div>
-                      <p className="text-white font-medium">Tracking Number: {order.tracking_number}</p>
+                      <p className="text-white font-medium">{t('orderDetail.trackingNumber').replace('{number}', order.tracking_number)}</p>
                       {order.estimated_delivery && (
                         <p className="text-emerald-200">
-                          Estimated Delivery: {new Date(order.estimated_delivery).toLocaleDateString()}
+                          {t('orderDetail.estimatedDelivery').replace('{date}', new Date(order.estimated_delivery).toLocaleDateString())}
                         </p>
                       )}
                     </div>
@@ -343,27 +345,27 @@ export default function OrderDetailPage() {
             {/* Contact Information */}
             <div>
               <h2 className="text-xl font-semibold text-white mb-4">
-                {isBuyer ? 'Seller Information' : 'Buyer Information'}
+                {isBuyer ? t('orderDetail.sellerInformation') : t('orderDetail.buyerInformation')}
               </h2>
               <div className="bg-slate-700/30 rounded-lg p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-white font-medium">{isBuyer ? 'Seller' : 'Buyer'}</p>
-                    <p className="text-emerald-200">User ID: {isBuyer ? order.seller_id.slice(-8) : order.buyer_id.slice(-8)}</p>
+                    <p className="text-white font-medium">{isBuyer ? t('orderDetail.seller') : t('orderDetail.buyer')}</p>
+                    <p className="text-emerald-200">{t('orderDetail.userId').replace('{id}', isBuyer ? order.seller_id.slice(-8) : order.buyer_id.slice(-8))}</p>
                   </div>
                   <div className="flex space-x-3">
                     <button
                       onClick={() => setShowMessageModal(true)}
                       className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black py-2 px-4 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium shadow-lg hover:shadow-yellow-500/25"
                     >
-                      Send Message
+                      {t('orderDetail.sendMessage')}
                     </button>
                     {order.order_status !== 'cancelled' && (
                       <Link
                         href={`/disputes?create=${order.id}`}
                         className="bg-gradient-to-r from-red-500 to-orange-500 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-orange-600 transition-all duration-300 font-medium shadow-lg hover:shadow-red-500/25"
                       >
-                        Report Dispute
+                        {t('orderDetail.reportDispute')}
                       </Link>
                     )}
                   </div>
@@ -380,7 +382,7 @@ export default function OrderDetailPage() {
             className="inline-flex items-center space-x-2 text-yellow-400 hover:text-yellow-300 transition-colors"
           >
             <span>←</span>
-            <span>Back to Dashboard</span>
+            <span>{t('orderDetail.backToDashboard')}</span>
           </Link>
         </div>
       </div>
@@ -391,7 +393,7 @@ export default function OrderDetailPage() {
           isOpen={showMessageModal}
           onClose={() => setShowMessageModal(false)}
           recipientId={isBuyer ? order.seller_id : order.buyer_id}
-          recipientName={isBuyer ? 'Seller' : 'Buyer'}
+          recipientName={isBuyer ? t('orderDetail.seller') : t('orderDetail.buyer')}
           productId={order.product_id}
           orderId={order.id}
         />
