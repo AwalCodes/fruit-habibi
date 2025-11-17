@@ -148,16 +148,16 @@ export default function HelpCenterPage() {
       icon: UserIcon,
       questions: [
         {
-          q: "[EN] How do I create an account?",
-          a: "[EN] Click 'Create Account' on our homepage"
+          q: t('help.faqGettingStartedQ1'),
+          a: t('help.faqGettingStartedA1')
         },
         {
-          q: "[EN] What information do I need?",
-          a: "[EN] We require business registration documents"
+          q: t('help.faqGettingStartedQ2'),
+          a: t('help.faqGettingStartedA2')
         },
         {
-          q: "[EN] How long does verification take?",
-          a: "[EN] Standard verification takes 1-3 business days"
+          q: t('help.faqGettingStartedQ3'),
+          a: t('help.faqGettingStartedA3')
         }
       ]
     },
@@ -166,20 +166,20 @@ export default function HelpCenterPage() {
       icon: CreditCardIcon,
       questions: [
         {
-          q: "[EN] How does the payment system work?",
-          a: "[EN] We use secure escrow payments"
+          q: t('help.faqBuyingSellingQ1'),
+          a: t('help.faqBuyingSellingA1')
         },
         {
-          q: "[EN] What are the platform fees?",
-          a: "[EN] We charge a 3% commission"
+          q: t('help.faqBuyingSellingQ2'),
+          a: t('help.faqBuyingSellingA2')
         },
         {
-          q: "[EN] How do I list my products?",
-          a: "[EN] Go to your dashboard, click 'Create Listing'"
+          q: t('help.faqBuyingSellingQ3'),
+          a: t('help.faqBuyingSellingA3')
         },
         {
-          q: "[EN] Can I negotiate prices?",
-          a: "[EN] Yes! Use our messaging system"
+          q: t('help.faqBuyingSellingQ4'),
+          a: t('help.faqBuyingSellingA4')
         }
       ]
     },
@@ -188,16 +188,16 @@ export default function HelpCenterPage() {
       icon: TruckIcon,
       questions: [
         {
-          q: "[EN] How does shipping work?",
-          a: "[EN] Sellers specify shipping methods"
+          q: t('help.faqShippingQ1'),
+          a: t('help.faqShippingA1')
         },
         {
-          q: "[EN] What if my product arrives damaged?",
-          a: "[EN] Report damage within 48 hours"
+          q: t('help.faqShippingQ2'),
+          a: t('help.faqShippingA2')
         },
         {
-          q: "[EN] Do you handle international shipping?",
-          a: "[EN] Yes! We facilitate global trade"
+          q: t('help.faqShippingQ3'),
+          a: t('help.faqShippingA3')
         }
       ]
     },
@@ -206,16 +206,16 @@ export default function HelpCenterPage() {
       icon: ShieldCheckIcon,
       questions: [
         {
-          q: "[EN] How do you verify sellers?",
-          a: "[EN] We verify business licenses"
+          q: t('help.faqSafetyQ1'),
+          a: t('help.faqSafetyA1')
         },
         {
-          q: "[EN] What if a seller doesn't deliver?",
-          a: "[EN] Our dispute resolution system handles cases"
+          q: t('help.faqSafetyQ2'),
+          a: t('help.faqSafetyA2')
         },
         {
-          q: "[EN] Is my payment information secure?",
-          a: "[EN] Absolutely. We use bank-level encryption"
+          q: t('help.faqSafetyQ3'),
+          a: t('help.faqSafetyA3')
         }
       ]
     },
@@ -224,16 +224,16 @@ export default function HelpCenterPage() {
       icon: GlobeAltIcon,
       questions: [
         {
-          q: "[EN] I can't access my account",
-          a: "[EN] Try resetting your password"
+          q: t('help.faqTechnicalQ1'),
+          a: t('help.faqTechnicalA1')
         },
         {
-          q: "[EN] The website is loading slowly",
-          a: "[EN] Check your internet connection"
+          q: t('help.faqTechnicalQ2'),
+          a: t('help.faqTechnicalA2')
         },
         {
-          q: "[EN] How do I update my business information?",
-          a: "[EN] Go to your profile settings"
+          q: t('help.faqTechnicalQ3'),
+          a: t('help.faqTechnicalA3')
         }
       ]
     }
