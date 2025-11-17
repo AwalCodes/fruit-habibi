@@ -419,7 +419,7 @@ export default function OrdersPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400 mx-auto mb-4"></div>
-          <p className="text-emerald-200">{t('orders.loadingOrdersText')}</p>
+          <p className="text-emerald-200">Loading orders...</p>
         </div>
       </div>
     }>
