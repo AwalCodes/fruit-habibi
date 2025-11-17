@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { CartProvider } from "@/contexts/CartContext";
-import I18nWrapper from "@/components/I18nWrapper";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-
-export const dynamic = 'force-dynamic';
+import ClientLayout from "@/components/ClientLayout";
 
 export const metadata: Metadata = {
   title: "Fruit Habibi - B2B Fruits & Vegetables Marketplace",
@@ -26,19 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <body className="font-sans antialiased" suppressHydrationWarning>
-        <I18nWrapper>
-          <AuthProvider>
-            <CartProvider>
-              <div className="min-h-screen flex flex-col">
-                <Navbar />
-                <main className="flex-1">
-                  {children}
-                </main>
-                <Footer />
-              </div>
-            </CartProvider>
-          </AuthProvider>
-        </I18nWrapper>
+        <ClientLayout>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   );
