@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 
 import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
@@ -38,47 +39,48 @@ interface Order {
   // Foreign key data will be fetched separately if needed
 }
 
-const statusConfig = {
-  pending: {
-    label: 'Pending Payment',
-    color: 'text-yellow-400',
-    bgColor: 'bg-yellow-500/20 border-yellow-500/30',
-    icon: ClockIcon
-  },
-  paid: {
-    label: 'Payment Received',
-    color: 'text-blue-400',
-    bgColor: 'bg-blue-500/20 border-blue-500/30',
-    icon: CheckCircleIcon
-  },
-  shipped: {
-    label: 'Shipped',
-    color: 'text-purple-400',
-    bgColor: 'bg-purple-500/20 border-purple-500/30',
-    icon: TruckIcon
-  },
-  delivered: {
-    label: 'Delivered',
-    color: 'text-green-400',
-    bgColor: 'bg-green-500/20 border-green-500/30',
-    icon: CheckCircleIcon
-  },
-  cancelled: {
-    label: 'Cancelled',
-    color: 'text-red-400',
-    bgColor: 'bg-red-500/20 border-red-500/30',
-    icon: XCircleIcon
-  },
-  refunded: {
-    label: 'Refunded',
-    color: 'text-gray-400',
-    bgColor: 'bg-gray-500/20 border-gray-500/30',
-    icon: XCircleIcon
-  }
-};
-
 function OrdersPageContent() {
+  const { t } = useI18n();
   const { user, loading: authLoading } = useAuth();
+  
+  const statusConfig = {
+    pending: {
+      label: t('orders.pendingPayment'),
+      color: 'text-yellow-400',
+      bgColor: 'bg-yellow-500/20 border-yellow-500/30',
+      icon: ClockIcon
+    },
+    paid: {
+      label: t('orders.paymentReceived'),
+      color: 'text-blue-400',
+      bgColor: 'bg-blue-500/20 border-blue-500/30',
+      icon: CheckCircleIcon
+    },
+    shipped: {
+      label: t('orders.shipped'),
+      color: 'text-purple-400',
+      bgColor: 'bg-purple-500/20 border-purple-500/30',
+      icon: TruckIcon
+    },
+    delivered: {
+      label: t('orders.delivered'),
+      color: 'text-green-400',
+      bgColor: 'bg-green-500/20 border-green-500/30',
+      icon: CheckCircleIcon
+    },
+    cancelled: {
+      label: t('orders.cancelled'),
+      color: 'text-red-400',
+      bgColor: 'bg-red-500/20 border-red-500/30',
+      icon: XCircleIcon
+    },
+    refunded: {
+      label: t('orders.refunded'),
+      color: 'text-gray-400',
+      bgColor: 'bg-gray-500/20 border-gray-500/30',
+      icon: XCircleIcon
+    }
+  };
   const router = useRouter();
   const searchParams = useSearchParams();
   const [orders, setOrders] = useState<Order[]>([]);
@@ -125,9 +127,9 @@ function OrdersPageContent() {
         
         // Check if it's a table not found error
         if (fetchError.code === '42P01' || fetchError.message?.includes('does not exist')) {
-          setError('Orders table not found. Please run the database migrations first.');
+          setError(t('orders.tableNotFound'));
         } else {
-          setError(`Failed to load orders: ${fetchError.message}`);
+          setError(`${t('orders.failedToLoad')}: ${fetchError.message}`);
         }
         return;
       }
@@ -135,7 +137,7 @@ function OrdersPageContent() {
       setOrders(data || []);
     } catch (err) {
       console.error('Error loading orders:', err);
-      setError('Failed to load orders');
+      setError(t('orders.failedToLoad'));
     } finally {
       setLoading(false);
     }
@@ -154,9 +156,9 @@ function OrdersPageContent() {
 
   const getOtherParty = (order: Order) => {
     if (order.buyer_id === user?.id) {
-      return 'Seller';
+      return t('orders.seller');
     }
-    return 'Buyer';
+    return t('orders.buyer');
   };
 
   if (authLoading || loading) {
@@ -168,7 +170,7 @@ function OrdersPageContent() {
           transition={{ duration: 0.5 }}
           className="text-lg text-emerald-200"
         >
-          Loading orders...
+          {t('orders.loadingOrders')}
         </motion.div>
       </div>
     );
@@ -190,10 +192,10 @@ function OrdersPageContent() {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
-                  My Orders
+                  {t('orders.title')}
                 </h1>
                 <p className="text-emerald-200 mt-1">
-                  Manage your purchases and sales
+                  {t('orders.subtitle')}
                 </p>
               </div>
             </div>
@@ -202,7 +204,7 @@ function OrdersPageContent() {
               className="inline-flex items-center gap-2 text-emerald-400 hover:text-white transition-colors"
             >
               <ArrowLeftIcon className="w-5 h-5" />
-              Back to Dashboard
+              {t('orders.backToDashboard')}
             </Link>
           </div>
         </div>
@@ -229,9 +231,9 @@ function OrdersPageContent() {
             <div className="flex items-center space-x-3">
               <CheckCircleIcon className="w-6 h-6 text-green-400" />
               <div>
-                <h3 className="text-green-400 font-semibold">Payment Successful!</h3>
+                <h3 className="text-green-400 font-semibold">{t('orders.paymentSuccessful')}</h3>
                 <p className="text-emerald-200 text-sm">
-                  Your order has been confirmed and payment received.
+                  {t('orders.orderConfirmed')}
                 </p>
               </div>
             </div>
@@ -249,7 +251,7 @@ function OrdersPageContent() {
                   : 'text-emerald-200 hover:bg-emerald-500/20'
               }`}
             >
-              All Orders ({orders.length})
+              {t('orders.allOrders')} ({orders.length})
             </button>
             <button
               onClick={() => setActiveTab('buying')}
@@ -259,7 +261,7 @@ function OrdersPageContent() {
                   : 'text-emerald-200 hover:bg-emerald-500/20'
               }`}
             >
-              Buying ({orders.filter(o => o.buyer_id === user?.id).length})
+              {t('orders.buying')} ({orders.filter(o => o.buyer_id === user?.id).length})
             </button>
             <button
               onClick={() => setActiveTab('selling')}
@@ -269,7 +271,7 @@ function OrdersPageContent() {
                   : 'text-emerald-200 hover:bg-emerald-500/20'
               }`}
             >
-              Selling ({orders.filter(o => o.seller_id === user?.id).length})
+              {t('orders.selling')} ({orders.filter(o => o.seller_id === user?.id).length})
             </button>
           </div>
         </div>
@@ -279,21 +281,16 @@ function OrdersPageContent() {
           <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-xl shadow-2xl border border-slate-600/30 p-12 text-center">
             <ShoppingBagIcon className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">
-              {activeTab === 'all' ? 'No Orders Found' : 
-               activeTab === 'buying' ? 'No Purchases Yet' : 'No Sales Yet'}
+              {t('orders.noOrders')}
             </h3>
             <p className="text-emerald-200 mb-6">
-              {activeTab === 'buying' 
-                ? 'Start shopping to see your orders here.' 
-                : activeTab === 'selling'
-                ? 'Create listings to start selling and see orders here.'
-                : 'Your orders will appear here once you start buying or selling.'}
+              {t('orders.noOrdersDesc')}
             </p>
             <Link
               href="/listings"
               className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-lg hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 font-medium"
             >
-              Browse Products
+              {t('orders.browseListings')}
             </Link>
           </div>
         ) : (

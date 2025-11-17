@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { UserCircleIcon, PencilIcon, CheckIcon, XMarkIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
@@ -19,6 +20,7 @@ interface UserProfile {
 }
 
 export default function ProfilePage() {
+  const { t } = useI18n();
   const { user, loading: authLoading } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -64,7 +66,7 @@ export default function ProfilePage() {
       });
     } catch (error) {
       console.error('Error fetching profile:', error);
-      setError('Failed to load profile');
+      setError(t('profile.failedToLoad'));
     } finally {
       setLoading(false);
     }
@@ -111,10 +113,10 @@ export default function ProfilePage() {
       } : null);
 
       setEditing(false);
-      setSuccess('Profile updated successfully!');
+      setSuccess(t('profile.profileUpdated'));
     } catch (error) {
       console.error('Error updating profile:', error);
-      setError('Failed to update profile');
+      setError(t('profile.failedToUpdate'));
     } finally {
       setSaving(false);
     }
@@ -137,9 +139,9 @@ export default function ProfilePage() {
 
   const getRoleDisplayName = (role: string) => {
     switch (role) {
-      case 'farmer': return 'Farmer/Exporter';
-      case 'importer': return 'Importer/Distributor';
-      case 'admin': return 'Administrator';
+      case 'farmer': return t('profile.farmerExporter');
+      case 'importer': return t('profile.importerDistributor');
+      case 'admin': return t('profile.administrator');
       default: return role;
     }
   };
@@ -147,7 +149,7 @@ export default function ProfilePage() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black flex items-center justify-center">
-        <div className="text-lg text-emerald-200">Loading profile...</div>
+        <div className="text-lg text-emerald-200">{t('profile.loadingProfile')}</div>
       </div>
     );
   }
@@ -160,8 +162,8 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Profile</h1>
-          <p className="mt-2 text-emerald-200">Manage your account information</p>
+          <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">{t('profile.title')}</h1>
+          <p className="mt-2 text-emerald-200">{t('profile.subtitle')}</p>
         </div>
 
         <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden">
@@ -170,8 +172,8 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-3">
                 <UserCircleIcon className="h-10 w-10 text-yellow-400" />
                 <div>
-                  <h2 className="text-lg font-medium text-white">Personal Information</h2>
-                  <p className="text-sm text-emerald-200">Your account details and preferences</p>
+                  <h2 className="text-lg font-medium text-white">{t('profile.personalInformation')}</h2>
+                  <p className="text-sm text-emerald-200">{t('profile.accountDetails')}</p>
                 </div>
               </div>
               {!editing && (
@@ -180,7 +182,7 @@ export default function ProfilePage() {
                   className="inline-flex items-center px-4 py-2 border border-yellow-400/30 shadow-sm text-sm leading-4 font-medium rounded-lg text-yellow-400 bg-slate-700/50 hover:bg-slate-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 transition-all duration-300"
                 >
                   <PencilIcon className="h-4 w-4 mr-2" />
-                  Edit Profile
+                  {t('profile.editProfile')}
                 </button>
               )}
             </div>

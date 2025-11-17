@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { supabase } from '@/lib/supabase';
 import { useSearchParams, useRouter } from 'next/navigation';
 import ChatPanel from '@/components/ChatPanel';
@@ -22,6 +23,7 @@ interface Conversation {
 
 
 function MessagesPageContent() {
+  const { t } = useI18n();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -87,12 +89,12 @@ function MessagesPageContent() {
         .eq('id', productId)
         .single();
 
-      setChatOtherUserName(userData?.full_name || 'Unknown User');
-      setChatProductTitle(productData?.title || 'Unknown Product');
+      setChatOtherUserName(userData?.full_name || t('messages.unknownUser'));
+      setChatProductTitle(productData?.title || t('messages.unknownProduct'));
     } catch (error) {
       console.error('Error fetching chat details:', error);
-      setChatOtherUserName('Unknown User');
-      setChatProductTitle('Unknown Product');
+      setChatOtherUserName(t('messages.unknownUser'));
+      setChatProductTitle(t('messages.unknownProduct'));
     }
   };
 
@@ -165,7 +167,7 @@ function MessagesPageContent() {
         const conversationKey = `${productId}-${otherUserId}`;
         
         // Use cleaner fallback name if user not found
-        const userName = otherUser ? otherUser.full_name : 'Unknown User';
+        const userName = otherUser ? otherUser.full_name : t('messages.unknownUser');
         
         if (product && (!conversationMap.has(conversationKey) || 
             new Date(message.created_at) > new Date(conversationMap.get(conversationKey).last_message_time))) {
@@ -185,7 +187,7 @@ function MessagesPageContent() {
           setConversations(conversationsArray);
         } catch (error) {
           console.error('Error fetching conversations:', error);
-          setError(error instanceof Error ? error.message : 'Failed to load conversations');
+          setError(error instanceof Error ? error.message : t('messages.failedToLoad'));
         } finally {
           setLoading(false);
         }
@@ -217,7 +219,7 @@ function MessagesPageContent() {
           <div className="flex items-center justify-center h-64">
             <div className="text-lg text-emerald-100 flex items-center gap-3">
               <div className="w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
-              Loading conversations...
+              {t('messages.loadingConversations')}
             </div>
           </div>
         </div>
@@ -231,7 +233,7 @@ function MessagesPageContent() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-red-900/50 to-red-800/50 border border-red-400/30 rounded-2xl p-6 backdrop-blur-sm">
             <div className="text-red-100">
-              <h3 className="text-lg font-medium">Error loading messages</h3>
+              <h3 className="text-lg font-medium">{t('messages.errorLoading')}</h3>
               <p className="mt-2">{error}</p>
             </div>
           </div>
@@ -252,10 +254,10 @@ function MessagesPageContent() {
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-4 drop-shadow-lg">
-            Global Messages
+            {t('messages.title')}
           </h1>
           <p className="text-xl text-emerald-100 leading-relaxed">
-            Your luxury conversations with buyers and verified suppliers
+            {t('messages.subtitle')}
           </p>
         </div>
 
@@ -269,15 +271,15 @@ function MessagesPageContent() {
               >
                 💬
               </motion.div>
-              <h3 className="text-2xl font-bold text-white mb-4">No Conversations Yet</h3>
+              <h3 className="text-2xl font-bold text-white mb-4">{t('messages.noConversations')}</h3>
               <p className="text-emerald-100 mb-8 leading-relaxed">
-                Start luxury conversations by browsing all listings and contacting verified suppliers
+                {t('messages.startConversation')}
               </p>
               <Link
                 href="/listings"
                 className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-8 py-4 rounded-full font-bold hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25 flex items-center gap-3 mx-auto w-fit"
               >
-                ✨ Browse All Listings
+                ✨ {t('common.browseListings')}
               </Link>
             </div>
           </div>
