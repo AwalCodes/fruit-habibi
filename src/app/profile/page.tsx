@@ -223,23 +223,23 @@ export default function ProfilePage() {
 
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-emerald-200">
-                  Email Address
+                  {t('profile.emailAddress')}
                 </label>
                 <p className="mt-1 text-sm text-white">{profile?.email}</p>
-                <p className="mt-1 text-xs text-emerald-300">Email cannot be changed</p>
+                <p className="mt-1 text-xs text-emerald-300">{t('profile.emailCannotBeChanged')}</p>
               </div>
 
               <div>
                 <label htmlFor="role" className="block text-sm font-medium text-emerald-200">
-                  Account Type
+                  {t('profile.accountType')}
                 </label>
                 <p className="mt-1 text-sm text-white">{profile ? getRoleDisplayName(profile.role) : ''}</p>
-                <p className="mt-1 text-xs text-emerald-300">Role cannot be changed</p>
+                <p className="mt-1 text-xs text-emerald-300">{t('profile.roleCannotBeChanged')}</p>
               </div>
 
               <div>
                 <label htmlFor="country" className="block text-sm font-medium text-emerald-200">
-                  Country
+                  {t('profile.country')}
                 </label>
                 {editing ? (
                   <input
@@ -249,7 +249,7 @@ export default function ProfilePage() {
                     value={editData.country}
                     onChange={handleChange}
                     className="mt-1 block w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 text-white placeholder-emerald-300 sm:text-sm"
-                    placeholder="Enter your country"
+                    placeholder={t('profile.enterCountry')}
                   />
                 ) : (
                   <p className="mt-1 text-sm text-white">{profile?.country}</p>
@@ -258,7 +258,7 @@ export default function ProfilePage() {
 
               <div className="sm:col-span-2">
                 <label className="block text-sm font-medium text-emerald-200">
-                  Member Since
+                  {t('profile.memberSince')}
                 </label>
                 <p className="mt-1 text-sm text-white">{profile ? formatDate(profile.created_at) : ''}</p>
               </div>
@@ -272,7 +272,7 @@ export default function ProfilePage() {
                   className="inline-flex items-center px-4 py-2 border border-slate-600 shadow-sm text-sm font-medium rounded-lg text-emerald-200 bg-slate-700/50 hover:bg-slate-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 transition-all duration-300"
                 >
                   <XMarkIcon className="h-4 w-4 mr-2" />
-                  Cancel
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="button"
@@ -281,7 +281,7 @@ export default function ProfilePage() {
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-yellow-500/25"
                 >
                   <CheckIcon className="h-4 w-4 mr-2" />
-                  {saving ? 'Saving...' : 'Save Changes'}
+                  {saving ? t('profile.saving') : t('profile.saveChanges')}
                 </button>
               </div>
             )}
@@ -293,15 +293,15 @@ export default function ProfilePage() {
           <div className="px-6 py-4 border-b border-slate-600">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-medium text-white">Account Verification</h2>
-                <p className="text-sm text-emerald-200">Build trust and unlock premium features</p>
+                <h2 className="text-lg font-medium text-white">{t('profile.accountVerification')}</h2>
+                <p className="text-sm text-emerald-200">{t('profile.buildTrust')}</p>
               </div>
               <button
                 onClick={() => setShowVerification(true)}
                 className="inline-flex items-center px-4 py-2 border border-emerald-400/30 shadow-sm text-sm leading-4 font-medium rounded-lg text-emerald-400 bg-slate-700/50 hover:bg-slate-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 transition-all duration-300"
               >
                 <ShieldCheckIcon className="h-4 w-4 mr-2" />
-                Verify Account
+                {t('profile.verifyAccount')}
               </button>
             </div>
           </div>
@@ -312,27 +312,27 @@ export default function ProfilePage() {
                   <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
                     <CheckIcon className="w-4 h-4 text-blue-400" />
                   </div>
-                  <h3 className="text-sm font-medium text-white">Email Verified</h3>
+                  <h3 className="text-sm font-medium text-white">{t('profile.emailVerified')}</h3>
                 </div>
-                <p className="text-xs text-emerald-300">Secure your account</p>
+                <p className="text-xs text-emerald-300">{t('profile.secureAccount')}</p>
               </div>
               <div className="bg-slate-700/30 p-4 rounded-lg border border-slate-600">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
                     <CheckIcon className="w-4 h-4 text-green-400" />
                   </div>
-                  <h3 className="text-sm font-medium text-white">Phone Verified</h3>
+                  <h3 className="text-sm font-medium text-white">{t('profile.phoneVerified')}</h3>
                 </div>
-                <p className="text-xs text-emerald-300">Enhanced security</p>
+                <p className="text-xs text-emerald-300">{t('profile.enhancedSecurity')}</p>
               </div>
               <div className="bg-slate-700/30 p-4 rounded-lg border border-slate-600">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center">
                     <CheckIcon className="w-4 h-4 text-purple-400" />
                   </div>
-                  <h3 className="text-sm font-medium text-white">ID Verified</h3>
+                  <h3 className="text-sm font-medium text-white">{t('profile.idVerified')}</h3>
                 </div>
-                <p className="text-xs text-emerald-300">Full verification</p>
+                <p className="text-xs text-emerald-300">{t('profile.fullVerification')}</p>
               </div>
             </div>
           </div>
@@ -341,21 +341,21 @@ export default function ProfilePage() {
         {/* Account Actions */}
         <div className="mt-8 bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-600">
-            <h2 className="text-lg font-medium text-white">Account Actions</h2>
-            <p className="text-sm text-emerald-200">Manage your account security and preferences</p>
+            <h2 className="text-lg font-medium text-white">{t('profile.accountActions')}</h2>
+            <p className="text-sm text-emerald-200">{t('profile.manageAccountSecurity')}</p>
           </div>
           <div className="px-6 py-6">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-medium text-white">Change Password</h3>
-                  <p className="text-sm text-emerald-200">Update your account password</p>
+                  <h3 className="text-sm font-medium text-white">{t('profile.changePassword')}</h3>
+                  <p className="text-sm text-emerald-200">{t('profile.updateAccountPassword')}</p>
                 </div>
                 <button
                   onClick={() => router.push('/change-password')}
                   className="inline-flex items-center px-4 py-2 border border-yellow-400/30 shadow-sm text-sm leading-4 font-medium rounded-lg text-yellow-400 bg-slate-700/50 hover:bg-slate-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 transition-all duration-300"
                 >
-                  Change Password
+                  {t('profile.changePassword')}
                 </button>
               </div>
             </div>

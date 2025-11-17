@@ -302,7 +302,7 @@ export default function ListingDetailPage() {
                     <p className="text-sm text-emerald-300">{product.users?.country || 'Unknown'}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-emerald-300">Listed on</p>
+                    <p className="text-sm text-emerald-300">{t('listing.listedOn')}</p>
                     <p className="text-sm font-medium text-white">{formatDate(product.created_at)}</p>
                   </div>
                 </div>
@@ -359,10 +359,10 @@ export default function ListingDetailPage() {
                               {isAddingToCart ? (
                                 <>
                                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                  Adding...
+                                  {t('listing.adding')}
                                 </>
                               ) : showCartSuccess ? (
-                                <>✅ Added!</>
+                                <>✅ {t('listing.added')}</>
                               ) : (
                                 <>🛒 {t('listing.addToCart')}</>
                               )}
@@ -382,7 +382,7 @@ export default function ListingDetailPage() {
                               href={showChat ? `/listing/${product.id}` : `/listing/${product.id}?chat=true`}
                               className="bg-gradient-to-r from-purple-500 to-purple-600 text-white py-2 px-3 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-purple-500/25 text-xs"
                             >
-                              {showChat ? t('listing.hideChat') : '💬 Chat'}
+                              {showChat ? t('listing.hideChat') : `💬 ${t('listing.chat')}`}
                             </Link>
                           </div>
                         </div>
@@ -391,9 +391,9 @@ export default function ListingDetailPage() {
                         {showCartSuccess && (
                           <div className="bg-emerald-900/50 border border-emerald-500 rounded-lg p-3 text-center">
                             <p className="text-emerald-200 text-sm">
-                              ✅ Added to cart! 
+                              ✅ {t('listing.addedToCart')} 
                               <Link href="/cart" className="text-yellow-400 hover:text-yellow-300 ml-1 underline">
-                                View Cart
+                                {t('listing.viewCart')}
                               </Link>
                             </p>
                           </div>
@@ -414,21 +414,21 @@ export default function ListingDetailPage() {
                 ) : (
                   <div className="text-center space-y-4">
                     <div className="bg-emerald-900/30 border border-emerald-500/30 rounded-lg p-4">
-                      <p className="text-emerald-200 font-medium mb-2">Want to purchase this item?</p>
-                      <p className="text-sm text-emerald-300 mb-4">Sign in to add to cart, buy now, or chat with the supplier</p>
+                      <p className="text-emerald-200 font-medium mb-2">{t('listing.wantToPurchase')}</p>
+                      <p className="text-sm text-emerald-300 mb-4">{t('listing.signInToPurchase')}</p>
                       
                       <div className="space-y-2">
                         <Link
                           href="/register"
                           className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-3 px-4 rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 font-medium inline-block shadow-lg hover:shadow-emerald-500/25"
                         >
-                          🚀 Create Account
+                          🚀 {t('listing.createAccount')}
                         </Link>
                         <Link
                           href="/login"
                           className="w-full bg-gradient-to-r from-slate-600 to-slate-700 text-white py-3 px-4 rounded-lg hover:from-slate-500 hover:to-slate-600 transition-all duration-300 font-medium inline-block shadow-lg hover:shadow-slate-500/25"
                         >
-                          Sign In
+                          {t('common.signIn')}
                         </Link>
                       </div>
                     </div>

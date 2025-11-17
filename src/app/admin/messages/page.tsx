@@ -3,6 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -42,6 +43,7 @@ interface Message {
 
 export default function MessageMonitoring() {
   const { user, loading } = useAuth();
+  const { t } = useI18n();
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [filteredMessages, setFilteredMessages] = useState<Message[]>([]);
@@ -174,7 +176,7 @@ export default function MessageMonitoring() {
   if (loading || pageLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading message monitoring...</div>
+        <div className="text-lg">{t('admin.loadingMessageMonitoring')}</div>
       </div>
     );
   }
@@ -350,7 +352,7 @@ export default function MessageMonitoring() {
         {filteredMessages.length === 0 && (
           <div className="text-center py-12">
             <ChatBubbleLeftRightIcon className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No messages found</h3>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">{t('admin.noMessagesFound')}</h3>
             <p className="mt-1 text-sm text-gray-500">
               Try adjusting your search criteria
             </p>

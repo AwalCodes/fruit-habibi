@@ -3,6 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -43,6 +44,7 @@ interface Listing {
 
 export default function ListingModeration() {
   const { user, loading } = useAuth();
+  const { t } = useI18n();
   const router = useRouter();
   const [listings, setListings] = useState<Listing[]>([]);
   const [filteredListings, setFilteredListings] = useState<Listing[]>([]);
@@ -260,7 +262,7 @@ export default function ListingModeration() {
   if (loading || pageLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading listing moderation...</div>
+        <div className="text-lg">{t('admin.loadingListingModeration')}</div>
       </div>
     );
   }
@@ -545,7 +547,7 @@ export default function ListingModeration() {
                       <button
                         onClick={() => handleStatusChange(listing.id, 'published')}
                         className="text-green-600 hover:text-green-700"
-                        title="Approve listing"
+                        title={t('admin.approveListing')}
                       >
                         <CheckCircleIcon className="h-5 w-5" />
                       </button>
@@ -554,7 +556,7 @@ export default function ListingModeration() {
                       <button
                         onClick={() => handleStatusChange(listing.id, 'rejected')}
                         className="text-red-600 hover:text-red-700"
-                        title="Reject listing"
+                        title={t('admin.rejectListing')}
                       >
                         <XCircleIcon className="h-5 w-5" />
                       </button>
@@ -578,7 +580,7 @@ export default function ListingModeration() {
         {filteredListings.length === 0 && (
           <div className="text-center py-12">
             <DocumentTextIcon className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No listings found</h3>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">{t('admin.noListingsFound')}</h3>
             <p className="mt-1 text-sm text-gray-500">
               Try adjusting your search criteria
             </p>

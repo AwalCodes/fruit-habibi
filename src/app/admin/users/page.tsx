@@ -3,6 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -32,6 +33,7 @@ interface User {
 
 export default function UserManagement() {
   const { user, loading } = useAuth();
+  const { t } = useI18n();
   const router = useRouter();
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
@@ -200,7 +202,7 @@ export default function UserManagement() {
   if (loading || pageLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading user management...</div>
+        <div className="text-lg">{t('admin.loadingUserManagement')}</div>
       </div>
     );
   }
