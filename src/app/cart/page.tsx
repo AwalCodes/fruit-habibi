@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { useCart } from '@/contexts/CartContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -19,6 +20,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 export default function CartPage() {
+  const { t } = useI18n();
   const { user, loading: authLoading } = useAuth();
   const { items, updateQuantity, removeItem, clearCart, getTotalPrice, getTotalItems } = useCart();
   const router = useRouter();
@@ -39,7 +41,7 @@ export default function CartPage() {
           transition={{ duration: 0.5 }}
           className="text-lg text-emerald-200"
         >
-          Loading...
+          {t('cart.loading')}
         </motion.div>
       </div>
     );
@@ -75,10 +77,10 @@ export default function CartPage() {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
-                  Shopping Cart
+                  {t('cart.title')}
                 </h1>
                 <p className="text-emerald-200 mt-1">
-                  {getTotalItems()} item{getTotalItems() !== 1 ? 's' : ''} in your cart
+                  {getTotalItems()} {getTotalItems() !== 1 ? t('cart.itemsInCartPlural') : t('cart.itemsInCart')} {t('cart.inYourCart')}
                 </p>
               </div>
             </div>
@@ -87,7 +89,7 @@ export default function CartPage() {
               className="inline-flex items-center gap-2 text-emerald-400 hover:text-white transition-colors"
             >
               <ArrowLeftIcon className="w-5 h-5" />
-              Continue Shopping
+              {t('cart.continueShopping')}
             </Link>
           </div>
         </div>
@@ -96,15 +98,15 @@ export default function CartPage() {
           /* Empty Cart */
           <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-xl shadow-2xl border border-slate-600/30 p-12 text-center">
             <ShoppingCartIcon className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">Your cart is empty</h3>
+            <h3 className="text-xl font-semibold text-white mb-2">{t('cart.emptyCart')}</h3>
             <p className="text-emerald-200 mb-6">
-              Start adding products to your cart to see them here.
+              {t('cart.emptyCartDesc')}
             </p>
             <Link
               href="/listings"
               className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-lg hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 font-medium"
             >
-              Browse Products
+              {t('cart.browseProducts')}
             </Link>
           </div>
         ) : (
@@ -139,10 +141,10 @@ export default function CartPage() {
                         {item.title}
                       </h3>
                       <p className="text-emerald-300 text-sm">
-                        by {item.seller_name}
+                        {t('cart.by')} {item.seller_name}
                       </p>
                       <p className="text-yellow-400 font-semibold">
-                        ${item.price.toFixed(2)} each
+                        ${item.price.toFixed(2)} {t('cart.each')}
                       </p>
                     </div>
 
@@ -187,24 +189,20 @@ export default function CartPage() {
             {/* Cart Summary */}
             <div className="lg:col-span-1">
               <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-xl shadow-2xl border border-slate-600/30 p-6 sticky top-8">
-                <h2 className="text-xl font-semibold text-white mb-4">Order Summary</h2>
+                <h2 className="text-xl font-semibold text-white mb-4">{t('orders.orderId')}</h2>
                 
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between">
-                    <span className="text-emerald-300">Items ({getTotalItems()}):</span>
+                    <span className="text-emerald-300">{t('cart.itemsInCartPlural')} ({getTotalItems()}):</span>
                     <span className="text-white">${getTotalPrice().toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-emerald-300">Shipping:</span>
-                    <span className="text-white">$0.00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-emerald-300">Tax:</span>
-                    <span className="text-white">$0.00</span>
+                    <span className="text-emerald-300">{t('cart.subtotal')}:</span>
+                    <span className="text-white">${getTotalPrice().toFixed(2)}</span>
                   </div>
                   <div className="border-t border-slate-600 pt-3">
                     <div className="flex justify-between">
-                      <span className="text-lg font-semibold text-white">Total:</span>
+                      <span className="text-lg font-semibold text-white">{t('cart.total')}:</span>
                       <span className="text-lg font-semibold text-yellow-400">
                         ${getTotalPrice().toFixed(2)}
                       </span>
@@ -220,12 +218,12 @@ export default function CartPage() {
                   {isCheckingOut ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Processing...
+                      {t('common.loading')}
                     </>
                   ) : (
                     <>
                       <CreditCardIcon className="w-5 h-5" />
-                      Proceed to Checkout
+                      {t('cart.proceedToCheckout')}
                     </>
                   )}
                 </button>

@@ -7,6 +7,7 @@ import { useParams, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/lib/supabase';
 import ChatPanel from '@/components/ChatPanel';
@@ -33,6 +34,7 @@ interface Product {
 }
 
 export default function ListingDetailPage() {
+  const { t } = useI18n();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -92,8 +94,8 @@ export default function ListingDetailPage() {
         // User doesn't exist, create a fallback
         finalUserData = {
           id: productData.owner_id,
-          full_name: 'Unknown Seller',
-          country: 'Unknown'
+          full_name: t('listing.unknownSeller'),
+          country: t('listing.unknown')
         };
         console.log('User not found, using fallback:', finalUserData);
       }
@@ -108,7 +110,7 @@ export default function ListingDetailPage() {
 
       setProduct(combinedData);
     } catch {
-      setError('Product not found');
+      setError(t('listing.productNotFound'));
     } finally {
       setLoading(false);
     }
@@ -134,7 +136,7 @@ export default function ListingDetailPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center h-64">
-            <div className="text-lg text-emerald-200">Loading product...</div>
+            <div className="text-lg text-emerald-200">{t('listing.loadingProduct')}</div>
           </div>
         </div>
       </div>
@@ -146,13 +148,13 @@ export default function ListingDetailPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center py-12">
-            <h1 className="text-2xl font-bold text-white mb-4">Product Not Found</h1>
-            <p className="text-emerald-200 mb-8">The product you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+            <h1 className="text-2xl font-bold text-white mb-4">{t('listing.productNotFound')}</h1>
+            <p className="text-emerald-200 mb-8">{t('listing.productNotFoundDesc')}</p>
             <Link
               href="/listings"
               className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white px-6 py-3 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25"
             >
-              Browse All Listings
+              {t('listing.backToListings')}
             </Link>
           </div>
         </div>
