@@ -18,6 +18,10 @@ import {
   ShoppingBagIcon
 } from '@heroicons/react/24/outline';
 
+// Force dynamic rendering - don't pre-render at build time
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+
 interface DashboardStats {
   totalListings: number;
   publishedListings: number;

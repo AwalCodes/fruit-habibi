@@ -1,23 +1,10 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 import I18nWrapper from "@/components/I18nWrapper";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-
-const inter = localFont({
-  src: [
-    {
-      path: "./fonts/Inter-VariableFont_slnt,wght.ttf",
-      weight: "100 900",
-      style: "normal",
-    },
-  ],
-  variable: "--font-inter",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Fruit Habibi - B2B Fruits & Vegetables Marketplace",
@@ -36,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`} suppressHydrationWarning>
+      <body className="font-sans antialiased" suppressHydrationWarning>
         <I18nWrapper>
           <AuthProvider>
             <CartProvider>
