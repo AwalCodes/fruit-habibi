@@ -278,26 +278,26 @@ export default function ListingDetailPage() {
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <h3 className="text-sm font-medium text-emerald-200">Available Quantity</h3>
+                  <h3 className="text-sm font-medium text-emerald-200">{t('listing.quantity')}</h3>
                   <p className="text-lg font-semibold text-white">
                     {product.quantity} {product.unit}
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-emerald-200">Location</h3>
+                  <h3 className="text-sm font-medium text-emerald-200">{t('listing.location')}</h3>
                   <p className="text-lg font-semibold text-white">{product.location}</p>
                 </div>
               </div>
 
               <div className="mb-6">
-                <h3 className="text-lg font-medium text-white mb-2">Description</h3>
+                <h3 className="text-lg font-medium text-white mb-2">{t('listing.description')}</h3>
                 <p className="text-emerald-200 leading-relaxed">{product.description}</p>
               </div>
 
               <div className="border-t border-slate-600 pt-6">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h3 className="text-lg font-medium text-white">Supplier</h3>
+                    <h3 className="text-lg font-medium text-white">{t('listing.seller')}</h3>
                     <p className="text-emerald-200">{product.users?.full_name || 'Unknown'}</p>
                     <p className="text-sm text-emerald-300">{product.users?.country || 'Unknown'}</p>
                   </div>
@@ -325,7 +325,7 @@ export default function ListingDetailPage() {
                       <>
                         {/* Quantity Selector */}
                         <div className="flex items-center gap-3">
-                          <label className="text-emerald-200 font-medium">Quantity:</label>
+                          <label className="text-emerald-200 font-medium">{t('listing.quantity')}:</label>
                           <div className="flex items-center border border-emerald-500 rounded-lg">
                             <button
                               onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -364,7 +364,7 @@ export default function ListingDetailPage() {
                               ) : showCartSuccess ? (
                                 <>✅ Added!</>
                               ) : (
-                                <>🛒 Add to Cart</>
+                                <>🛒 {t('listing.addToCart')}</>
                               )}
                             </button>
 
@@ -372,7 +372,7 @@ export default function ListingDetailPage() {
                               href={`/checkout?product=${product.id}&quantity=${quantity}`}
                               className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-3 px-4 rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-yellow-500/25 text-sm"
                             >
-                              💳 Buy Now (Real Stripe Payment)
+                              💳 {t('listing.buyNow')} ({t('listing.realStripePayment')})
                             </Link>
                           </div>
 
@@ -382,7 +382,7 @@ export default function ListingDetailPage() {
                               href={showChat ? `/listing/${product.id}` : `/listing/${product.id}?chat=true`}
                               className="bg-gradient-to-r from-purple-500 to-purple-600 text-white py-2 px-3 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-purple-500/25 text-xs"
                             >
-                              {showChat ? 'Hide Chat' : '💬 Chat'}
+                              {showChat ? t('listing.hideChat') : '💬 Chat'}
                             </Link>
                           </div>
                         </div>
@@ -407,7 +407,7 @@ export default function ListingDetailPage() {
                         href={showChat ? `/listing/${product.id}` : `/listing/${product.id}?chat=true`}
                         className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300 font-medium inline-block text-center shadow-lg hover:shadow-purple-500/25"
                       >
-                        {showChat ? 'Hide Chat' : '💬 View Messages'}
+                        {showChat ? t('listing.hideChat') : `💬 ${t('listing.viewMessages')}`}
                       </Link>
                     )}
                   </div>
