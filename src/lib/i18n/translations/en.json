@@ -212,5 +212,46 @@
     "startOnboarding": "Start Onboarding",
     "newListingCreated": "New listing created",
     "messageReceived": "Message received"
+  },
+  "help": {
+    "title": "Help Center",
+    "subtitle": "Get the support you need to succeed on our premium B2B marketplace. Find answers, get help, and connect with our expert team.",
+    "liveChatSupport": "Live Chat Support",
+    "getInstantHelp": "Get instant help from our support team",
+    "available247": "24/7 Available",
+    "startChat": "Start Chat",
+    "emailSupport": "Email Support",
+    "detailedAssistance": "Detailed assistance via email",
+    "responseWithin2Hours": "Response within 2 hours",
+    "sendEmail": "Send Email",
+    "phoneSupport": "Phone Support",
+    "speakDirectly": "Speak directly with our experts",
+    "businessHoursOnly": "Business hours only",
+    "callNow": "Call Now",
+    "gettingStarted": "Getting Started",
+    "buyingSelling": "Buying & Selling",
+    "shippingLogistics": "Shipping & Logistics",
+    "safetySecurity": "Safety & Security",
+    "technicalSupport": "Technical Support",
+    "stillNeedHelp": "Still Need Help?",
+    "dedicatedSupport": "Our dedicated support team is here to help you succeed. Contact us through any of the methods above, and we'll get back to you promptly.",
+    "contactSupport": "Contact Support",
+    "goToDashboard": "Go to Dashboard"
+  },
+  "about": {
+    "title": "About Fruit Habibi",
+    "subtitle": "[EN] Learn about our mission"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "[EN] Get in touch"
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "subtitle": "[EN] Read our terms"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "subtitle": "[EN] Read our privacy policy"
   }
 }

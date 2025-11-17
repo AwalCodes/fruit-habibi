@@ -14,6 +14,7 @@ import {
   InformationCircleIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { useI18n } from '@/contexts/I18nContext';
 
 export const dynamic = 'force-dynamic';
 
@@ -114,31 +115,129 @@ const faqs = [
   }
 ];
 
-const contactMethods = [
-  {
-    title: "Live Chat Support",
-    description: "Get instant help from our support team",
-    icon: ChatBubbleLeftRightIcon,
-    availability: "24/7 Available",
-    action: "Start Chat"
-  },
-  {
-    title: "Email Support",
-    description: "Detailed assistance via email",
-    icon: InformationCircleIcon,
-    availability: "Response within 2 hours",
-    action: "Send Email"
-  },
-  {
-    title: "Phone Support",
-    description: "Speak directly with our experts",
-    icon: UserIcon,
-    availability: "Business hours only",
-    action: "Call Now"
-  }
-];
-
 export default function HelpCenterPage() {
+  const { t } = useI18n();
+  
+  const contactMethods = [
+    {
+      title: t('help.liveChatSupport'),
+      description: t('help.getInstantHelp'),
+      icon: ChatBubbleLeftRightIcon,
+      availability: t('help.available247'),
+      action: t('help.startChat')
+    },
+    {
+      title: t('help.emailSupport'),
+      description: t('help.detailedAssistance'),
+      icon: InformationCircleIcon,
+      availability: t('help.responseWithin2Hours'),
+      action: t('help.sendEmail')
+    },
+    {
+      title: t('help.phoneSupport'),
+      description: t('help.speakDirectly'),
+      icon: UserIcon,
+      availability: t('help.businessHoursOnly'),
+      action: t('help.callNow')
+    }
+  ];
+  
+  const faqs = [
+    {
+      category: t('help.gettingStarted'),
+      icon: UserIcon,
+      questions: [
+        {
+          q: "[EN] How do I create an account?",
+          a: "[EN] Click 'Create Account' on our homepage"
+        },
+        {
+          q: "[EN] What information do I need?",
+          a: "[EN] We require business registration documents"
+        },
+        {
+          q: "[EN] How long does verification take?",
+          a: "[EN] Standard verification takes 1-3 business days"
+        }
+      ]
+    },
+    {
+      category: t('help.buyingSelling'),
+      icon: CreditCardIcon,
+      questions: [
+        {
+          q: "[EN] How does the payment system work?",
+          a: "[EN] We use secure escrow payments"
+        },
+        {
+          q: "[EN] What are the platform fees?",
+          a: "[EN] We charge a 3% commission"
+        },
+        {
+          q: "[EN] How do I list my products?",
+          a: "[EN] Go to your dashboard, click 'Create Listing'"
+        },
+        {
+          q: "[EN] Can I negotiate prices?",
+          a: "[EN] Yes! Use our messaging system"
+        }
+      ]
+    },
+    {
+      category: t('help.shippingLogistics'),
+      icon: TruckIcon,
+      questions: [
+        {
+          q: "[EN] How does shipping work?",
+          a: "[EN] Sellers specify shipping methods"
+        },
+        {
+          q: "[EN] What if my product arrives damaged?",
+          a: "[EN] Report damage within 48 hours"
+        },
+        {
+          q: "[EN] Do you handle international shipping?",
+          a: "[EN] Yes! We facilitate global trade"
+        }
+      ]
+    },
+    {
+      category: t('help.safetySecurity'),
+      icon: ShieldCheckIcon,
+      questions: [
+        {
+          q: "[EN] How do you verify sellers?",
+          a: "[EN] We verify business licenses"
+        },
+        {
+          q: "[EN] What if a seller doesn't deliver?",
+          a: "[EN] Our dispute resolution system handles cases"
+        },
+        {
+          q: "[EN] Is my payment information secure?",
+          a: "[EN] Absolutely. We use bank-level encryption"
+        }
+      ]
+    },
+    {
+      category: t('help.technicalSupport'),
+      icon: GlobeAltIcon,
+      questions: [
+        {
+          q: "[EN] I can't access my account",
+          a: "[EN] Try resetting your password"
+        },
+        {
+          q: "[EN] The website is loading slowly",
+          a: "[EN] Check your internet connection"
+        },
+        {
+          q: "[EN] How do I update my business information?",
+          a: "[EN] Go to your profile settings"
+        }
+      ]
+    }
+  ];
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black">
       {/* Header */}
@@ -152,12 +251,11 @@ export default function HelpCenterPage() {
             <div className="flex items-center justify-center gap-3 mb-6">
               <ShieldCheckIcon className="w-12 h-12 text-emerald-400" />
               <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-yellow-400">
-                Help Center
+                {t('help.title')}
               </h1>
             </div>
             <p className="text-xl text-emerald-200 max-w-3xl mx-auto">
-              Get the support you need to succeed on our premium B2B marketplace. 
-              Find answers, get help, and connect with our expert team.
+              {t('help.subtitle')}
             </p>
           </motion.div>
         </div>
@@ -246,24 +344,23 @@ export default function HelpCenterPage() {
           <div className="text-center">
             <CheckCircleIcon className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-yellow-400 mb-4">
-              Still Need Help?
+              {t('help.stillNeedHelp')}
             </h2>
             <p className="text-emerald-200 mb-6 max-w-2xl mx-auto">
-              Our dedicated support team is here to help you succeed. Contact us through any of the methods above, 
-              and we'll get back to you promptly.
+              {t('help.dedicatedSupport')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
                 className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-3 rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 font-medium shadow-lg hover:shadow-emerald-500/25"
               >
-                Contact Support
+                {t('help.contactSupport')}
               </Link>
               <Link
                 href="/dashboard"
                 className="border border-emerald-500/30 text-emerald-200 px-8 py-3 rounded-lg hover:bg-emerald-500/10 transition-all duration-300 font-medium"
               >
-                Go to Dashboard
+                {t('help.goToDashboard')}
               </Link>
             </div>
           </div>
