@@ -28,6 +28,18 @@ const metadataTranslations: Record<Locale, { title: string; description: string 
     title: 'फ्रूट हबीबी - B2B फल और सब्जियों का बाजार',
     description: 'अफ्रीकी और एशियाई किसानों को मध्य पूर्वी आयातकों से जोड़ें। विश्वास के साथ ताजा उत्पाद का व्यापार करें।',
   },
+  es: {
+    title: 'Fruit Habibi - Mercado B2B de Frutas y Verduras',
+    description: 'Conecta agricultores africanos y asiáticos con importadores de Medio Oriente. Comercia productos frescos con confianza.',
+  },
+  zh: {
+    title: 'Fruit Habibi - B2B水果和蔬菜市场',
+    description: '连接非洲和亚洲农民与中东进口商。自信地交易新鲜农产品。',
+  },
+  pt: {
+    title: 'Fruit Habibi - Mercado B2B de Frutas e Vegetais',
+    description: 'Conecte agricultores africanos e asiáticos com importadores do Oriente Médio. Negocie produtos frescos com confiança.',
+  },
 };
 
 /**
@@ -45,7 +57,7 @@ export function generateMultilingualMetadata({
 
   // Generate alternate language links (hreflang)
   const alternates: Record<string, string> = {};
-  const locales: Locale[] = ['en', 'fr', 'ar', 'hi'];
+  const locales: Locale[] = ['en', 'fr', 'ar', 'hi', 'es', 'zh', 'pt'];
   
   locales.forEach((lang) => {
     alternates[lang] = `${siteUrl}/${lang}${path}`;
@@ -86,7 +98,7 @@ export function generateMultilingualMetadata({
  * Generate hreflang link tags for HTML head
  */
 export function generateHreflangLinks(currentPath: string): string {
-  const locales: Locale[] = ['en', 'fr', 'ar', 'hi'];
+  const locales: Locale[] = ['en', 'fr', 'ar', 'hi', 'es', 'zh', 'pt'];
   
   const links = locales.map((locale) => {
     return `<link rel="alternate" hreflang="${locale}" href="${siteUrl}/${locale}${currentPath}" />`;
