@@ -6,6 +6,8 @@ import I18nWrapper from "@/components/I18nWrapper";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: "Fruit Habibi - B2B Fruits & Vegetables Marketplace",
   description: "Connect African and Asian farmers with Middle Eastern importers. Trade fresh produce with confidence.",
