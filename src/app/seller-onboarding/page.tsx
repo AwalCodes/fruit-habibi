@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { useRouter } from 'next/navigation';
 import SellerOnboarding from '@/components/SellerOnboarding';
 import { motion } from 'framer-motion';
@@ -11,6 +12,7 @@ import { motion } from 'framer-motion';
 export default function SellerOnboardingPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const { t } = useI18n();
   const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export default function SellerOnboardingPage() {
           transition={{ duration: 0.5 }}
           className="text-lg text-emerald-200"
         >
-          Loading...
+          {t('sellerOnboarding.loading')}
         </motion.div>
       </div>
     );
@@ -53,23 +55,23 @@ export default function SellerOnboardingPage() {
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400 mb-4">
-            Onboarding Complete!
+            {t('sellerOnboarding.onboardingComplete')}
           </h2>
           <p className="text-emerald-200 mb-6">
-            You're all set to start selling on Fruit Habibi. Your seller account is now active.
+            {t('sellerOnboarding.onboardingCompleteDesc')}
           </p>
           <div className="space-y-3">
             <button
               onClick={() => router.push('/dashboard')}
               className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 px-6 rounded-lg hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 font-medium shadow-lg hover:shadow-emerald-500/25"
             >
-              Go to Dashboard
+              {t('sellerOnboarding.goToDashboard')}
             </button>
             <button
               onClick={() => router.push('/listings/create')}
               className="w-full border border-emerald-500/30 text-emerald-200 py-3 px-6 rounded-lg hover:bg-emerald-500/10 transition-all duration-300 font-medium"
             >
-              Create First Listing
+              {t('sellerOnboarding.createFirstListing')}
             </button>
           </div>
         </motion.div>

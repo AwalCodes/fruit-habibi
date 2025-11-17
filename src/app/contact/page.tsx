@@ -4,9 +4,11 @@ export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useI18n } from '@/contexts/I18nContext';
 import { EnvelopeIcon, PhoneIcon, MapPinIcon, ClockIcon } from '@heroicons/react/24/outline';
 
 export default function ContactPage() {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -57,7 +59,7 @@ export default function ContactPage() {
               transition={{ delay: 0.2 }}
               className="text-5xl font-bold text-white mb-6"
             >
-              Get in Touch
+              {t('contact.title')}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: -20 }}
@@ -65,7 +67,7 @@ export default function ContactPage() {
               transition={{ delay: 0.3 }}
               className="text-xl text-emerald-200 max-w-2xl mx-auto"
             >
-              Connect with our team of experts to discuss your premium fruit sourcing needs
+              {t('contact.subtitle')}
             </motion.p>
           </div>
 
@@ -77,7 +79,7 @@ export default function ContactPage() {
               transition={{ delay: 0.4 }}
               className="space-y-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-8">Contact Information</h2>
+              <h2 className="text-3xl font-bold text-white mb-8">{t('contact.contactInformation')}</h2>
               
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
@@ -87,7 +89,7 @@ export default function ContactPage() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">Email</h3>
+                    <h3 className="text-lg font-semibold text-white mb-1">{t('contact.email')}</h3>
                     <p className="text-emerald-200">contact@fruithabibi.com</p>
                     <p className="text-emerald-200">support@fruithabibi.com</p>
                   </div>
@@ -100,7 +102,7 @@ export default function ContactPage() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">Phone</h3>
+                    <h3 className="text-lg font-semibold text-white mb-1">{t('contact.phone')}</h3>
                     <p className="text-emerald-200">+1 (555) 123-4567</p>
                     <p className="text-emerald-200">+1 (555) 987-6543</p>
                   </div>
@@ -113,7 +115,7 @@ export default function ContactPage() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">Address</h3>
+                    <h3 className="text-lg font-semibold text-white mb-1">{t('contact.address')}</h3>
                     <p className="text-emerald-200">
                       123 Premium Fruit Avenue<br />
                       Dubai, UAE 12345
@@ -128,33 +130,33 @@ export default function ContactPage() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">Business Hours</h3>
-                    <p className="text-emerald-200">Monday - Friday: 9:00 AM - 6:00 PM</p>
-                    <p className="text-emerald-200">Saturday: 10:00 AM - 4:00 PM</p>
-                    <p className="text-emerald-200">Sunday: Closed</p>
+                    <h3 className="text-lg font-semibold text-white mb-1">{t('contact.businessHours')}</h3>
+                    <p className="text-emerald-200">{t('contact.mondayFriday')}</p>
+                    <p className="text-emerald-200">{t('contact.saturday')}</p>
+                    <p className="text-emerald-200">{t('contact.sunday')}</p>
                   </div>
                 </div>
               </div>
 
               {/* Additional Info */}
               <div className="bg-gradient-to-r from-emerald-900/50 to-teal-900/50 rounded-2xl p-6 border border-emerald-500/20">
-                <h3 className="text-xl font-bold text-white mb-3">Why Choose Fruit Habibi?</h3>
+                <h3 className="text-xl font-bold text-white mb-3">{t('contact.whyChoose')}</h3>
                 <ul className="space-y-2 text-emerald-200">
                   <li className="flex items-center space-x-2">
                     <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
-                    <span>Premium quality fruits from around the world</span>
+                    <span>{t('contact.premiumQuality')}</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
-                    <span>Fast and reliable delivery</span>
+                    <span>{t('contact.fastDelivery')}</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
-                    <span>24/7 customer support</span>
+                    <span>{t('contact.customerSupport')}</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
-                    <span>Competitive wholesale prices</span>
+                    <span>{t('contact.competitivePrices')}</span>
                   </li>
                 </ul>
               </div>
@@ -167,12 +169,12 @@ export default function ContactPage() {
               transition={{ delay: 0.5 }}
               className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-3xl p-8 border border-emerald-500/20 backdrop-blur-sm"
             >
-              <h2 className="text-3xl font-bold text-white mb-8">Send us a Message</h2>
+              <h2 className="text-3xl font-bold text-white mb-8">{t('contact.sendMessage')}</h2>
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-emerald-200 mb-2">
-                    Full Name *
+                    {t('contact.fullName')}
                   </label>
                   <input
                     type="text"
@@ -182,13 +184,13 @@ export default function ContactPage() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 bg-slate-700/50 border border-emerald-500/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
-                    placeholder="Enter your full name"
+                    placeholder={t('contact.enterFullName')}
                   />
                 </div>
 
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-emerald-200 mb-2">
-                    Email Address *
+                    {t('contact.emailAddress')}
                   </label>
                   <input
                     type="email"
@@ -198,13 +200,13 @@ export default function ContactPage() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 bg-slate-700/50 border border-emerald-500/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
-                    placeholder="Enter your email address"
+                    placeholder={t('contact.enterEmailAddress')}
                   />
                 </div>
 
                 <div>
                   <label htmlFor="subject" className="block text-sm font-medium text-emerald-200 mb-2">
-                    Subject *
+                    {t('contact.subject')}
                   </label>
                   <input
                     type="text"
@@ -214,13 +216,13 @@ export default function ContactPage() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 bg-slate-700/50 border border-emerald-500/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
-                    placeholder="What is this about?"
+                    placeholder={t('contact.whatIsThisAbout')}
                   />
                 </div>
 
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-emerald-200 mb-2">
-                    Message *
+                    {t('contact.message')}
                   </label>
                   <textarea
                     id="message"
@@ -230,7 +232,7 @@ export default function ContactPage() {
                     required
                     rows={6}
                     className="w-full px-4 py-3 bg-slate-700/50 border border-emerald-500/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 resize-none"
-                    placeholder="Tell us how we can help you..."
+                    placeholder={t('contact.tellUsHow')}
                   />
                 </div>
 
@@ -245,10 +247,10 @@ export default function ContactPage() {
                   {isSubmitting ? (
                     <div className="flex items-center justify-center space-x-2">
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Sending Message...</span>
+                      <span>{t('contact.sendingMessage')}</span>
                     </div>
                   ) : (
-                    'Send Message'
+                    t('contact.sendMessageButton')
                   )}
                 </motion.button>
 
@@ -259,7 +261,7 @@ export default function ContactPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="p-4 bg-emerald-500/20 border border-emerald-500/30 rounded-lg text-emerald-200 text-center"
                   >
-                    ✓ Message sent successfully! We'll get back to you soon.
+                    {t('contact.messageSentSuccess')}
                   </motion.div>
                 )}
 
@@ -269,7 +271,7 @@ export default function ContactPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-red-200 text-center"
                   >
-                    ✗ Failed to send message. Please try again.
+                    {t('contact.messageFailed')}
                   </motion.div>
                 )}
               </form>

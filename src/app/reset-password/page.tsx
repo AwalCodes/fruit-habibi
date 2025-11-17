@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useI18n } from '@/contexts/I18nContext';
 import { supabase } from '@/lib/supabase';
 import { ArrowLeftIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 
@@ -17,6 +18,7 @@ function ResetPasswordPageContent() {
   const [isValidSession, setIsValidSession] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useI18n();
 
   useEffect(() => {
     // Check if we have a valid session for password reset
@@ -25,7 +27,7 @@ function ResetPasswordPageContent() {
       if (session) {
         setIsValidSession(true);
       } else {
-        setError('Invalid or expired reset link. Please request a new password reset.');
+        setError(t('resetPassword.invalidOrExpired'));
       }
     };
 
@@ -36,12 +38,12 @@ function ResetPasswordPageContent() {
     e.preventDefault();
     
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('resetPassword.passwordsDoNotMatch'));
       return;
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters long');
+      setError(t('resetPassword.passwordMinLength'));
       return;
     }
 
@@ -56,14 +58,14 @@ function ResetPasswordPageContent() {
 
       if (error) throw error;
 
-      setMessage('Password updated successfully! You can now sign in with your new password.');
+      setMessage(t('resetPassword.passwordUpdatedSuccess'));
       
       // Redirect to login after a short delay
       setTimeout(() => {
         router.push('/login');
       }, 2000);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'An error occurred');
+      setError(error instanceof Error ? error.message : t('auth.errorOccurred'));
     } finally {
       setLoading(false);
     }
@@ -74,13 +76,13 @@ function ResetPasswordPageContent() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Invalid Reset Link</h2>
-            <p className="text-gray-600 mb-6">{error || 'This password reset link is invalid or has expired.'}</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('resetPassword.invalidResetLink')}</h2>
+            <p className="text-gray-600 mb-6">{error || t('resetPassword.invalidOrExpired')}</p>
             <Link
               href="/forgot-password"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark"
             >
-              Request New Reset Link
+              {t('resetPassword.requestNewResetLink')}
             </Link>
           </div>
         </div>
@@ -96,17 +98,17 @@ function ResetPasswordPageContent() {
             <LockClosedIcon className="h-6 w-6 text-primary" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-            Set new password
+            {t('resetPassword.setNewPassword')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Enter your new password below.
+            {t('resetPassword.subtitle')}
           </p>
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="password" className="sr-only">
-              New password
+              {t('resetPassword.newPassword')}
             </label>
             <input
               id="password"
@@ -117,14 +119,14 @@ function ResetPasswordPageContent() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="relative block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
-              placeholder="New password"
+              placeholder={t('resetPassword.newPassword')}
               disabled={loading}
             />
           </div>
 
           <div>
             <label htmlFor="confirmPassword" className="sr-only">
-              Confirm new password
+              {t('resetPassword.confirmNewPassword')}
             </label>
             <input
               id="confirmPassword"
@@ -135,7 +137,7 @@ function ResetPasswordPageContent() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="relative block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
-              placeholder="Confirm new password"
+              placeholder={t('resetPassword.confirmNewPassword')}
               disabled={loading}
             />
           </div>
@@ -158,7 +160,7 @@ function ResetPasswordPageContent() {
               disabled={loading || !password || !confirmPassword}
               className="group relative flex w-full justify-center rounded-md bg-primary py-2 px-3 text-sm font-semibold text-white hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Updating...' : 'Update password'}
+              {loading ? t('resetPassword.updating') : t('resetPassword.updatePassword')}
             </button>
           </div>
 
@@ -168,7 +170,7 @@ function ResetPasswordPageContent() {
               className="flex items-center justify-center text-sm text-primary hover:text-primary-dark"
             >
               <ArrowLeftIcon className="h-4 w-4 mr-1" />
-              Back to sign in
+              {t('resetPassword.backToSignIn')}
             </Link>
           </div>
         </form>

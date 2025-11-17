@@ -4,8 +4,10 @@ export const dynamic = 'force-dynamic';
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useI18n } from '@/contexts/I18nContext';
 
 export default function AboutPage() {
+  const { t } = useI18n();
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black relative overflow-hidden">
       {/* Luxury Background Pattern */}
@@ -46,11 +48,10 @@ export default function AboutPage() {
           className="text-center mb-16"
         >
           <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6 drop-shadow-lg">
-            About Fruit Habibi
+            {t('about.title')}
           </h1>
           <p className="text-2xl text-emerald-100 leading-relaxed max-w-4xl mx-auto">
-            Connecting the world's finest growers with trusted buyers across borders, 
-            building a sustainable future for global agricultural trade.
+            {t('about.subtitle')}
           </p>
         </motion.div>
 
@@ -67,19 +68,16 @@ export default function AboutPage() {
               <div>
                 <div className="flex items-center gap-3 mb-6">
                   <span className="text-4xl">🌱</span>
-                  <h2 className="text-4xl font-bold text-white">Our Story</h2>
+                  <h2 className="text-4xl font-bold text-white">{t('about.ourStory')}</h2>
                 </div>
                 <p className="text-emerald-100 text-lg leading-relaxed mb-6">
-                  Founded with a vision to revolutionize the global fruits and vegetables trade, 
-                  Fruit Habibi emerged from the understanding that quality produce deserves quality connections.
+                  {t('about.ourStoryDesc1')}
                 </p>
                 <p className="text-emerald-100 text-lg leading-relaxed mb-6">
-                  We bridge the gap between passionate growers who cultivate the earth's finest harvest 
-                  and discerning buyers who value excellence, sustainability, and authentic partnerships.
+                  {t('about.ourStoryDesc2')}
                 </p>
                 <p className="text-emerald-100 text-lg leading-relaxed">
-                  Today, we're proud to facilitate thousands of successful trades, 
-                  supporting agricultural communities while delivering exceptional produce worldwide.
+                  {t('about.ourStoryDesc3')}
                 </p>
               </div>
               <div className="relative">
@@ -92,8 +90,8 @@ export default function AboutPage() {
                   className="bg-gradient-to-br from-emerald-800/30 to-yellow-600/30 rounded-2xl p-8 text-center"
                 >
                   <div className="text-8xl mb-4">🌍</div>
-                  <h3 className="text-2xl font-bold text-yellow-300 mb-2">Global Reach</h3>
-                  <p className="text-emerald-200">Connecting continents through quality produce</p>
+                  <h3 className="text-2xl font-bold text-yellow-300 mb-2">{t('about.globalReach')}</h3>
+                  <p className="text-emerald-200">{t('about.globalReachDesc')}</p>
                 </motion.div>
               </div>
             </div>
@@ -111,24 +109,23 @@ export default function AboutPage() {
           >
             <div className="flex items-center gap-3 mb-6">
               <span className="text-4xl">🎯</span>
-              <h2 className="text-3xl font-bold text-white">Our Mission</h2>
+              <h2 className="text-3xl font-bold text-white">{t('about.ourMission')}</h2>
             </div>
             <p className="text-emerald-100 text-lg leading-relaxed mb-6">
-              To create a transparent, efficient, and sustainable marketplace that empowers 
-              agricultural producers and connects them with buyers who appreciate quality.
+              {t('about.ourMissionDesc')}
             </p>
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <span className="text-yellow-400">✨</span>
-                <span className="text-emerald-200">Facilitate fair trade partnerships</span>
+                <span className="text-emerald-200">{t('about.facilitateFairTrade')}</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-yellow-400">🌿</span>
-                <span className="text-emerald-200">Promote sustainable agriculture</span>
+                <span className="text-emerald-200">{t('about.promoteSustainable')}</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-yellow-400">🤝</span>
-                <span className="text-emerald-200">Build lasting business relationships</span>
+                <span className="text-emerald-200">{t('about.buildRelationships')}</span>
               </div>
             </div>
           </motion.div>
@@ -142,20 +139,20 @@ export default function AboutPage() {
           >
             <div className="flex items-center gap-3 mb-6">
               <span className="text-4xl">💎</span>
-              <h2 className="text-3xl font-bold text-white">Our Values</h2>
+              <h2 className="text-3xl font-bold text-white">{t('about.ourValues')}</h2>
             </div>
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl font-bold text-yellow-300 mb-2">Quality First</h3>
-                <p className="text-emerald-100">We believe exceptional produce deserves exceptional service.</p>
+                <h3 className="text-xl font-bold text-yellow-300 mb-2">{t('about.qualityFirst')}</h3>
+                <p className="text-emerald-100">{t('about.qualityFirstDesc')}</p>
               </div>
               <div>
-                <h3 className="text-xl font-bold text-yellow-300 mb-2">Trust & Transparency</h3>
-                <p className="text-emerald-100">Building relationships through honest communication and reliable service.</p>
+                <h3 className="text-xl font-bold text-yellow-300 mb-2">{t('about.trustTransparency')}</h3>
+                <p className="text-emerald-100">{t('about.trustTransparencyDesc')}</p>
               </div>
               <div>
-                <h3 className="text-xl font-bold text-yellow-300 mb-2">Global Community</h3>
-                <p className="text-emerald-100">Celebrating diversity while fostering international collaboration.</p>
+                <h3 className="text-xl font-bold text-yellow-300 mb-2">{t('about.globalCommunity')}</h3>
+                <p className="text-emerald-100">{t('about.globalCommunityDesc')}</p>
               </div>
             </div>
           </motion.div>
@@ -171,10 +168,10 @@ export default function AboutPage() {
         >
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-4">
-              What We Offer
+              {t('about.whatWeOffer')}
             </h2>
             <p className="text-xl text-emerald-100 max-w-3xl mx-auto">
-              Comprehensive solutions for the modern agricultural marketplace
+              {t('about.whatWeOfferDesc')}
             </p>
           </div>
 
@@ -184,9 +181,9 @@ export default function AboutPage() {
               className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl border border-yellow-400/20 p-8 text-center shadow-xl hover:shadow-yellow-500/10 transition-all duration-300"
             >
               <div className="text-6xl mb-4">🚚</div>
-              <h3 className="text-2xl font-bold text-white mb-4">Logistics Excellence</h3>
+              <h3 className="text-2xl font-bold text-white mb-4">{t('about.logisticsExcellence')}</h3>
               <p className="text-emerald-100 leading-relaxed">
-                Seamless shipping solutions ensuring your produce reaches its destination fresh and on time.
+                {t('about.logisticsExcellenceDesc')}
               </p>
             </motion.div>
 
@@ -195,9 +192,9 @@ export default function AboutPage() {
               className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl border border-yellow-400/20 p-8 text-center shadow-xl hover:shadow-yellow-500/10 transition-all duration-300"
             >
               <div className="text-6xl mb-4">💬</div>
-              <h3 className="text-2xl font-bold text-white mb-4">Direct Communication</h3>
+              <h3 className="text-2xl font-bold text-white mb-4">{t('about.directCommunication')}</h3>
               <p className="text-emerald-100 leading-relaxed">
-                Connect directly with verified suppliers and buyers through our secure messaging platform.
+                {t('about.directCommunicationDesc')}
               </p>
             </motion.div>
 
@@ -206,9 +203,9 @@ export default function AboutPage() {
               className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl border border-yellow-400/20 p-8 text-center shadow-xl hover:shadow-yellow-500/10 transition-all duration-300"
             >
               <div className="text-6xl mb-4">🛡️</div>
-              <h3 className="text-2xl font-bold text-white mb-4">Trusted Network</h3>
+              <h3 className="text-2xl font-bold text-white mb-4">{t('about.trustedNetwork')}</h3>
               <p className="text-emerald-100 leading-relaxed">
-                Join a curated community of verified exporters and buyers committed to quality and reliability.
+                {t('about.trustedNetworkDesc')}
               </p>
             </motion.div>
           </div>
@@ -224,11 +221,10 @@ export default function AboutPage() {
         >
           <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-3xl border border-yellow-400/20 p-12 shadow-2xl">
             <h2 className="text-4xl font-bold text-white mb-6">
-              Ready to Join Our Community?
+              {t('about.readyToJoin')}
             </h2>
             <p className="text-xl text-emerald-100 mb-8 max-w-2xl mx-auto">
-              Whether you're a grower looking to expand your reach or a buyer seeking quality produce, 
-              we're here to help you succeed.
+              {t('about.readyToJoinDesc')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -236,14 +232,14 @@ export default function AboutPage() {
                 className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-8 py-4 rounded-full font-bold hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25 flex items-center gap-3 justify-center"
               >
                 <span className="text-xl">🌟</span>
-                Get Started Today
+                {t('about.getStartedToday')}
               </Link>
               <Link
                 href="/listings"
                 className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-8 py-4 rounded-full font-bold hover:from-emerald-500 hover:to-emerald-600 transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 flex items-center gap-3 justify-center"
               >
                 <span className="text-xl">🍎</span>
-                Browse Listings
+                {t('about.browseListings')}
               </Link>
             </div>
           </div>
