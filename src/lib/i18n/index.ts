@@ -1,6 +1,6 @@
-export type Locale = 'en' | 'fr' | 'ar' | 'hi';
+export type Locale = 'en' | 'fr' | 'ar' | 'hi' | 'es' | 'zh' | 'pt';
 
-export const locales: Locale[] = ['en', 'fr', 'ar', 'hi'];
+export const locales: Locale[] = ['en', 'fr', 'ar', 'hi', 'es', 'zh', 'pt'];
 
 export const defaultLocale: Locale = 'en';
 
@@ -9,6 +9,9 @@ export const localeNames: Record<Locale, string> = {
   fr: 'Français',
   ar: 'العربية',
   hi: 'हिन्दी',
+  es: 'Español',
+  zh: '中文',
+  pt: 'Português',
 };
 
 // RTL languages
