@@ -298,7 +298,12 @@
     "subtotal": "Sous-total",
     "total": "Total",
     "proceedToCheckout": "Procéder au Paiement",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "cartCheckoutTitle": "[FR] Cart Checkout",
+    "cartCheckoutDesc": "[FR] Complete your purchase with Stripe",
+    "backToCart": "[FR] Back to Cart",
+    "checkout": "[FR] Checkout",
+    "stripePaymentNote": "[FR] Click \"Checkout\" next to each item to complete payment. Each item will be processed securely through Stripe."
   },
   "listing": {
     "loadingProduct": "Chargement du produit...",

@@ -298,7 +298,12 @@
     "subtotal": "उप-योग",
     "total": "कुल",
     "proceedToCheckout": "चेकआउट के लिए आगे बढ़ें",
-    "loading": "लोड हो रहा है..."
+    "loading": "लोड हो रहा है...",
+    "cartCheckoutTitle": "[HI] Cart Checkout",
+    "cartCheckoutDesc": "[HI] Complete your purchase with Stripe",
+    "backToCart": "[HI] Back to Cart",
+    "checkout": "[HI] Checkout",
+    "stripePaymentNote": "[HI] Click \"Checkout\" next to each item to complete payment. Each item will be processed securely through Stripe."
   },
   "listing": {
     "loadingProduct": "उत्पाद लोड हो रहा है...",

@@ -298,7 +298,12 @@
     "subtotal": "المجموع الفرعي",
     "total": "الإجمالي",
     "proceedToCheckout": "المتابعة إلى الدفع",
-    "loading": "جاري التحميل..."
+    "loading": "جاري التحميل...",
+    "cartCheckoutTitle": "[AR] Cart Checkout",
+    "cartCheckoutDesc": "[AR] Complete your purchase with Stripe",
+    "backToCart": "[AR] Back to Cart",
+    "checkout": "[AR] Checkout",
+    "stripePaymentNote": "[AR] Click \"Checkout\" next to each item to complete payment. Each item will be processed securely through Stripe."
   },
   "listing": {
     "loadingProduct": "جاري تحميل المنتج...",

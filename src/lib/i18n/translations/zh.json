@@ -298,7 +298,12 @@
     "subtotal": "小计",
     "total": "总计",
     "proceedToCheckout": "进行结账",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "cartCheckoutTitle": "[ZH] Cart Checkout",
+    "cartCheckoutDesc": "[ZH] Complete your purchase with Stripe",
+    "backToCart": "[ZH] Back to Cart",
+    "checkout": "[ZH] Checkout",
+    "stripePaymentNote": "[ZH] Click \"Checkout\" next to each item to complete payment. Each item will be processed securely through Stripe."
   },
   "listing": {
     "loadingProduct": "正在加载产品...",
