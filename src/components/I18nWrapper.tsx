@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { I18nProvider } from '@/contexts/I18nContext';
 import { getTranslations, defaultLocale, type Locale } from '@/lib/i18n';
+import enTranslations from '@/lib/i18n/translations/en.json';
 
 function getLocaleFromCookie(): Locale {
   if (typeof window === 'undefined') return defaultLocale;
@@ -20,33 +21,24 @@ function getLocaleFromCookie(): Locale {
 
 export default function I18nWrapper({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState<Locale>(defaultLocale);
-  const [translations, setTranslations] = useState<any>({});
-  const [loading, setLoading] = useState(true);
+  const [translations, setTranslations] = useState<any>(enTranslations);
 
   useEffect(() => {
     // Get locale from cookie or use default
     const detectedLocale = getLocaleFromCookie();
     setLocale(detectedLocale);
     
-    // Load translations
-    getTranslations(detectedLocale)
-      .then((trans) => {
-        setTranslations(trans);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Failed to load translations:', error);
-        // Fallback to English
-        getTranslations(defaultLocale).then((trans) => {
+    // Only load if not English
+    if (detectedLocale !== 'en') {
+      getTranslations(detectedLocale)
+        .then((trans) => {
           setTranslations(trans);
-          setLoading(false);
+        })
+        .catch((error) => {
+          console.error('Failed to load translations:', error);
         });
-      });
+    }
   }, []);
-
-  if (loading) {
-    return <>{children}</>;
-  }
 
   return (
     <I18nProvider initialLocale={locale} initialTranslations={translations}>
