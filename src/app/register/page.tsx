@@ -6,8 +6,10 @@ import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 
 function RegisterForm() {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -31,27 +33,27 @@ function RegisterForm() {
 
   const validateForm = () => {
     if (!formData.fullName.trim()) {
-      setError('Full name is required');
+      setError(t('auth.fullNameRequired'));
       return false;
     }
     if (!formData.email.trim()) {
-      setError('Email is required');
+      setError(t('auth.emailRequired'));
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      setError('Please enter a valid email address');
+      setError(t('auth.validEmail'));
       return false;
     }
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long');
+      setError(t('auth.passwordMinLength'));
       return false;
     }
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.passwordsDontMatch'));
       return false;
     }
     if (!formData.country.trim()) {
-      setError('Country is required');
+      setError(t('auth.countryRequired'));
       return false;
     }
     return true;
@@ -71,7 +73,7 @@ function RegisterForm() {
       await signUp(formData.email, formData.password, formData.fullName, formData.role, formData.country);
       router.push('/dashboard');
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : 'An error occurred during registration');
+      setError(error instanceof Error ? error.message : t('auth.registrationError'));
     } finally {
       setLoading(false);
     }
@@ -89,10 +91,10 @@ function RegisterForm() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
-            Create your account
+            {t('auth.createAccountTitle')}
           </h2>
           <p className="mt-2 text-center text-sm text-emerald-200">
-            Join as a {formData.role === 'farmer' ? 'Farmer/Exporter' : 'Importer/Distributor'}
+            {t('auth.joinAs')} {formData.role === 'farmer' ? t('auth.farmerExporter') : t('auth.importerDistributor')}
           </p>
         </div>
         
@@ -106,7 +108,7 @@ function RegisterForm() {
           <div className="space-y-4">
             <div>
               <label htmlFor="fullName" className="block text-sm font-medium text-emerald-200">
-                Full Name
+                {t('auth.fullName')}
               </label>
               <input
                 id="fullName"
@@ -116,13 +118,13 @@ function RegisterForm() {
                 value={formData.fullName}
                 onChange={handleChange}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 bg-slate-700/50 border border-slate-600 placeholder-emerald-300 text-white rounded-lg focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 focus:z-10 sm:text-sm"
-                placeholder="Enter your full name"
+                placeholder={t('auth.enterFullName')}
               />
             </div>
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-emerald-200">
-                Email Address
+                {t('auth.emailAddress')}
               </label>
               <input
                 id="email"
@@ -132,13 +134,13 @@ function RegisterForm() {
                 value={formData.email}
                 onChange={handleChange}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 bg-slate-700/50 border border-slate-600 placeholder-emerald-300 text-white rounded-lg focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 focus:z-10 sm:text-sm"
-                placeholder="Enter your email"
+                placeholder={t('auth.enterEmail')}
               />
             </div>
 
             <div>
               <label htmlFor="role" className="block text-sm font-medium text-emerald-200">
-                Account Type
+                {t('auth.accountType')}
               </label>
               <select
                 id="role"
@@ -147,14 +149,14 @@ function RegisterForm() {
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 bg-slate-700/50 border border-slate-600 text-white rounded-lg shadow-sm focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 sm:text-sm"
               >
-                <option value="farmer">Farmer/Exporter</option>
-                <option value="importer">Importer/Distributor</option>
+                <option value="farmer">{t('auth.farmerExporter')}</option>
+                <option value="importer">{t('auth.importerDistributor')}</option>
               </select>
             </div>
 
             <div>
               <label htmlFor="country" className="block text-sm font-medium text-emerald-200">
-                Country
+                {t('auth.country')}
               </label>
               <input
                 id="country"
@@ -164,13 +166,13 @@ function RegisterForm() {
                 value={formData.country}
                 onChange={handleChange}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 bg-slate-700/50 border border-slate-600 placeholder-emerald-300 text-white rounded-lg focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 focus:z-10 sm:text-sm"
-                placeholder="Enter your country"
+                placeholder={t('auth.enterCountry')}
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-emerald-200">
-                Password
+                {t('auth.password')}
               </label>
               <input
                 id="password"
@@ -180,13 +182,13 @@ function RegisterForm() {
                 value={formData.password}
                 onChange={handleChange}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 bg-slate-700/50 border border-slate-600 placeholder-emerald-300 text-white rounded-lg focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 focus:z-10 sm:text-sm"
-                placeholder="Create a password"
+                placeholder={t('auth.createPassword')}
               />
             </div>
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-emerald-200">
-                Confirm Password
+                {t('auth.confirmPassword')}
               </label>
               <input
                 id="confirmPassword"
@@ -196,7 +198,7 @@ function RegisterForm() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 bg-slate-700/50 border border-slate-600 placeholder-emerald-300 text-white rounded-lg focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 focus:z-10 sm:text-sm"
-                placeholder="Confirm your password"
+                placeholder={t('auth.confirmPasswordPlaceholder')}
               />
             </div>
           </div>
@@ -207,15 +209,15 @@ function RegisterForm() {
               disabled={loading}
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-black bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-yellow-500/25"
             >
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {loading ? t('auth.creatingAccount') : t('auth.createAccount')}
             </button>
           </div>
 
           <div className="text-center">
             <span className="text-sm text-emerald-200">
-              Already have an account?{' '}
+              {t('auth.alreadyHaveAccount')}{' '}
               <Link href="/login" className="font-medium text-yellow-400 hover:text-yellow-300 transition-colors">
-                Sign in
+                {t('auth.signInLink')}
               </Link>
             </span>
           </div>

@@ -6,8 +6,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 
 export default function LoginPage() {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -27,7 +29,7 @@ export default function LoginPage() {
       await signIn(formData.email, formData.password);
       router.push('/dashboard');
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : 'An error occurred');
+      setError(error instanceof Error ? error.message : t('auth.errorOccurred'));
     } finally {
       setLoading(false);
     }
@@ -45,10 +47,10 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
-            Sign in to your account
+            {t('auth.signInTitle')}
           </h2>
           <p className="mt-2 text-center text-sm text-emerald-200">
-            Access your dashboard and manage your listings
+            {t('auth.signInSubtitle')}
           </p>
         </div>
         
@@ -62,7 +64,7 @@ export default function LoginPage() {
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-emerald-200">
-                Email Address
+                {t('auth.emailAddress')}
               </label>
               <input
                 id="email"
@@ -72,13 +74,13 @@ export default function LoginPage() {
                 value={formData.email}
                 onChange={handleChange}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 bg-slate-700/50 border border-slate-600 placeholder-emerald-300 text-white rounded-lg focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 focus:z-10 sm:text-sm"
-                placeholder="Enter your email"
+                placeholder={t('auth.enterEmail')}
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-emerald-200">
-                Password
+                {t('auth.password')}
               </label>
               <input
                 id="password"
@@ -88,7 +90,7 @@ export default function LoginPage() {
                 value={formData.password}
                 onChange={handleChange}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 bg-slate-700/50 border border-slate-600 placeholder-emerald-300 text-white rounded-lg focus:outline-none focus:ring-yellow-400 focus:border-yellow-400 focus:z-10 sm:text-sm"
-                placeholder="Enter your password"
+                placeholder={t('auth.enterPassword')}
               />
             </div>
           </div>
@@ -99,7 +101,7 @@ export default function LoginPage() {
                 href="/forgot-password"
                 className="font-medium text-yellow-400 hover:text-yellow-300 transition-colors"
               >
-                Forgot your password?
+                {t('auth.forgotPassword')}
               </Link>
             </div>
           </div>
@@ -110,15 +112,15 @@ export default function LoginPage() {
               disabled={loading}
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-black bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-yellow-500/25"
             >
-              {loading ? 'Signing In...' : 'Sign In'}
+              {loading ? t('auth.signingIn') : t('auth.signIn')}
             </button>
           </div>
 
           <div className="text-center">
             <span className="text-sm text-emerald-200">
-              Don&apos;t have an account?{' '}
+              {t('auth.dontHaveAccount')}{' '}
               <Link href="/register" className="font-medium text-yellow-400 hover:text-yellow-300 transition-colors">
-                Create one
+                {t('auth.createOne')}
               </Link>
             </span>
           </div>

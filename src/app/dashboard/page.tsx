@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -42,6 +43,7 @@ interface RecentActivity {
 }
 
 export default function DashboardPage() {
+  const { t } = useI18n();
   const { user, loading } = useAuth();
   const router = useRouter();
   const [stats, setStats] = useState<DashboardStats>({
@@ -149,7 +151,7 @@ export default function DashboardPage() {
           activity.push({
             id: product.id,
             type: 'listing_created',
-            title: 'New listing created',
+            title: t('dashboard.newListingCreated'),
             description: product.title,
             timestamp: product.created_at
           });
@@ -161,7 +163,7 @@ export default function DashboardPage() {
           activity.push({
             id: message.id,
             type: 'message_received',
-            title: 'Message received',
+            title: t('dashboard.messageReceived'),
             description: `"${message.body.substring(0, 50)}..."`,
             timestamp: message.created_at
           });
@@ -222,7 +224,7 @@ export default function DashboardPage() {
   if (loading || dashboardLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black flex items-center justify-center">
-        <div className="text-lg text-emerald-200">Loading your dashboard...</div>
+        <div className="text-lg text-emerald-200">{t('common.loading')}</div>
       </div>
     );
   }
@@ -240,22 +242,22 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
-                  Welcome back, {user.user_metadata?.full_name || 'Trader'}!
+                  {t('dashboard.welcomeBack')} {user.user_metadata?.full_name || t('hero.trader')}!
                 </h1>
                 <p className="mt-2 text-emerald-200">
-                  Here's what's happening with your business today
+                  {t('dashboard.whatsHappening')}
                 </p>
               </div>
               <div className="flex items-center space-x-4">
                 <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border border-yellow-400/30 text-yellow-400">
-                  {user.user_metadata?.role === 'farmer' ? '🌱 Farmer/Exporter' : '📦 Importer/Distributor'}
+                  {user.user_metadata?.role === 'farmer' ? `🌱 ${t('auth.farmerExporter')}` : `📦 ${t('auth.importerDistributor')}`}
                 </span>
                 <span className="text-sm text-emerald-300">{user.user_metadata?.country}</span>
                 <button
                   onClick={() => router.push('/seller-onboarding')}
                   className="inline-flex items-center px-4 py-2 border border-emerald-400/30 shadow-sm text-sm leading-4 font-medium rounded-lg text-emerald-400 bg-slate-700/50 hover:bg-slate-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 transition-all duration-300"
                 >
-                  🚀 Seller Onboarding
+                  🚀 {t('dashboard.startOnboarding')}
                 </button>
               </div>
             </div>
@@ -279,9 +281,9 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white">Ready to Start Selling?</h3>
+                  <h3 className="text-lg font-semibold text-white">{t('dashboard.readyToStartSelling')}</h3>
                   <p className="text-emerald-200 text-sm">
-                    Complete your seller onboarding to unlock all features and start building your business
+                    {t('dashboard.completeOnboarding')}
                   </p>
                 </div>
               </div>
@@ -290,13 +292,13 @@ export default function DashboardPage() {
                   onClick={() => setShowOnboardingPrompt(false)}
                   className="px-4 py-2 text-emerald-300 hover:text-white transition-colors"
                 >
-                  Maybe Later
+                  {t('dashboard.maybeLater')}
                 </button>
                 <button
                   onClick={() => router.push('/seller-onboarding')}
                   className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-2 rounded-lg hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 font-medium"
                 >
-                  Start Onboarding
+                  {t('dashboard.startOnboarding')}
                 </button>
               </div>
             </div>
@@ -320,13 +322,13 @@ export default function DashboardPage() {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-2xl font-bold text-white">{stats.totalListings}</h3>
-                  <p className="text-sm text-emerald-200">Total Listings</p>
+                  <p className="text-sm text-emerald-200">{t('dashboard.totalListings')}</p>
                 </div>
               </div>
               <div className="mt-4 flex items-center text-sm">
-                <span className="text-emerald-400 font-medium">{stats.publishedListings} published</span>
+                <span className="text-emerald-400 font-medium">{stats.publishedListings} {t('dashboard.published')}</span>
                 <span className="text-slate-400 mx-2">•</span>
-                <span className="text-slate-300">{stats.draftListings} drafts</span>
+                <span className="text-slate-300">{stats.draftListings} {t('dashboard.drafts')}</span>
               </div>
             </div>
           </motion.div>
@@ -346,12 +348,12 @@ export default function DashboardPage() {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-2xl font-bold text-white">{stats.totalMessages}</h3>
-                  <p className="text-sm text-emerald-200">Total Messages</p>
+                  <p className="text-sm text-emerald-200">{t('dashboard.totalMessages')}</p>
                 </div>
               </div>
               <div className="mt-4">
                 <Link href="/messages" className="text-yellow-400 hover:text-yellow-300 font-medium text-sm transition-colors">
-                  View conversations →
+                  {t('dashboard.viewConversations')}
                 </Link>
               </div>
             </div>
@@ -372,12 +374,12 @@ export default function DashboardPage() {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-2xl font-bold text-white">{stats.totalViews}</h3>
-                  <p className="text-sm text-emerald-200">Total Views</p>
+                  <p className="text-sm text-emerald-200">{t('dashboard.totalViews')}</p>
                 </div>
               </div>
               <div className="mt-4 flex items-center text-sm">
                 <ArrowTrendingUpIcon className="h-4 w-4 text-emerald-400 mr-1" />
-                <span className="text-emerald-400 font-medium">+12% this month</span>
+                <span className="text-emerald-400 font-medium">+12% {t('dashboard.thisMonth')}</span>
               </div>
             </div>
           </motion.div>
@@ -397,7 +399,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-2xl font-bold text-white">{stats.avgRating}</h3>
-                  <p className="text-sm text-emerald-200">Average Rating</p>
+                  <p className="text-sm text-emerald-200">{t('dashboard.averageRating')}</p>
                 </div>
               </div>
               <div className="mt-4 flex items-center text-sm">
@@ -409,7 +411,7 @@ export default function DashboardPage() {
                     />
                   ))}
                 </div>
-                <span className="ml-2 text-slate-300">({stats.totalReviews} reviews)</span>
+                <span className="ml-2 text-slate-300">({stats.totalReviews} {t('dashboard.reviews')})</span>
               </div>
             </div>
           </motion.div>
@@ -425,7 +427,7 @@ export default function DashboardPage() {
               className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm shadow-lg rounded-lg border border-slate-600/30"
             >
               <div className="px-6 py-4 border-b border-slate-600">
-                <h2 className="text-lg font-medium text-white">Quick Actions</h2>
+                <h2 className="text-lg font-medium text-white">{t('dashboard.quickActions')}</h2>
               </div>
               <div className="p-6 space-y-4">
                 <Link
@@ -436,8 +438,8 @@ export default function DashboardPage() {
                     <DocumentTextIcon className="h-5 w-5 text-yellow-400" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-white">Create New Listing</h3>
-                    <p className="text-sm text-emerald-200">Add a new product to your catalog</p>
+                    <h3 className="font-medium text-white">{t('hero.createNewListing')}</h3>
+                    <p className="text-sm text-emerald-200">{t('dashboard.addNewProduct')}</p>
                   </div>
                 </Link>
 
@@ -449,8 +451,8 @@ export default function DashboardPage() {
                     <UserGroupIcon className="h-5 w-5 text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-white">Browse Marketplace</h3>
-                    <p className="text-sm text-emerald-200">Discover products from other suppliers</p>
+                    <h3 className="font-medium text-white">{t('dashboard.browseMarketplace')}</h3>
+                    <p className="text-sm text-emerald-200">{t('dashboard.discoverProducts')}</p>
                   </div>
                 </Link>
 
@@ -462,8 +464,8 @@ export default function DashboardPage() {
                     <ShoppingBagIcon className="h-5 w-5 text-blue-400" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-white">View Orders</h3>
-                    <p className="text-sm text-emerald-200">Manage your purchases and sales</p>
+                    <h3 className="font-medium text-white">{t('dashboard.viewOrders')}</h3>
+                    <p className="text-sm text-emerald-200">{t('dashboard.managePurchases')}</p>
                   </div>
                 </Link>
 
@@ -475,8 +477,8 @@ export default function DashboardPage() {
                     <ChatBubbleLeftRightIcon className="h-5 w-5 text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-white">View Messages</h3>
-                    <p className="text-sm text-emerald-200">Check your conversations</p>
+                    <h3 className="font-medium text-white">{t('dashboard.viewMessages')}</h3>
+                    <p className="text-sm text-emerald-200">{t('dashboard.checkConversations')}</p>
                   </div>
                 </Link>
               </div>
@@ -492,7 +494,7 @@ export default function DashboardPage() {
               className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm shadow-lg rounded-lg border border-slate-600/30"
             >
               <div className="px-6 py-4 border-b border-slate-600">
-                <h2 className="text-lg font-medium text-white">Recent Activity</h2>
+                <h2 className="text-lg font-medium text-white">{t('dashboard.recentActivity')}</h2>
               </div>
               <div className="p-6">
                 {recentActivity.length > 0 ? (
@@ -513,11 +515,11 @@ export default function DashboardPage() {
                 ) : (
                   <div className="text-center py-8">
                     <ChartBarIcon className="mx-auto h-12 w-12 text-yellow-400" />
-                    <h3 className="mt-2 text-sm font-medium text-white">No activity yet</h3>
+                    <h3 className="mt-2 text-sm font-medium text-white">{t('dashboard.noActivityYet')}</h3>
                     <p className="mt-1 text-sm text-emerald-200">
                       {user.user_metadata?.role === 'farmer' 
-                        ? 'Create your first listing to get started!' 
-                        : 'Browse listings to start making inquiries!'
+                        ? t('dashboard.createFirstListing')
+                        : t('dashboard.browseToStart')
                       }
                     </p>
                     <div className="mt-6">
@@ -525,7 +527,7 @@ export default function DashboardPage() {
                         href={user.user_metadata?.role === 'farmer' ? '/listings/create' : '/listings'}
                         className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-black bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 transition-all duration-300"
                       >
-                        Get Started
+                        {t('dashboard.getStarted')}
                       </Link>
                     </div>
                   </div>

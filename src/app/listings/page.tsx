@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { supabase } from '@/lib/supabase';
 import Pagination from '@/components/Pagination';
 import AdvancedSearchFilters, { SearchFilters } from '@/components/AdvancedSearchFilters';
@@ -13,6 +14,7 @@ import Link from 'next/link';
 
 
 export default function ListingsPage() {
+  const { t } = useI18n();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(12);
   const [products, setProducts] = useState<SearchResult[]>([]);
@@ -85,12 +87,12 @@ export default function ListingsPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-black py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-lg text-emerald-100 flex items-center gap-3">
-              <div className="w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
-              Loading premium listings...
+            <div className="flex items-center justify-center h-64">
+              <div className="text-lg text-emerald-100 flex items-center gap-3">
+                <div className="w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+                {t('listings.loadingListings')}
+              </div>
             </div>
-          </div>
         </div>
       </div>
     );
@@ -113,13 +115,13 @@ export default function ListingsPage() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-4 drop-shadow-lg">
-                Browse All Listings
+                {t('listings.browseAllListings')}
               </h1>
               <p className="text-xl text-emerald-100 leading-relaxed">
-                Discover luxury fresh produce from trusted premium suppliers worldwide
+                {t('listings.discoverLuxury')}
                 {!user && (
                   <span className="block text-sm text-emerald-200 mt-2">
-                    💡 Sign up to create listings and connect with suppliers directly
+                    {t('listings.signUpPrompt')}
                   </span>
                 )}
               </p>
@@ -129,7 +131,7 @@ export default function ListingsPage() {
                 href="/listings/create"
                 className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-black px-6 py-3 rounded-full font-bold hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 shadow-lg hover:shadow-yellow-500/25 flex items-center gap-2"
               >
-                ✨ Create New Listing
+                {t('listings.createNewListing')}
               </Link>
             ) : (
               <div className="flex gap-3">
@@ -137,13 +139,13 @@ export default function ListingsPage() {
                   href="/register"
                   className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-full font-bold hover:from-emerald-400 hover:to-emerald-500 transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 flex items-center gap-2"
                 >
-                  🚀 Join Marketplace
+                  {t('listings.joinMarketplace')}
                 </Link>
                 <Link
                   href="/login"
                   className="bg-gradient-to-r from-slate-600 to-slate-700 text-white px-6 py-3 rounded-full font-bold hover:from-slate-500 hover:to-slate-600 transition-all duration-300 shadow-lg hover:shadow-slate-500/25 flex items-center gap-2"
                 >
-                  Sign In
+                  {t('common.signIn')}
                 </Link>
               </div>
             )}
